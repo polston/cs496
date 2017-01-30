@@ -11,6 +11,7 @@ app.set('view engine', 'ejs');
 
 //static files
 app.use(express.static('./public'));
+app.use('/node_modules', express.static(__dirname + '/node_modules/'));
 
 //fire controllers
 indexController(app);
