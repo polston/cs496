@@ -6,7 +6,7 @@ module.exports = function(app){
               {name: 'Nathan'},
               {name: 'Austin'}];
 
-  //definitely a better way to do '/' and '/index'
+  //there's definitely a better way to do '/' and '/index'
   app.get('/', function(req, res){
     console.log(req.url);
     res.render('index', {group: people});
