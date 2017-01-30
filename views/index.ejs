@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include ../views/partials/head.ejs %>
+</head>
+
+<body>
+    <header>
+        <% include ../views/partials/header.ejs %>
+    </header>
+
+    <h1> aww yeah </h1>
+    <div class="main">
+        <p>stuff</p>
+        <p>test1</p>
+    </div>
+
+    <div class="group">
+        <div class="people">
+            <ul>
+                <!-- ejs example, look in the controller -->
+                <% group.forEach(function(person){ %>
+
+                    <li>
+                        <%= person.name; %>
+                    </li>
+
+                    <% }); %>
+                        <!-- end of ejs example -->
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <% include ../views/partials/footer.ejs %>
+    </footer>
+
+</body>
+
+</html>

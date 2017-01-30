@@ -1,0 +1,26 @@
+{
+  "name": "cs496",
+  "version": "1.0.0",
+  "description": "CS496 group project",
+  "main": "app.js",
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "ejs": "^2.5.5",
+    "express": "^4.14.1",
+    "jquery": "^3.1.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/polston/cs496.git"
+  },
+  "author": "Michael Polston, David Owens, Nathan Cartwright, Austin Little",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/polston/cs496/issues"
+  },
+  "homepage": "https://github.com/polston/cs496#readme"
+}
