@@ -2,7 +2,7 @@ CS496 Project Repository
 
 To run:
 Install nodejs and npm (both should be bundled in the installer if you're on windows)
-(https://nodejs.org/en/)
+(https://nodejs.org/en/ use 7.4)
 
 Navigate to the project directory via the terminal.
 
