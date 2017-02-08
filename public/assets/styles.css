@@ -1,0 +1,13 @@
+
+
+.container-fluid {
+  background-color: blue;
+}
+
+.col-sm-6 {
+  background-color: red;
+}
+
+.center-text {
+  text-align: center;
+}

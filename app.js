@@ -12,11 +12,11 @@ let app = express();
 
 //set up template engine
 app.set('view engine', 'ejs');
-console.log('tst123');
 
 //static files
 app.use(express.static('./public'));
-//node modules path
+
+//node modules path for normal cdn stuff
 app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist/css/'));
 app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
 
