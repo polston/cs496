@@ -9,27 +9,52 @@
     <header>
         <% include ../views/partials/header.ejs %>
     </header>
-
-    <h1> aww yeah </h1>
+    <div class="container-fluid">
+      <div class="center-text">
+        <h1> aww yeah </h1>
+      </div>
+      
+    </div>
     <div class="main">
         <p>stuff</p>
         <p>test1</p>
     </div>
 
     <div class="group">
-        <div class="people">
+      <div class="people">
+        <!-- ejs example, look in the controller -->
+        <!-- with some ugly bootstrap and font-awesome -->
+        <div class="container">
+          <div class="row">
+            
             <ul>
-                <!-- ejs example, look in the controller -->
-                <% group.forEach(function(person){ %>
-
-                    <li>
-                        <%= person.name; %>
-                    </li>
-
-                    <% }); %>
-                        <!-- end of ejs example -->
+              
+              <% let counter = 0; %>
+              
+              <% group.forEach(function(person){ %>
+                  <% if(counter % 2 === 0){ %>
+                    
+                    <div class="col-sm-6">
+                      <i class="fa fa-hand-lizard-o" aria-hidden="true"></i>
+                      <li><%= person.name; %></li>
+                    </div>
+                    
+                  <% }else{ %>
+                    
+                    <div class="col-sm-6">
+                      <i class="fa fa-hand-lizard-o" aria-hidden="true"></i>
+                      <li><%= person.name; %></li>
+                    </div>
+                    
+                  <% }; %>
+              <% }); %>
+              
             </ul>
+            
+          </div>
         </div>
+        <!-- end of ejs example -->
+      </div>
     </div>
 
     <footer>
