@@ -12,6 +12,7 @@ let app = express();
 
 //set up template engine
 app.set('view engine', 'ejs');
+console.log('tst123');
 
 //static files
 app.use(express.static('./public'));
