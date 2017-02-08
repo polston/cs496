@@ -4,6 +4,7 @@ let express = require('express');
 //includes the controllers, probably a way to just batch include all of them
 //but, I don't know how (yet)
 let indexController = require('./controllers/indexController');
+let whateverController = require('./controllers/whateverController');
 let errorController = require('./controllers/errorController');
 
 //creates an express application
@@ -22,7 +23,9 @@ app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
 
 //fire controllers
 indexController(app);
+whateverController(app);
 errorController(app);
+
 
 //listen to port 3000
 app.listen(3000);
