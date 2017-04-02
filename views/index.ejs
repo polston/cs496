@@ -1,64 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="IndexApp">
 
 <head>
-    <% include ../views/partials/head.ejs %>
+<% include ./partials/head %>
+<script src="../public/js/index.js"></script>
 </head>
 
 <body>
     <header>
-        <% include ../views/partials/header.ejs %>
     </header>
-    <div class="container-fluid">
-      <div class="center-text">
-        <h1> aww yeah </h1>
-      </div>
-      
-    </div>
-    <div class="main">
-        <p>stuff</p>
-        <p>test1</p>
-    </div>
 
-    <div class="group">
-      <div class="people">
-        <!-- ejs example, look in the controller -->
-        <!-- with some ugly bootstrap and font-awesome -->
-        <div class="container">
-          <div class="row">
-            
-            <ul>
-              
-              <% let counter = 0; %>
-              
-              <% group.forEach(function(person){ %>
-                  <% if(counter % 2 === 0){ %>
-                    
-                    <div class="col-sm-6">
-                      <i class="fa fa-hand-lizard-o" aria-hidden="true"></i>
-                      <li><%= person.name; %></li>
-                    </div>
-                    
-                  <% }else{ %>
-                    
-                    <div class="col-sm-6">
-                      <i class="fa fa-hand-lizard-o" aria-hidden="true"></i>
-                      <li><%= person.name; %></li>
-                    </div>
-                    
-                  <% }; %>
-              <% }); %>
-              
-            </ul>
-            
-          </div>
+    <div class="container" ng-controller="IndexController">
+        <h2>Create User</h2>
+        <input ng-model="user.name.firstName" class="form-control" type="text" placeholder="first name">
+        <input ng-model="user.name.lastName" class="form-control" type="text" placeholder="first name">
+        <select ng-model="user.permissions" class="form-control" >
+            <option ng-repeat="option in permissionOptions">
+                {{option}}
+            </option>
+        </select>
+
+        <button class="btn btn-primary" ng-click="createUser(user)">Create</button>
+        <button class="btn btn-success" ng-click="updateUser(user)">Update</button>
+
+
+        <div><h1>All users:</h1></div>
+        <div ng-repeat="user in users" >
+            <h4>
+                {{user}}
+                <a ng-click="deleteUser(user._id)" class="pull-right"><span class="fa fa-times-circle-o"></span></a>
+                <a ng-click="editUser(user._id)" class="pull-right"><span class="fa fa-pencil-square-o"></span></a>
+            </h4>
         </div>
-        <!-- end of ejs example -->
-      </div>
+
     </div>
 
     <footer>
-        <% include ../views/partials/footer.ejs %>
     </footer>
 
 </body>
