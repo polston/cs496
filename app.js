@@ -45,5 +45,6 @@ errorRoutes(app);
 
 
 //listen to port 3000
-app.listen(4000);
+process.env.PORT, process.env.IP
+app.listen(process.env.PORT || 4000, process.env.IP || 'localhost');
 console.log('listening to port 4000');

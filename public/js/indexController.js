@@ -25,6 +25,7 @@ function IndexController($scope, $http) {
     }
 
     function createUser(user) {
+        user.permissions = user.permissions.trim()
         $http.post('/api/users', user).then(
             function(result){
                 getAllUsers()
@@ -56,6 +57,7 @@ function IndexController($scope, $http) {
     }
 
     function updateUser(user) {
+        user.permissions = user.permissions.trim()
         $http.put('/api/users/'+user._id, user).then(
             function(result){
                 getAllUsers()

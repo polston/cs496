@@ -1,8 +1,8 @@
 module.exports = function(app){
 
   // index controller
-  app.get('/public/js/index.js', function(req, res){
-    res.sendFile('public/js/index.js', {'root': './'})
+  app.get('/public/js/indexController.js', function(req, res){
+    res.sendFile('public/js/indexController.js', {'root': './'})
   });
 
 };

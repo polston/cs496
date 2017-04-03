@@ -10,6 +10,7 @@ router.get('/users', function(req, res, next){
   })
 })
 
+//get user by id
 router.get('/users/:id', function(req, res, next){
   User.findById(req.params.id).then(function(user){
     res.send(user)
@@ -23,16 +24,18 @@ router.post('/users', function(req, res, next){
   }).catch(next)
 })
 
+//remove user from database
 router.delete('/users/:id', function(req, res, next){
   User.findByIdAndRemove(req.params.id).then(function(user){
     res.send(user)
   })
 })
 
+//update user in database
 router.put('/users/:id', function(req, res, next){
   User.findByIdAndUpdate(req.params.id, req.body).then(function(){
     User.findById(req.params.id).then(function(user){
-      console.log('test' + user)
+      //console.log('test' + user)
       res.send(user)
     })
   })
