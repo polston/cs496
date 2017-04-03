@@ -1,32 +1,49 @@
 //includes the express module
 let express = require('express');
+let mongoose = require('mongoose')
+let bodyParseer = require('body-parser')
 
-//includes the controllers, probably a way to just batch include all of them
+mongoose.Promise = global.Promise
+
+mongoose.connect('mongodb://localhost/cs496')
+
+//includes the routes, probably a way to just batch include all of them
 //but, I don't know how (yet)
-let indexController = require('./controllers/indexController');
-let whateverController = require('./controllers/whateverController');
-let errorController = require('./controllers/errorController');
+let indexRoutes = require('./routes/index');
+let whateverRoutes = require('./routes/whatever');
+let errorRoutes = require('./routes/error');
+let controllerRoutes = require('./routes/controllers')
 
 //creates an express application
 //mostly magic
 let app = express();
 
+app.use(bodyParseer.json())
+
 //set up template engine
 app.set('view engine', 'ejs');
+//app.set('view engine', 'html')
 
 //static files
-app.use(express.static('./public'));
+app.use(express.static(__dirname + '/public'));
+
+app.use('/api/', require('./routes/api'))
+//app.use('/controllers/', require('./public/js'))
+
+// app.use(express.static('./public/js'));
 
 //node modules path for normal cdn stuff
-app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist/css/'));
 app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
+app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist/css/'));
+app.use('/angular', express.static(__dirname + '/node_modules/angular/'))
 
-//fire controllers
-indexController(app);
-whateverController(app);
-errorController(app);
+//fire routes
+controllerRoutes(app)
+indexRoutes(app);
+whateverRoutes(app);
+errorRoutes(app);
 
 
 //listen to port 3000
-app.listen(3000);
-console.log('listening to port 3000');
+app.listen(4000);
+console.log('listening to port 4000');

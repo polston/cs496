@@ -5,7 +5,7 @@ module.exports = function(app){
   // in the view
   app.use(function(req, res, next){
     console.log(req.url);
-    res.status(404).render('errors/404');
+    res.status(404).render('../views/errors/404.ejs');
   });
 
 };
