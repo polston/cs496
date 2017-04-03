@@ -7,7 +7,7 @@ const UserSchema = new Schema({
     lastName: {type: String, required: true}
   },
   courses: [String],
-  permissions: {type: String, default: 'student'}
+  permissions: {type: String, default: 'Student'}
 })
 
 const User = mongoose.model('user', UserSchema)
