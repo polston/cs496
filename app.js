@@ -18,14 +18,16 @@ let controllerRoutes = require('./routes/controllers')
 //mostly magic
 let app = express();
 
+//static files
+app.use(express.static(__dirname + '/public'));
+
 app.use(bodyParseer.json())
 
 //set up template engine
 app.set('view engine', 'ejs');
 //app.set('view engine', 'html')
 
-//static files
-app.use(express.static(__dirname + '/public'));
+
 
 app.use('/api/', require('./routes/api'))
 //app.use('/controllers/', require('./public/js'))
@@ -45,6 +47,7 @@ errorRoutes(app);
 
 
 //listen to port 3000
-process.env.PORT, process.env.IP
-app.listen(process.env.PORT || 4000, process.env.IP || 'localhost');
+//process.env.PORT, process.env.IP
+if(!module.parent){ app.listen(process.env.PORT || 4000, process.env.IP || 'localhost'); }
+
 console.log('listening to port 4000');
