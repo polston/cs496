@@ -1,4 +1,8 @@
+process.env.TEST = 'true'
+
 const assert = require('assert')
+const expect = require('chai').expect()
+const should = require('chai').should()
 const User = require('../models/userModel')
 const mongoose = require('mongoose')
 mongoose.Promise = global.Promise
@@ -31,7 +35,7 @@ describe('user model tests', function(done) {
         })
     })
 
-    it('should update a user\'s permissions in the database', function(done) {
+    it('should update a user\'s permissions in the database by id', function(done) {
         User.findByIdAndUpdate(user._id, {$set: {permissions: 'Tutor'}}, function(err, doc) {
             if(err) { return console.log(err) }
             User.findById(user._id, function(err, doc) {
@@ -41,10 +45,22 @@ describe('user model tests', function(done) {
             })
         })
     })
-
+    
+    it('should delete a user by id in the database', function(done) {
+        User.findByIdAndRemove(user._id, function(err, doc) {
+            if(err) { return console.log(err) }
+            User.findById(doc._id, function(err, doc) {
+                if(err) { return console.log(err) }
+                should.not.exist(doc)
+                done()
+            })
+        })
+    })
+    
+    
     //TODO: add delete and self-contained create
 
-    //drop the test user after every test
+    // drop the test user after every test
     afterEach(function(done) {
         User.remove({_id: user._id}, function(err, doc) {
             if(err) { console.log(err) }

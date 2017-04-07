@@ -1,3 +1,5 @@
+process.env.TEST = 'true'
+
 //some of these imports may be unnecessary
 const assert = require('assert')
 const supertest = require('supertest')
@@ -5,10 +7,12 @@ const should = require('chai').should()
 const expect = require('chai').expect()
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
+const app = require('../app')
 mongoose.Promise = global.Promise
 
 const User = require('../models/userModel')
-const api = supertest('https://cs496-polston.c9users.io/api')
+const api = supertest(app)
+//const api = supertest(process.env.IP + ':'+ process.env.PORT + '/api')
 
 describe('api tests', function(done) {
     let user
@@ -31,7 +35,7 @@ describe('api tests', function(done) {
 
     describe('get routes', function(done) {
         it('should return a 200 response', function(done) {
-            api.get('/users')
+            api.get('/api/users')
             .expect(200)
             .end(function(err, res) {
                 if(err) { console.log('Error: ' + err) }
@@ -40,7 +44,7 @@ describe('api tests', function(done) {
         })
 
         it('should return user object requested', function(done) {
-            api.get('/users/'+user._id)
+            api.get('/api/users/'+user._id)
             .expect(200)
             .end(function(err, res) {
                 if(err) { console.log('Error: ' + err) }
@@ -53,7 +57,7 @@ describe('api tests', function(done) {
         })
 
         it('should return all users', function(done) {
-            api.get('/users')
+            api.get('/api/users')
             .expect(200)
             .end(function(err, res) {
                 if(err) { console.log('Error: ' + err) }
@@ -78,7 +82,7 @@ describe('api tests', function(done) {
                   permissions: 'Student'
                 }
 
-            api.post('/users')
+            api.post('/api/users')
             .send(postUser)
             .expect(200)
             .end(function(err, res) {
@@ -93,17 +97,17 @@ describe('api tests', function(done) {
     })
 
     describe('put routes', function(done) {
-        it('should update user in database', function(done) {
+        it('should update all of a user\'s properties in database', function(done) {
             let putUser = {
                 name: {
                     firstName: 'PutTestUserFirstName',
                     lastName: 'PutTestUserLastName'
                   },
                   courses: ['PutClass1', 'PutClass2', 'PutClass3'],
-                  permissions: 'Student'
+                  permissions: 'Tutor'
                 }
 
-            api.put('/users/'+user._id)
+            api.put('/api/users/'+user._id)
             .send(putUser)
             .expect(200)
             .end(function(err, res) {
@@ -112,6 +116,7 @@ describe('api tests', function(done) {
                 res.body.should.have.property('_id').eql(user._id.toString())
                 res.body.should.have.deep.property('name.firstName', 'PutTestUserFirstName')
                 res.body.should.have.deep.property('name.lastName', 'PutTestUserLastName')
+                res.body.should.have.property('permissions', 'Tutor')
                 done()
             })
         })
@@ -119,7 +124,7 @@ describe('api tests', function(done) {
 
     describe('delete routes', function(done) {
         it('delete user in database', function(done) {
-            api.delete('/users/'+user._id)
+            api.delete('/api/users/'+user._id)
             .expect(200)
             .end(function(err, res) {
                 if(err) { console.log('Error: ' + err) }
