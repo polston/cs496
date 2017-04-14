@@ -12,17 +12,18 @@ mongoose.connect(dbconfig.db)
 
 //includes the routes, probably a way to just batch include all of them
 //but, I don't know how (yet)
-let indexRoutes = require('./routes/index');
-let whateverRoutes = require('./routes/whatever');
-let errorRoutes = require('./routes/error');
-let controllerRoutes = require('./routes/controllers')
+let indexRoutes = require('./routes/indexRoutes');
+let whateverRoutes = require('./routes/whateverRoutes');
+let errorRoutes = require('./routes/errorRoutes');
+let controllerRoutes = require('./routes/controllerRoutes')
+let calendarRoutes = require('./routes/calendarRoutes')
 
 //creates an express application
 //mostly magic
-let app = express();
+let app = express()
 
 //static & public files
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/public'))
 
 //used to parse the 'body' of http requests into json
 app.use(bodyParseer.json())
@@ -31,7 +32,7 @@ app.use(bodyParseer.json())
 app.set('view engine', 'ejs');
 
 //appends '/api/' to all of the api routes
-app.use('/api/', require('./routes/api'))
+app.use('/api/', require('./routes/apiRoutes'))
 
 //node modules path for normal cdn stuff
 app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
@@ -40,9 +41,10 @@ app.use('/angular', express.static(__dirname + '/node_modules/angular/'))
 
 //fire routes
 controllerRoutes(app)
-indexRoutes(app);
-whateverRoutes(app);
-errorRoutes(app);
+indexRoutes(app)
+calendarRoutes(app)
+whateverRoutes(app)
+errorRoutes(app)
 
 
 //listen to port 3000
