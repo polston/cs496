@@ -17,6 +17,6 @@ While still in the directory, in the terminal type "node app.js"
 
 This will start the server.
 
-Go to your browser and naviate to localhost:3000.
+Go to your browser and naviate to localhost:4000.
 
 The views/index.ejs will be rendered.
