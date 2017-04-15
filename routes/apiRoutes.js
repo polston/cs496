@@ -24,18 +24,19 @@ router.post('/users', function(req, res, next){
   let user = new User(req.body)
   user.validate(function(error){
     if(error) {
-      res.json({error : error})
+      // res.json({error : error}) //sent back from post
+      //printed to the server console
       if (error.name == 'ValidationError') {
         for (field in error.errors) {
-          console.log('test?')
-            console.log(error.errors[field].message); 
+            console.log(error.errors[field].message)
         }
-    }
+      }
+      res.json({error : error})
     }
     else {
       User.create(user).then(function(user){
-    res.json(user)
-  }).catch(next)
+        res.json(user)
+      }).catch(next)
     }
   })
   // User.create(req.body).then(function(user){
