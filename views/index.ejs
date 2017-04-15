@@ -12,6 +12,9 @@
 
     <div class="container" ng-controller="IndexController">
         <h2>Create User</h2>
+        <%
+        // error reporting  
+        %>
         <div ng-if="validationError" class="error">
             <div ng-repeat="error in validationError">
                 {{error}}
