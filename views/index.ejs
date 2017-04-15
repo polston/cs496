@@ -13,7 +13,7 @@
     <div class="container" ng-controller="IndexController">
         <h2>Create User</h2>
         <input ng-model="user.name.firstName" class="form-control" type="text" placeholder="first name">
-        <input ng-model="user.name.lastName" class="form-control" type="text" placeholder="first name">
+        <input ng-model="user.name.lastName" class="form-control" type="text" placeholder="last name">
         <select ng-model="user.permissions" class="form-control" >
             <option ng-repeat="option in permissionOptions">
                 {{option}}

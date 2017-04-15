@@ -25,9 +25,11 @@ function IndexController($scope, $http) {
     }
 
     function createUser(user) {
-        user.permissions = user.permissions.trim()
         $http.post('/api/users', user).then(
             function(result){
+                if(result.data.error){
+                    console.log(result.data.error)
+                }
                 getAllUsers()
             },
             function(err){
