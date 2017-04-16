@@ -14,7 +14,7 @@
 <div class="container" ng-controller="CalendarController">
         <h2>Create Appointment</h2>
         <input ng-model="appointment.date" class="form-control" type="date" placeholder="dd-MM-yyyy" min="2013-01-01" required/>
-        <input ng-model="appointment.tutor" class="form-control" type="text" placeholder="first name">
+        <!-- <input ng-model="appointment.tutor" class="form-control" type="text" placeholder="first name"> -->
         
         <select ng-model="appointment.tutor" class="form-control" >
             <option ng-repeat="option in tutorOptions track by option._id">

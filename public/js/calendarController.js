@@ -7,8 +7,9 @@ function CalendarController($scope, $http) {
     $scope.deleteAppointment = deleteAppointment
     $scope.editAppointment = editAppointment
     $scope.updateAppointment = updateAppointment
-    $scope.tutorOptions = ['Admin', 'Supervisor', 'Tutor', 'Student']
+    // $scope.tutorOptions = ['Admin', 'Supervisor', 'Tutor', 'Student']
     $scope.studentOptions = getAllStudents()
+    $scope.tutorOptions = getAllTutors()
 
     function init(){
         getAllAppointments()
@@ -82,6 +83,23 @@ function CalendarController($scope, $http) {
                 }
               }
               $scope.studentOptions = allStudents
+            },
+            function(err) {
+                console.log(err)
+        })
+    }
+
+    function getAllTutors(){
+      $http.get('/api/users').then(
+            function(tutors){
+              console.log(tutors.data)
+              let allTutors = []
+              for(let i = 0; i < tutors.data.length; i++){
+                if(tutors.data[i]['permissions'] == 'Tutor'){
+                  allTutors.push(tutors.data[i])
+                }
+              }
+              $scope.tutorOptions = allTutors
             },
             function(err) {
                 console.log(err)
