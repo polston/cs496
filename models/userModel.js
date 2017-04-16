@@ -16,13 +16,15 @@ const UserSchema = new Schema({
       type: String,
       minlength: [1, 'Last name must contain at least one character'],
       maxlength: [25, 'Last name is too long.'],
-      // required: [true, 'First name requried.'],
+      required: [true, 'First name requried.'],
+      trim: true
     },
     lastName: {
       type: String,
       minlength: [1, 'First name must contain at least one character'],
-      maxlength: [25, 'First name is too long.']
-      // required: [true, 'Last name required.'],
+      maxlength: [25, 'First name is too long.'],
+      required: [true, 'Last name required.'],
+      trim: true
   }
 },
   courses: [String],
