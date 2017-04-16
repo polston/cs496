@@ -11,3 +11,57 @@
 .center-text {
   text-align: center;
 }
+
+/*#landing-page {*/
+/*    background: url("background.jpg") no-repeat center center fixed; */
+/*   -webkit-background-size: cover;*/
+/*   -moz-background-size: cover;*/
+/*   -o-background-size: cover;*/
+   /*position: absolute;*/
+/*  background-size: cover;*/
+/*  height:100%;*/
+/*}*/
+
+/*==================================================
+=            Bootstrap 3 Media Queries             =
+==================================================*/
+
+
+
+
+    /*==========  Mobile First Method  ==========*/
+
+    /* Custom, iPhone Retina */ 
+    @media only screen and (min-width : 320px) {
+        
+    }
+
+    /* Extra Small Devices, Phones */ 
+    @media only screen and (min-width : 480px) {
+
+    }
+
+    /* Small Devices, Tablets */
+    @media only screen and (min-width : 768px) {
+
+    }
+
+    /* Medium Devices, Desktops */
+    @media (min-width : 992px) {
+      #site-logo {
+              max-height: 50%;
+              max-width: 50%;
+      }
+    }
+
+    /* Large Devices, Wide Screens */
+    @media (min-width : 1200px) {
+      #site-logo {
+              max-height: 50%;
+              max-width: 50%;
+      }
+    }
+
+
+
+    
