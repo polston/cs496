@@ -5,6 +5,12 @@ const Appointment = require('../models/appointmentModel')
 
 //TODO: add 404 handler for invalid id
 
+
+// http://mongoosejs.com/docs/populate.html
+// Including the above link for propserity, because eventually we will have to make it
+// so that only certain fields are returned to the front end and not an entire document
+// with all associated information
+
 //get all users
 router.get('/users', function(req, res, next){
   User.find({}).then(function(users){
@@ -77,6 +83,7 @@ router.get('/calendar/:id', function(req, res, next){
 
 //add new appointment to the database
 router.post('/calendar', function(req, res, next){
+  console.log(req.body)
   Appointment.create(req.body).then(function(appointment){
     res.json(appointment)
   }).catch(next)
