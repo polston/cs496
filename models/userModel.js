@@ -5,7 +5,14 @@ const validPermissions = ['Admin', 'Supervisor', 'Tutor', 'Student']
 
 const UserSchema = new Schema({
   _id: { type: Schema.ObjectId, auto: true },
+  google: {
+    id: String, //google.id
+    token: String,
+    email: String,
+    name: String
+  },
   name: {
+<<<<<<< HEAD
     firstName: {
       type: String,
       minlength: [1, 'Last name must contain at least one character'],
@@ -32,6 +39,14 @@ const UserSchema = new Schema({
       message: "Invalid permissions"
     },
   }
+=======
+    firstName: String,// firstName: {type: String, required: true},
+    lastName: String// lastName: {type: String, required: true}
+  },
+  courses: [String],
+  permissions: {type: String, default: 'Student', required: true},
+  email: String// email: {type: String, required: true}
+>>>>>>> 9936d07... Added Google OAuth2 Sign-In
 })
 
 const User = mongoose.model('user', UserSchema)
