@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html ng-app="CalendarApp">
+
+<head>
+<% include ./partials/head %>
+<script src="../public/js/calendarController.js"></script>
+</head>
+
+
+<body>
+<header>
+</header>
+
+<div class="container" ng-controller="CalendarController">
+        <h2>Create Appointment</h2>
+        <input ng-model="appointment.date" class="form-control" type="date" placeholder="dd-MM-yyyy" min="2013-01-01" required/>
+        <input ng-model="appointment.tutor" class="form-control" type="text" placeholder="first name">
+        
+        <select ng-model="appointment.tutor" class="form-control" >
+            <option ng-repeat="option in tutorOptions track by option._id">
+                {{option}}
+            </option>
+        </select>
+
+        <select ng-model="appointment.student" class="form-control" >
+            <option ng-repeat="option in studentOptions track by option._id">
+                {{option}}
+            </option>
+        </select>
+
+        <button class="btn btn-primary" ng-click="createAppointment(appointment)">Create</button>
+        <button class="btn btn-success" ng-click="updateAppointment(appointment)">Update</button>
+
+
+        <div><h1>All users:</h1></div>
+        <div ng-repeat="appointment in appointments" >
+            <h4>
+                {{appointment}}
+                <a ng-click="deleteAppointment(appointment._id)" class="pull-right"><span class="fa fa-times-circle-o"></span></a>
+                <a ng-click="editAppointment(appointment._id)" class="pull-right"><span class="fa fa-pencil-square-o"></span></a>
+            </h4>
+        </div>
+
+    </div>
+
+
+<footer>
+</footer>
+</body>
+
+</html>
