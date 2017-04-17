@@ -29,10 +29,14 @@ function CalendarController($scope, $http) {
     }
 
     function createAppointment(appointment) {
-        for(thing in appointment){
-            thing = appointment[thing].trim()
-        }
-        console.log(appointment)
+        // appointment  = appointment.trim()
+        // for(thing in appointment){
+        // appointment[thing] = appointment[thing].trim()
+        // }
+        // console.log(appointment)
+        // appt = JSON.parse(appointment)
+        // console.log(JSON.parse(appointment.tutor))
+        console.log('\n\n appointment date: ' + JSON.stringify(appointment))
         $http.post('/api/calendar', appointment).then(
             function(result){
                 getAllAppointments()

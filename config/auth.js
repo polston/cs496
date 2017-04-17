@@ -1,11 +1,10 @@
-let secrets = require('./authsecrets')
+const secrets = require('./authsecrets')
 
 module.exports = {
-
+    
     'googleAuth' : {
-        'clientID'      : secrets.clientID,
-        'clientSecret'  : secrets.clientSecret,
-        'callbackURL'   : secrets.callbackURL
+        'clientID'      : secrets.googleAuth.clientID,
+        'clientSecret'  : secrets.googleAuth.clientSecret,
+        'callbackURL'   : secrets.googleAuth.callbackURL
     }
-
 };

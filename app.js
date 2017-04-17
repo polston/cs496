@@ -37,10 +37,11 @@ app.use(require('express-session')({
     resave: false,
     saveUninitialized: false
 })); 
-app.use(passport.initialize());                                        //whatever you've done, we're not getting users anymore
-app.use(passport.session());                                            //sec...well its redirecting now lol
+
+app.use(passport.initialize());
+app.use(passport.session());
 require('./config/passport')(passport);
-app.use(bodyParseer.json())                                             
+app.use(bodyParseer.json())
 
 //set up template engine
 app.set('view engine', 'ejs');
@@ -68,7 +69,8 @@ if(!module.parent){
     app.listen(process.env.PORT || 4000, process.env.IP || 'localhost');
 }
 
-console.log('Server starting at ' + (process.env.IP || 'localhost') + ':' + (process.env.PORT || 4000) + ', probably.' );
+
+console.log('Server starting at ' + (process.env.IP || 'localhost') + ':' + (4000 || process.env.PORT ) + ', probably.' );
 
 //export for testing suites and stuff
 module.exports = app

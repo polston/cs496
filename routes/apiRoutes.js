@@ -83,10 +83,28 @@ router.get('/calendar/:id', function(req, res, next){
 
 //add new appointment to the database
 router.post('/calendar', function(req, res, next){
-  console.log(req.body)
+  
+  let appointment = new Appointment(req.body)
+
+  appointment.validate(function(error){
+    if(error) {
+      // res.json({error : error}) //sent back from post
+      //printed to the server console
+      if (error.name == 'ValidationError') {
+        for (field in error.errors) {
+            console.log(error.errors[field].message)
+        }
+      }
+      res.json({error : error})
+  }
+})
+
   Appointment.create(req.body).then(function(appointment){
+    console.log('\n\ncalendar post res: ' + JSON.stringify(req.body))
     res.json(appointment)
-  }).catch(next)
+  }).catch(next, function(next){
+    console.log('next' + next)
+  })
 })
 
 //remove appointment from database
