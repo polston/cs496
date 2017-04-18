@@ -84,7 +84,7 @@ router.get('/calendar/:id', function(req, res, next){
 //add new appointment to the database
 router.post('/calendar', function(req, res, next){
   
-  let appointment = new Appointment(req.body)
+  let appointment = new Appointment(req.body.tutor)
 
   appointment.validate(function(error){
     if(error) {

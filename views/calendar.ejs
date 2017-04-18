@@ -4,6 +4,20 @@
 <head>
 <% include ./partials/head %>
 <script src="../public/js/calendarController.js"></script>
+<script>
+    $(function(){           
+        if (!Modernizr.inputtypes.date) {
+        // If not native HTML5 support, fallback to jQuery datePicker
+            $('input[type=date]').datepicker({
+                // Consistent format with the HTML5 picker
+                    dateFormat : 'yy-mm-dd'
+                },
+                // Localization
+                $.datepicker.regional['it']
+            );
+        }
+    });
+</script>
 </head>
 
 
@@ -28,11 +42,11 @@
             </option>
         </select>
         <input ng-model="appointment.course" class="form-control" type="text" placeholder="Underwater Basket Weaving" required/>
-
+        {{appointment.course}}
         <button class="btn btn-primary" ng-click="createAppointment(appointment)">Create</button>
         <button class="btn btn-success" ng-click="updateAppointment(appointment)">Update</button>
-
-
+        {{appointment}}
+        {{appointment.date | date:'yyyy-MM-dd'}}
         <div><h1>All users:</h1></div>
         <div ng-repeat="appointment in appointments" >
             <h4>
