@@ -1,6 +1,9 @@
 
 # Created by https://www.gitignore.io/api/node
 
+### auth secrets ###
+config/authsecrets.js
+
 ### Node ###
 # Logs
 logs
