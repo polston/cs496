@@ -1,0 +1,25 @@
+{
+  "name": "cs496",
+  "description": "CS496 group project",
+  "main": "app.js",
+  "authors": [
+    "Michael Polston",
+    "David Owens",
+    "Nathan Cartwright",
+    "Austin Little"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/polston/cs496",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-bootstrap": "^2.5.0",
+    "angular-ui-calendar": "^1.0.2"
+  }
+}

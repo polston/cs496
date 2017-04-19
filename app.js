@@ -53,6 +53,7 @@ app.use('/api/', require('./routes/apiRoutes'))
 app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
 app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist/css/'));
 app.use('/angular', express.static(__dirname + '/node_modules/angular/'))
+app.use('/bower_components', express.static(__dirname + '/bower_components/'))
 
 //fire routes
 controllerRoutes(app);
