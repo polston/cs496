@@ -11,6 +11,11 @@
 .center-text {
   text-align: center;
 }
+/*TODO: so, this doesn't work, but we need to  probably 
+get rid of the scrollbar on the monthly calendar? */
+#calendar {
+  height: 100%;
+}
 
 /*#landing-page {*/
 /*    background: url("background.jpg") no-repeat center center fixed; */

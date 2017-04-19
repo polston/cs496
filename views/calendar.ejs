@@ -10,6 +10,7 @@
 <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
 
 <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.min.js"></script>
 
 <script  src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
@@ -48,7 +49,33 @@
 
 <div role="main">
     <div class="container">
+    <div ng-controller="ModalCtrl as $ctrl" class="modal-demo">
+                <script type="text/ng-template" id="myModalContent.html">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="modal-title">I'm a modal!</h3>
+                    </div>
+                    
+                    <div class="modal-body" id="modal-body">
+                        <ul>
+                            <li ng-repeat="item in $ctrl.items">
+                                <a href="#" ng-click="$event.preventDefault(); $ctrl.selected.item = item">{{ item }}</a>
+                            </li>
+                        </ul>
+                        Selected: <b>{{ $ctrl.selected.item }}</b>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
+                        <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+                    </div>
+                </script>
+                <button type="button" class="btn btn-default" ng-click="$ctrl.open()">Open me!</button
+            </div>
+
         <section id="directives-calendar" ng-controller="CalendarCtrl">
+
+            
+
+
 
             <div class="page-header">
                 <h1>UI-Calendar</h1>
@@ -68,11 +95,13 @@
                             Add Event
                         </button>
                     </div>
-
+                    
+                    <% /*TODO: This list looks really gross*/ %>
                     <li ng-repeat="e in events">
                         <div class="alert alert-info">
-                            <b> <input ng-model="e.title"></b>
                             {{e.start | date:"MMM dd"}} - {{e.end | date:"MMM dd"}}
+                            </br>
+                            <b> <input ng-model="e.title"></b>
                             <a ng-click="remove($index)" class="pull-right"><i class="fa fa-times-circle-o"></i></a>
                         </div>
                     </li>
@@ -82,7 +111,7 @@
 
                 <div class="col-sm-8">
                     
-                    <i class="fa fa-bell"></i> Calendar One
+                    <i class="fa fa-bell"></i> ATutorElete Calendar
                     <div class="alert-success calAlert" ng-show="alertMessage != undefined && alertMessage != ''">
                         <h4>{{alertMessage}}</h4>
                     </div>

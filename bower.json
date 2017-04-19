@@ -20,6 +20,7 @@
   ],
   "dependencies": {
     "angular-bootstrap": "^2.5.0",
-    "angular-ui-calendar": "^1.0.2"
+    "angular-ui-calendar": "^1.0.2",
+    "angular": "^1.6.4"
   }
 }
