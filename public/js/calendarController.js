@@ -1,4 +1,4 @@
-angular.module('calendarController', ['ui.calendar', 'ui.bootstrap', 'modalController'])
+angular.module('calendarController', ['ui.calendar', 'ui.bootstrap', 'modalController', 'dropDownController'])
         .controller('CalendarCtrl', CalendarCtrl);
 
 function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $document) {
@@ -187,53 +187,53 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
 
 var modalController = angular.module('modalController', ['ui.bootstrap'])
   .controller('ModalCtrl', function ($uibModal, $log, $document) {
-  var $ctrl = this;
-  $ctrl.items = ['item1', 'item2', 'item3'];
+    var $ctrl = this;
+    $ctrl.items = ['item1', 'item2', 'item3'];
 
-  $ctrl.animationsEnabled = true;
+    $ctrl.animationsEnabled = true;
 
-  $ctrl.open = function (size, parentSelector) {
-    var parentElem = parentSelector ? 
-      angular.element($document[0].querySelector('.modal-demo ' + parentSelector)) : undefined;
-    var modalInstance = $uibModal.open({
-      animation: $ctrl.animationsEnabled,
-      ariaLabelledBy: 'modal-title',
-      ariaDescribedBy: 'modal-body',
-      templateUrl: 'myModalContent.html',
-      controller: 'ModalInstanceCtrl',
-      controllerAs: '$ctrl',
-      size: size,
-      appendTo: parentElem,
-      resolve: {
-        items: function () {
-          return $ctrl.items;
+    $ctrl.open = function (size, parentSelector) {
+      var parentElem = parentSelector ? 
+        angular.element($document[0].querySelector('.modal-demo ' + parentSelector)) : undefined;
+      var modalInstance = $uibModal.open({
+        animation: $ctrl.animationsEnabled,
+        ariaLabelledBy: 'modal-title',
+        ariaDescribedBy: 'modal-body',
+        templateUrl: 'myModalContent.html',
+        controller: 'ModalInstanceCtrl',
+        controllerAs: '$ctrl',
+        size: size,
+        appendTo: parentElem,
+        resolve: {
+          items: function () {
+            return $ctrl.items;
+          }
         }
-      }
-    });
+      });
 
-    modalInstance.result.then(function (selectedItem) {
-      $ctrl.selected = selectedItem;
-    }, function () {
-      $log.info('Modal dismissed at: ' + new Date());
-    });
-  };
+      modalInstance.result.then(function (selectedItem) {
+        $ctrl.selected = selectedItem;
+      }, function () {
+        $log.info('Modal dismissed at: ' + new Date());
+      });
+    };
 
-  $ctrl.openComponentModal = function () {
-    var modalInstance = $uibModal.open({
-      animation: $ctrl.animationsEnabled,
-      component: 'modalComponent',
-      resolve: {
-        items: function () {
-          return $ctrl.items;
+    $ctrl.openComponentModal = function () {
+      var modalInstance = $uibModal.open({
+        animation: $ctrl.animationsEnabled,
+        component: 'modalComponent',
+        resolve: {
+          items: function () {
+            return $ctrl.items;
+          }
         }
-      }
-    });
+      });
 
-    modalInstance.result.then(function (selectedItem) {
-      $ctrl.selected = selectedItem;
-    }, function () {
-      $log.info('modal-component dismissed at: ' + new Date());
-    });
+      modalInstance.result.then(function (selectedItem) {
+        $ctrl.selected = selectedItem;
+      }, function () {
+        $log.info('modal-component dismissed at: ' + new Date());
+      });
   };
 
   $ctrl.openMultipleModals = function () {
@@ -268,20 +268,21 @@ var modalController = angular.module('modalController', ['ui.bootstrap'])
 // Please note that $uibModalInstance represents a modal window (instance) dependency.
 // It is not the same as the $uibModal service used above.
 
-var modalInstanceCtrl = angular.module('modalController').controller('ModalInstanceCtrl', function ($uibModalInstance, items) {
-  var $ctrl = this;
-  $ctrl.items = items;
-  $ctrl.selected = {
-    item: $ctrl.items[0]
-  };
+var modalInstanceCtrl = angular.module('modalController')
+  .controller('ModalInstanceCtrl', function ($uibModalInstance, items) {
+    var $ctrl = this;
+    $ctrl.items = items;
+    $ctrl.selected = {
+      item: $ctrl.items[0]
+    };
 
-  $ctrl.ok = function () {
-    $uibModalInstance.close($ctrl.selected.item);
-  };
+    $ctrl.ok = function () {
+      $uibModalInstance.close($ctrl.selected.item);
+    };
 
-  $ctrl.cancel = function () {
-    $uibModalInstance.dismiss('cancel');
-  };
+    $ctrl.cancel = function () {
+      $uibModalInstance.dismiss('cancel');
+    };
 });
 
 // Please note that the close and dismiss bindings are from $uibModalInstance.
@@ -311,4 +312,31 @@ var modalComponent = angular.module('modalController').directive('modalComponent
       $ctrl.dismiss({$value: 'cancel'});
     };
   }
+});
+
+
+
+let dropDownController = angular.module('dropDownController', ['ui.bootstrap'])
+  .controller('DropdownCtrl', function ($scope, $log) {
+    $scope.items = [
+      'The first choice!',
+      'And another choice for you.',
+      'but wait! A third!'
+    ];
+
+    $scope.status = {
+      isopen: false
+    };
+
+    $scope.toggled = function(open) {
+      $log.log('Dropdown is now: ', open);
+    };
+
+    $scope.toggleDropdown = function($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+      $scope.status.isopen = !$scope.status.isopen;
+    };
+
+    $scope.appendToEl = angular.element(document.querySelector('#dropdown-long-content'));
 });
