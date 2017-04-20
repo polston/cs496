@@ -23,7 +23,7 @@
 <script type="text/javascript" src="bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
 <script type="text/javascript" src="bower_components/angular-ui-calendar/src/calendar.js"></script>
 <script type="text/javascript" src="bower_components/fullcalendar/dist/gcal.js"></script>
-
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
 <script src="../public/js/calendarController.js"></script>
 <!--
 <script>
@@ -87,16 +87,31 @@
             <button type="button" class="btn btn-default" ng-click="$ctrl.open()">Open me!</button>
         </div>
         <!--modal-->
-
+<!---->
             <!--TODO: normal bootstrap Modal, can't get it working' -->
             <!--would be nice to just not use the angular-bootstrap stuff at all if possible-->
             <!--kind of a headache...-->
+            <!--https://getbootstrap.com/javascript/#modals-->
             <!-- Small modal -->
+            
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#bs-example-modal-sm">Small modal</button>
             <div id="bs-example-modal-sm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
                 <div class="modal-dialog modal-sm" role="document">
                     <div class="modal-content">
-                    ...
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="myModalLabel">Floppy Flapjacks</h4>
+                        </div>
+                        <!--this works-->
+                        <select ng-model="appointment.student" class="form-control" ng-trim="true">
+                            <option ng-repeat="option in studentOptions track by option._id">
+                                {{option}}
+                            </option>
+                        </select>
+                        
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
                     </div>
                 </div>
             </div>
