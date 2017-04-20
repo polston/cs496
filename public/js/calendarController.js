@@ -1,13 +1,15 @@
 angular.module('calendarController', ['ui.calendar', 'ui.bootstrap', 'modalController', 'dropDownController'])
         .controller('CalendarCtrl', CalendarCtrl);
 
-function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $document) {
+function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $document, $http) {
     var date = new Date();
     var d = date.getDate();
     var m = date.getMonth();
     var y = date.getFullYear();
     $scope.remove = remove
     $scope.selectAppointment = selectAppointment
+    $scope.studentOptions = getAllStudents()
+    $scope.tutorOptions = getAllTutors()
 
     function init(){
       renderCalendar('myCalendar')
@@ -181,6 +183,41 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
     /* event sources array*/
     $scope.eventSources = [$scope.events, $scope.eventSource, $scope.eventsF];
     $scope.eventSources2 = [$scope.calEventsExt, $scope.eventsF, $scope.events];
+
+    function getAllStudents(){
+      $http.get('/api/users').then(
+            function(students){
+              console.log(students.data)
+              let allStudents = []
+              for(let i = 0; i < students.data.length; i++){
+                if(students.data[i]['permissions'] == 'Student'){
+                  console.log(students.data[i])
+                  allStudents.push(students.data[i])
+                }
+              }
+              $scope.studentOptions = allStudents
+            },
+            function(err) {
+                console.log(err)
+        })
+    }
+
+    function getAllTutors(){
+      $http.get('/api/users').then(
+            function(tutors){
+              console.log(tutors.data)
+              let allTutors = []
+              for(let i = 0; i < tutors.data.length; i++){
+                if(tutors.data[i]['permissions'] == 'Tutor'){
+                  allTutors.push(tutors.data[i])
+                }
+              }
+              $scope.tutorOptions = allTutors
+            },
+            function(err) {
+                console.log(err)
+        })
+    }
 }
 
 

@@ -2,12 +2,12 @@
 <html ng-app="calendarController">
 
 <head>
-<% include ./partials/head %>
+
 
 
 <link rel="stylesheet" href="bower_components/fullcalendar/dist/fullcalendar.css"/>
  <!--jquery, moment, and angular have to get included before fullcalendar -->
-<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+<!--<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
 
 <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
@@ -18,8 +18,8 @@
 <script type="text/javascript" src="bower_components/moment/min/moment.min.js"></script>
 
 
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.7.1/modernizr.min.js"></script>
-
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.7.1/modernizr.min.js"></script>-->
+<% include ./partials/head %>
 <script type="text/javascript" src="bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
 <script type="text/javascript" src="bower_components/angular-ui-calendar/src/calendar.js"></script>
 <script type="text/javascript" src="bower_components/fullcalendar/dist/gcal.js"></script>
@@ -63,59 +63,45 @@
                 </div>
                 
                 <div class="modal-body" id="modal-body">
-                    <ul>
-                        <li ng-repeat="item in $ctrl.items">
-                            <a href="#" ng-click="$event.preventDefault(); $ctrl.selected.item = item">{{ item }}</a>
-                        </li>
-                    </ul>
+
+                    <select ng-model="appointment.tutor" class="form-control" ng-trim="true" >
+                        <option ng-repeat="option in tutorOptions track by option._id">
+                            {{option}}
+                        </option>
+                    </select>
+                    </br>
+                    <select ng-model="appointment.student" class="dropdown-menu" ng-trim="true">
+                        <option ng-repeat="option in studentOptions track by option._id">
+                            {{option}}
+                        </option>
+                    </select>
+
                     Selected: <b>{{ $ctrl.selected.item }}</b>
                 </div>
 
-                <!-- dropdown buttons -->
-                <!--TODO: populate with students-->
-                <div ng-controller="DropdownCtrl as $studentDropDown">
-                    <div class="btn-group" uib-dropdown is-open="status.isopen">
-                    <button id="single-button" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
-                        Button dropdown <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
-                        <li role="menuitem"><a href="#">Action</a></li>
-                        <li role="menuitem"><a href="#">Another action</a></li>
-                        <li role="menuitem"><a href="#">Something else here</a></li>
-                        <li class="divider"></li>
-                        <li role="menuitem"><a href="#">Separated link</a></li>
-                    </ul>
-                    </div>
-                </div>
-
-                <!--TODO: populate with tutors-->
-                <div ng-controller="DropdownCtrl as $tutorDropDown">
-                    <div class="btn-group" uib-dropdown is-open="status.isopen">
-                    <button id="single-button" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
-                        Button dropdown <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
-                        <li role="menuitem"><a href="#">Action</a></li>
-                        <li role="menuitem"><a href="#">Another action</a></li>
-                        <li role="menuitem"><a href="#">Something else here</a></li>
-                        <li class="divider"></li>
-                        <li role="menuitem"><a href="#">Separated link</a></li>
-                    </ul>
-                    </div>
-                </div>
-                <!--dropdown buttons-->
-                
                 <div class="modal-footer">
                     <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
                     <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
                 </div>
             </script>
-            <button type="button" class="btn btn-default" ng-click="$ctrl.open()">Open me!</button
+            <button type="button" class="btn btn-default" ng-click="$ctrl.open()">Open me!</button>
         </div>
         <!--modal-->
 
-
-            <div class="page-header">
+            <!--TODO: normal bootstrap Modal, can't get it working' -->
+            <!--would be nice to just not use the angular-bootstrap stuff at all if possible-->
+            <!--kind of a headache...-->
+            <!-- Small modal -->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#bs-example-modal-sm">Small modal</button>
+            <div id="bs-example-modal-sm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content">
+                    ...
+                    </div>
+                </div>
+            </div>
+            
+            <div>
                 <h1>UI-Calendar</h1>
             </div>
 
