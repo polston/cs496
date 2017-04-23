@@ -25,6 +25,13 @@ router.get('/users/:id', function(req, res, next){
   })
 })
 
+//get user by courses
+router.get('/users/:courses', function(req, res, next){
+  User.findById(req.params.id).then(function(user){
+    res.json(user)
+  })
+})
+
 //add new user to the database
 router.post('/users', function(req, res, next){
   let user = new User(req.body)
@@ -84,16 +91,17 @@ router.get('/calendar/:id', function(req, res, next){
 //add new appointment to the database
 router.post('/calendar', function(req, res, next){
   
-  let appointment = new Appointment(req.body.tutor)
-
+  let appointment = new Appointment(req.body)
+  console.log('appointment: ', appointment)
   appointment.validate(function(error){
     if(error) {
       // res.json({error : error}) //sent back from post
       //printed to the server console
       if (error.name == 'ValidationError') {
-        for (field in error.errors) {
-            console.log(error.errors[field].message)
-        }
+        // for (field in error.errors) {
+        //     console.log(error.errors[field].message)
+        // }
+        console.log('you fucked up')
       }
       res.json({error : error})
   }

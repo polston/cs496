@@ -25,6 +25,7 @@ function IndexController($scope, $http) {
                 console.log(err)
         })
     }
+    
     // TODO: fire off flash message or something with the returned json error
     // from the database
     function createUser(user) {

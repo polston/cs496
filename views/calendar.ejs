@@ -55,38 +55,6 @@
         <section id="directives-calendar" ng-controller="CalendarCtrl">
 
             
-            <!--modal template-->
-        <div ng-controller="ModalCtrl as $ctrl" class="modal-demo">
-            <script type="text/ng-template" id="myModalContent.html">
-                <div class="modal-header">
-                    <h3 class="modal-title" id="modal-title">I'm a modal!</h3>
-                </div>
-                
-                <div class="modal-body" id="modal-body">
-
-                    <select ng-model="appointment.tutor" class="form-control" ng-trim="true" >
-                        <option ng-repeat="option in tutorOptions track by option._id">
-                            {{option}}
-                        </option>
-                    </select>
-                    </br>
-                    <select ng-model="appointment.student" class="dropdown-menu" ng-trim="true">
-                        <option ng-repeat="option in studentOptions track by option._id">
-                            {{option}}
-                        </option>
-                    </select>
-
-                    Selected: <b>{{ $ctrl.selected.item }}</b>
-                </div>
-
-                <div class="modal-footer">
-                    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
-                    <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
-                </div>
-            </script>
-            <button type="button" class="btn btn-default" ng-click="$ctrl.open()">Open me!</button>
-        </div>
-        <!--modal-->
 <!---->
             <!--TODO: normal bootstrap Modal, can't get it working' -->
             <!--would be nice to just not use the angular-bootstrap stuff at all if possible-->
@@ -94,23 +62,43 @@
             <!--https://getbootstrap.com/javascript/#modals-->
             <!-- Small modal -->
             
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#bs-example-modal-sm">Small modal</button>
-            <div id="bs-example-modal-sm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-                <div class="modal-dialog modal-sm" role="document">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#bs-example-modal-md">Add Appointment</button>
+            <div id="bs-example-modal-md" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+                <div class="modal-dialog modal-md" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title" id="myModalLabel">Floppy Flapjacks</h4>
+                            <h4 class="modal-title" id="myModalLabel">Add an Appointment</h4>
                         </div>
                         <!--this works-->
-                        <select ng-model="appointment.student" class="form-control" ng-trim="true">
-                            <option ng-repeat="option in studentOptions track by option._id">
+                        <h4 class="modal-title">Student</h4>
+                        <select ng-model="student" class="form-control" ng-trim="true">
+                            <option value="" disabled selected>Select a Student</option>
+                            <option ng-repeat="option in studentOptions">
+                                {{option}} <!--figured I'd fuck with the angular calendar and see what I couldn't do.-->
+                            </option>
+                        </select>
+                        <h4 class="modal-title">Tutor</h4>
+                        <select ng-model="tutor" class="form-control" ng-trim="true">
+                            <option value="" disabled selected>Select a Tutor</option>
+                            <option ng-repeat="option in tutorOptions">
                                 {{option}}
                             </option>
                         </select>
+                        <h4 class="modal-title">Course</h4>
+                        <select ng-model="course" class="form-control" ng-trim="true">
+                            
+                            <option value="" disabled selected>Select a Course</option>
+                            <option ng-repeat="option in courseOptions">
+                                {{option}}
+                            </option>
+                        </select>
+                        <h4 class="modal-title">Date</h4>
+                        <input ng-model="date" class="form-control" type="date" placeholder="MM/dd/yyyy" min="2017-04-01" required/>
+                        
                         
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
+                            <button class="btn btn-primary" ng-click="createAppointment(student,tutor,course,date)">Create</button>
                         </div>
                     </div>
                 </div>
@@ -124,15 +112,9 @@
                 <div class="col-sm-4">
                         
                     <div class="btn-group calTools">
-                        <button class="btn" ng-click="changeLang()">
-                            {{changeTo}}
-                        </button>              
-                        <button class="btn" ng-click="addRemoveEventSource(eventSources,eventSource)">
-                            Toggle Source
-                        </button>
-                        <button type="button" class="btn btn-primary" ng-click="addEvent()">
-                            Add Event
-                        </button>
+                        <!--<button type="button" class="btn btn-primary" ng-click="addEvent()">-->
+                        <!--    Add Event-->
+                        <!--</button>--> <% /*TODO: Maybe move modal here?*/ %>
                     </div>
                     
                     <% /*TODO: This list looks really gross*/ %>

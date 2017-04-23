@@ -23,9 +23,10 @@ let app = express();
 let indexRoutes = require('./routes/indexRoutes');
 let whateverRoutes = require('./routes/whateverRoutes');
 let errorRoutes = require('./routes/errorRoutes');
-let controllerRoutes = require('./routes/controllerRoutes')
-let calendarRoutes = require('./routes/calendarRoutes')
-let loginRoutes = require('./routes/login')
+let controllerRoutes = require('./routes/controllerRoutes');
+let calendarRoutes = require('./routes/calendarRoutes');
+let loginRoutes = require('./routes/login');
+let appointmentRoutes = require('./routes/appointmentsRoute');
 
 
 
@@ -61,7 +62,9 @@ loginRoutes(app,passport);
 indexRoutes(app);
 calendarRoutes(app)
 whateverRoutes(app);
+appointmentRoutes(app);
 errorRoutes(app);
+
 
 
 //listen to port 4000
