@@ -1,6 +1,6 @@
 var passport = require('passport');
-var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var configAuth = require('./auth');
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var User       = require('../models/userModel');
 
 module.exports = function(passport) {
@@ -44,11 +44,13 @@ module.exports = function(passport) {
                      //just seeing if his shit will actually work.
                  if (user) {
                      // if a user is found, log them in
+                     console.log(profile)
                      return done(null, user); //so this is passed back into login.js? should be?
                  } else {
                     // if the user isnt in our database, create a new user
                     var newUser          = new User();
-                    //where are you getting this from? I know it's the scotchio thing, but can you post a link?
+                    newUser.name.firstName = profile.name.givenName
+                    newUser.name.lastName =  profile.name.familyName
                     newUser.google.id    = profile.id; //w
                     newUser.google.token = accessToken; //?                                                                               //from google
                     newUser.google.name  = profile.displayName;

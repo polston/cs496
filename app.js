@@ -23,9 +23,10 @@ let app = express();
 let indexRoutes = require('./routes/indexRoutes');
 let whateverRoutes = require('./routes/whateverRoutes');
 let errorRoutes = require('./routes/errorRoutes');
-let controllerRoutes = require('./routes/controllerRoutes')
-let calendarRoutes = require('./routes/calendarRoutes')
-let loginRoutes = require('./routes/login')
+let controllerRoutes = require('./routes/controllerRoutes');
+let calendarRoutes = require('./routes/calendarRoutes');
+let loginRoutes = require('./routes/login');
+let appointmentRoutes = require('./routes/appointmentsRoute');
 
 
 
@@ -37,10 +38,11 @@ app.use(require('express-session')({
     resave: false,
     saveUninitialized: false
 })); 
-app.use(passport.initialize());                                        //whatever you've done, we're not getting users anymore
-app.use(passport.session());                                            //sec...well its redirecting now lol
+
+app.use(passport.initialize());
+app.use(passport.session());
 require('./config/passport')(passport);
-app.use(bodyParseer.json())                                             
+app.use(bodyParseer.json())
 
 //set up template engine
 app.set('view engine', 'ejs');
@@ -52,6 +54,7 @@ app.use('/api/', require('./routes/apiRoutes'))
 app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
 app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist/css/'));
 app.use('/angular', express.static(__dirname + '/node_modules/angular/'))
+app.use('/bower_components', express.static(__dirname + '/bower_components/'))
 
 //fire routes
 controllerRoutes(app);
@@ -59,7 +62,9 @@ loginRoutes(app,passport);
 indexRoutes(app);
 calendarRoutes(app)
 whateverRoutes(app);
+appointmentRoutes(app);
 errorRoutes(app);
+
 
 
 //listen to port 4000
@@ -68,7 +73,8 @@ if(!module.parent){
     app.listen(process.env.PORT || 4000, process.env.IP || 'localhost');
 }
 
-console.log('Server starting at ' + (process.env.IP || 'localhost') + ':' + (process.env.PORT || 4000) + ', probably.' );
+
+console.log('Server starting at ' + (process.env.IP || 'localhost') + ':' + (4000 || process.env.PORT ) + ', probably.' );
 
 //export for testing suites and stuff
 module.exports = app

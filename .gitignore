@@ -4,6 +4,10 @@
 ### auth secrets ###
 config/authsecrets.js
 
+
+### bower components ###
+bower_components
+
 ### Node ###
 # Logs
 logs

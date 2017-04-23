@@ -1,51 +1,158 @@
 <!DOCTYPE html>
-<html ng-app="CalendarApp">
+<html ng-app="calendarController">
 
 <head>
+
+
+
+<link rel="stylesheet" href="bower_components/fullcalendar/dist/fullcalendar.css"/>
+ <!--jquery, moment, and angular have to get included before fullcalendar -->
+<!--<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+
+<script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.min.js"></script>
+
+<script  src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+
+<script type="text/javascript" src="bower_components/moment/min/moment.min.js"></script>
+
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.7.1/modernizr.min.js"></script>-->
 <% include ./partials/head %>
+<script type="text/javascript" src="bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
+<script type="text/javascript" src="bower_components/angular-ui-calendar/src/calendar.js"></script>
+<script type="text/javascript" src="bower_components/fullcalendar/dist/gcal.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
 <script src="../public/js/calendarController.js"></script>
-</head>
+<!--
+<script>
+    $(function(){           
+        if (!Modernizr.inputtypes.date) {
+        // If not native HTML5 support, fallback to jQuery datePicker
+            $('input[type=date]').datepicker({
+                // Consistent format with the HTML5 picker
+                    dateFormat : 'yy-mm-dd'
+                },
+                // Localization
+                $.datepicker.regional['it']
+            );
+        }
+    });
+</script>
+</head>-->
 
 
 <body>
-<header>
-</header>
 
-<div class="container" ng-controller="CalendarController">
-        <h2>Create Appointment</h2>
-        <input ng-model="appointment.date" class="form-control" type="date" placeholder="dd-MM-yyyy" min="2013-01-01" required/>
-        <input ng-model="appointment.tutor" class="form-control" type="text" placeholder="first name">
+
+
+<div role="main">
+    <div class="container">
+
         
-        <select ng-model="appointment.tutor" class="form-control" >
-            <option ng-repeat="option in tutorOptions track by option._id">
-                {{option}}
-            </option>
-        </select>
 
-        <select ng-model="appointment.student" class="form-control" >
-            <option ng-repeat="option in studentOptions track by option._id">
-                {{option}}
-            </option>
-        </select>
+        <section id="directives-calendar" ng-controller="CalendarCtrl">
 
-        <button class="btn btn-primary" ng-click="createAppointment(appointment)">Create</button>
-        <button class="btn btn-success" ng-click="updateAppointment(appointment)">Update</button>
+            
+<!---->
+            <!--TODO: normal bootstrap Modal, can't get it working' -->
+            <!--would be nice to just not use the angular-bootstrap stuff at all if possible-->
+            <!--kind of a headache...-->
+            <!--https://getbootstrap.com/javascript/#modals-->
+            <!-- Small modal -->
+            
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#bs-example-modal-md">Add Appointment</button>
+            <div id="bs-example-modal-md" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+                <div class="modal-dialog modal-md" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="myModalLabel">Add an Appointment</h4>
+                        </div>
+                        <!--this works-->
+                        <h4 class="modal-title">Student</h4>
+                        <select ng-model="student" class="form-control" ng-trim="true">
+                            <option value="" disabled selected>Select a Student</option>
+                            <option ng-repeat="option in studentOptions">
+                                {{option}} <!--figured I'd fuck with the angular calendar and see what I couldn't do.-->
+                            </option>
+                        </select>
+                        <h4 class="modal-title">Tutor</h4>
+                        <select ng-model="tutor" class="form-control" ng-trim="true">
+                            <option value="" disabled selected>Select a Tutor</option>
+                            <option ng-repeat="option in tutorOptions">
+                                {{option}}
+                            </option>
+                        </select>
+                        <h4 class="modal-title">Course</h4>
+                        <select ng-model="course" class="form-control" ng-trim="true">
+                            
+                            <option value="" disabled selected>Select a Course</option>
+                            <option ng-repeat="option in courseOptions">
+                                {{option}}
+                            </option>
+                        </select>
+                        <h4 class="modal-title">Date</h4>
+                        <input ng-model="date" class="form-control" type="date" placeholder="MM/dd/yyyy" min="2017-04-01" required/>
+                        
+                        
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button class="btn btn-primary" ng-click="createAppointment(student,tutor,course,date)">Create</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div>
+                <h1>UI-Calendar</h1>
+            </div>
 
+            <div class="row-fluid">
+                <div class="col-sm-4">
+                        
+                    <div class="btn-group calTools">
+                        <!--<button type="button" class="btn btn-primary" ng-click="addEvent()">-->
+                        <!--    Add Event-->
+                        <!--</button>--> <% /*TODO: Maybe move modal here?*/ %>
+                    </div>
+                    
+                    <% /*TODO: This list looks really gross*/ %>
+                    <li ng-repeat="e in events">
+                        <div class="alert alert-info">
+                            {{e.start | date:"MMM dd"}} - {{e.end | date:"MMM dd"}}
+                            </br>
+                            <b> <input ng-model="e.title"></b>
+                            <a ng-click="remove($index)" class="pull-right"><i class="fa fa-times-circle-o"></i></a>
+                        </div>
+                    </li>
+                </div>
 
-        <div><h1>All users:</h1></div>
-        <div ng-repeat="appointment in appointments" >
-            <h4>
-                {{appointment}}
-                <a ng-click="deleteAppointment(appointment._id)" class="pull-right"><span class="fa fa-times-circle-o"></span></a>
-                <a ng-click="editAppointment(appointment._id)" class="pull-right"><span class="fa fa-pencil-square-o"></span></a>
-            </h4>
-        </div>
+                <!---->
 
+                <div class="col-sm-8">
+                    
+                    <i class="fa fa-bell"></i> ATutorElete Calendar
+                    <div class="alert-success calAlert" ng-show="alertMessage != undefined && alertMessage != ''">
+                        <h4>{{alertMessage}}</h4>
+                    </div>
+                    <div class="btn-toolbar">
+                        <!--<p class="pull-right lead">Calendar One View Options</p>-->
+                        <div class="btn-group">
+                            <button class="btn btn-success" ng-click="changeView('agendaDay', 'myCalendar')">AgendaDay</button>
+                            <button class="btn btn-success" ng-click="changeView('agendaWeek', 'myCalendar')">AgendaWeek</button>
+                            <button class="btn btn-success" ng-click="changeView('month', 'myCalendar')">Month</button>
+                        </div>
+                    </div>
+                        
+                    <div id="myCalendar" class="calendar" ng-model="eventSources" calendar="myCalendar" ui-calendar="uiConfig.calendar"></div>
+                </div>
+
+            </div>
+        </section>
     </div>
+</div>
 
-
-<footer>
-</footer>
 </body>
 
 </html>
