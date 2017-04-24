@@ -217,8 +217,8 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
                 }
                   
               }
-              $scope.courseOptions = courses
-              console.log('course options: ', $scope.courseOptions)
+             // $scope.courseOptions = courses
+              //console.log('course options: ', $scope.courseOptions)
               $scope.tutorOptions = allTutors
               $scope.tutorNames = names
             },
@@ -226,6 +226,17 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
                 console.log(err)
         })
     }
+    
+    $scope.getTutorCourses = function(tutor){
+              let courses = []
+              for(let i = 0; i < $scope.tutorOptions.length; i++){
+                if($scope.tutorOptions[i]['_id']==tutor){
+                  courses.push($scope.tutorOptions[i].courses)
+                }
+              }
+              $scope.courseOptions = courses
+    }
+ 
     
     
     function getAllAppointments() {

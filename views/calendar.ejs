@@ -74,7 +74,8 @@
                         </div>
                         <!--this works-->
                         <h4 class="modal-title">Student</h4>
-                        <select ng-model="student" ng-options="option._id as option.name.firstName + ' ' + option.name.lastName for option in studentOptions" class="form-control" ng-trim="true">
+                        <select ng-model="student" ng-options="option._id as option.name.firstName + ' ' + option.name.lastName for option in studentOptions" 
+                        class="form-control" ng-trim="true">
                             <option value="" disabled selected>Select a Student</option>
 
                             {{option}}
@@ -82,7 +83,8 @@
 
                       
                         <h4 class="modal-title">Tutor</h4>
-                        <select ng-model="tutor" ng-options="option._id as option.name.firstName + ' ' + option.name.lastName for option in tutorOptions" class="form-control" ng-trim="true">
+                        <select ng-model="tutor" ng-options="option._id as option.name.firstName + ' ' + option.name.lastName for option in tutorOptions" 
+                        class="form-control" ng-trim="true" ng-change="getTutorCourses(tutor)">
                             <option value="" disabled selected>Select a Tutor</option>
 
                             {{option}}
@@ -98,7 +100,8 @@
                         </select>
 
                         <h4 class="modal-title">Date</h4>
-                        <input ng-model="date" ng-model-options="{timezone: 'UTC'}" type="datetime-local" class="form-control" type="date" placeholder="yyyy-MM-ddHH:mm:ss" required/>
+                        <input ng-model="date" ng-model-options="{timezone: 'UTC'}" type="datetime-local" 
+                        class="form-control" type="date" placeholder="yyyy-MM-ddHH:mm:ss" required/>
                         
                         
                         <div class="modal-footer">
