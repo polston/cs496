@@ -262,7 +262,7 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
       console.log('date: ', date)
       
       let data = { date: date,
-                   course: course.trim(),
+                   course: course,
                    tutor: tutor,
                    student: student };
 

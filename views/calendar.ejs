@@ -20,11 +20,14 @@
 
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.7.1/modernizr.min.js"></script>-->
 <% include ./partials/head %>
+
 <script type="text/javascript" src="bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
 <script type="text/javascript" src="bower_components/angular-ui-calendar/src/calendar.js"></script>
 <script type="text/javascript" src="bower_components/fullcalendar/dist/gcal.js"></script>
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+
 <script src="../public/js/calendarController.js"></script>
+
 <!--
 <script>
     $(function(){           
@@ -95,7 +98,7 @@
                         </select>
 
                         <h4 class="modal-title">Date</h4>
-                        <input ng-model="date" class="form-control" type="date" placeholder="MM/dd/yyyy" min="2017-04-01" required/>
+                        <input ng-model="date" ng-model-options="{timezone: 'UTC'}" type="datetime-local" class="form-control" type="date" placeholder="yyyy-MM-ddHH:mm:ss" required/>
                         
                         
                         <div class="modal-footer">

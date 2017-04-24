@@ -20,7 +20,8 @@
   ],
   "dependencies": {
     "angular-bootstrap": "^2.5.0",
-    "angular-ui-calendar": "^1.0.2",
-    "angular": "^1.6.4"
+    "angular-ui-calendar": "https://github.com/angular-ui/ui-calendar.git#5171a36bf0ea66423f6de49e971b7cc389beba91",
+    "angular": "^1.6.4",
+    "angular-eonasdan-datetimepicker": "^0.3.9"
   }
 }
