@@ -290,7 +290,7 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
                 console.log(obj)
                 $scope.events.push(obj)
                 }
-              //$scope.clearDropdowns()
+              $scope.clearDropdowns()
             },
             function(err){
                 console.log('err: ', err)
