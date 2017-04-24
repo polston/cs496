@@ -251,7 +251,7 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
     //  $scope.events.push(obj)
     //}
 
-    $scope.createAppointment = function(student,tutor,course,date){
+    $scope.createAppointment = function(student, tutor, course, date){
      // console.log(JSON.parse(tutor)._id)
     // console.log('tutor: ', )
       console.log('student: ', student)
@@ -261,8 +261,8 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
       
       let data = { date: date,
                    course: course.trim(),
-                   tutor: JSON.parse(tutor)._id,
-                   student: JSON.parse(student)._id };
+                   tutor: tutor,
+                   student: student };
 
         $http.post('/api/calendar', data).then(
             function(result){
