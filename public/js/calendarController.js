@@ -285,4 +285,11 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
                 console.log('err: ', err)
         })
     }
+    
+    $scope.clearDropdowns = function(){
+      $scope.student = ""
+      $scope.tutor = ""
+      $scope.date = ""
+      $scope.course = ""
+    }
 }
