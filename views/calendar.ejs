@@ -84,13 +84,13 @@
                         </select>
 
                         <h4 class="modal-title">Course</h4>
-                        <select ng-model="course" class="form-control" ng-trim="true">
-                            
+                        
+                        <!--... this ng-options syntax is extremely confusing here, but it works-->
+                        <select ng-model="course" ng-options="option as option for option in courseOptions" class="form-control" ng-trim="true">
                             <option value="" disabled selected>Select a Course</option>
-                            <option ng-repeat="option in courseOptions">
-                                {{option}}
-                            </option>
+                            {{option}}
                         </select>
+
                         <h4 class="modal-title">Date</h4>
                         <input ng-model="date" class="form-control" type="date" placeholder="MM/dd/yyyy" min="2017-04-01" required/>
                         

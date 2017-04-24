@@ -10,6 +10,7 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
     $scope.selectAppointment = selectAppointment
     $scope.studentOptions = getAllStudents()
     $scope.tutorOptions = getAllTutors()
+    $scope.courseOptions = []
     // $scope.getAllAppointments= getAllAppointments
     $scope.events = []
 
@@ -217,6 +218,7 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
                   
               }
               $scope.courseOptions = courses
+              console.log('course options: ', $scope.courseOptions)
               $scope.tutorOptions = allTutors
               $scope.tutorNames = names
             },
