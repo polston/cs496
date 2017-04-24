@@ -17,6 +17,10 @@ get rid of the scrollbar on the monthly calendar? */
   height: 100%;
 }
 
+.error {
+  color: red;
+}
+
 /*#landing-page {*/
 /*    background: url("background.jpg") no-repeat center center fixed; */
 /*   -webkit-background-size: cover;*/

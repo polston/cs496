@@ -72,42 +72,52 @@
                         <div class="modal-header">
                             <h4 class="modal-title" id="myModalLabel">Add an Appointment</h4>
                         </div>
-                        <!--this works-->
+                        
+                        <form name="modalForm">
+                            <div class="modal-body">
                         <h4 class="modal-title">Student</h4>
                         <select ng-model="student" ng-options="option._id as option.name.firstName + ' ' + option.name.lastName for option in studentOptions" 
-                        class="form-control" ng-trim="true">
+                        class="form-control" ng-trim="true" name="studentPicker" required>
                             <option value="" disabled selected>Select a Student</option>
 
                             {{option}}
                         </select>
-
+                        <span ng-show="modalForm.studentPicker.$error.required" class="error">Student Required</span>
                       
                         <h4 class="modal-title">Tutor</h4>
                         <select ng-model="tutor" ng-options="option._id as option.name.firstName + ' ' + option.name.lastName for option in tutorOptions" 
-                        class="form-control" ng-trim="true" ng-change="getTutorCourses(tutor)">
+                        class="form-control" ng-trim="true" ng-change="getTutorCourses(tutor)" name="tutorPicker" required>
                             <option value="" disabled selected>Select a Tutor</option>
 
                             {{option}}
 
                         </select>
 
+                        <span ng-show="modalForm.tutorPicker.$error.required" class="error">Tutor Required</span>
+
                         <h4 class="modal-title">Course</h4>
                         
                         <!--... this ng-options syntax is extremely confusing here, but it works-->
-                        <select ng-model="course" ng-options="option as option for option in courseOptions" class="form-control" ng-trim="true">
+                        <select ng-model="course" ng-options="option as option for option in courseOptions" class="form-control" ng-trim="true" 
+                        name="coursePicker" required>
+    
                             <option value="" disabled selected>Select a Course</option>
                             {{option}}
                         </select>
 
+                        <span ng-show="modalForm.coursePicker.$error.required" class="error">Course Required</span>
+
                         <h4 class="modal-title">Date</h4>
                         <input ng-model="date" ng-model-options="{timezone: 'UTC'}" type="datetime-local" 
-                        class="form-control" type="date" placeholder="yyyy-MM-ddHH:mm:ss" required/>
-                        
-                        
+                        class="form-control" type="date" placeholder="yyyy-MM-ddHH:mm:ss" name="datePicker" required/>
+                        <span ng-show="modalForm.datePicker.$error.required" class="error">Date Required</span>
+                        </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clearDropdowns()">Close</button>
-                            <button class="btn btn-primary" ng-click="createAppointment(student,tutor,course,date)" data-dismiss="modal">Create</button>
+                            <button class="btn btn-primary" ng-disabled="modalForm.$invalid"
+                            ng-click="createAppointment(student,tutor,course,date)" data-dismiss="modal">Create</button>
                         </div>
+                    </form>
                     </div>
                 </div>
             </div>
