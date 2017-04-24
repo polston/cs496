@@ -74,13 +74,22 @@
                         <select ng-model="student" class="form-control" ng-trim="true">
                             <option value="" disabled selected>Select a Student</option>
                             <option ng-repeat="option in studentOptions">
-                                {{option}} <!--figured I'd fuck with the angular calendar and see what I couldn't do.-->
+                                {{option}}
                             </option>
                         </select>
+                        
+                        <select ng-model="test" >
+                            <option ng-options="option as option.permissions for option in tutorOptions">
+                                    {{option}}
+                            </option>
+                        </select>
+                        
+                        
+                            
                         <h4 class="modal-title">Tutor</h4>
                         <select ng-model="tutor" class="form-control" ng-trim="true">
                             <option value="" disabled selected>Select a Tutor</option>
-                            <option ng-repeat="option in tutorOptions">
+                            <option ng-repeat="option as tutorOptions">
                                 {{option}}
                             </option>
                         </select>
