@@ -26,7 +26,7 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
       
     }
     init()
-    console.log('events: ', $scope.events)
+    //console.log('events: ', $scope.events)
   /*  $scope.changeTo = 'Hungarian';
     //event source that pulls from google.com 
     $scope.eventSource = {
@@ -184,12 +184,12 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
     function getAllStudents(){
       $http.get('/api/users').then(
             function(students){
-              console.log(students.data)
+              //console.log(students.data)
               let allStudents = []
               let names = []
               for(let i = 0; i < students.data.length; i++){
                 if(students.data[i]['permissions'] == 'Student'){
-                  console.log(students.data[i])
+                 // console.log(students.data[i])
                   allStudents.push(students.data[i])
                   names.push(students.data[i].name.firstName + " " + students.data[i].name.lastName);
                 }
@@ -205,7 +205,7 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
     function getAllTutors(){
       $http.get('/api/users').then(
             function(tutors){
-              console.log(tutors.data)
+              //console.log(tutors.data)
               let allTutors = []
               let courses = []
               let names = []
@@ -240,14 +240,14 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
     
     
     function getAllAppointments() {
-      let temp = []
+     // $scope.events = []
+      //console.log(temp[0])
       $http.get('/api/calendar').then(
           function(appointments){
             
-            console.log(appointments.data)
+            //console.log(appointments.data)
             for(let i = 0; i < appointments.data.length; i++){
               let obj = {title: 'Test', start: Date.parse(appointments.data[i].date), end: Date.parse(appointments.data[i].date)}
-              // temp.push(obj)
               $scope.events.push(obj)
             }
             // console.log('temp: ', temp)
@@ -279,7 +279,18 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
 
         $http.post('/api/calendar', data).then(
             function(result){
-              getAllAppointments()
+              let contains = false
+              for(let i = 0;  i < $scope.events.length; i++){
+                if($scope.events[i]['_id']==data['_id']){
+                  contains = true
+                  }
+                }
+              if(contains == false){
+                let obj = {title: 'Test', start: Date.parse(data.date), end: Date.parse(data.date)}
+                console.log(obj)
+                $scope.events.push(obj)
+                }
+              //$scope.clearDropdowns()
             },
             function(err){
                 console.log('err: ', err)
