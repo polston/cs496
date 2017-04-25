@@ -11,20 +11,13 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
     $scope.studentOptions = getAllStudents()
     $scope.tutorOptions = getAllTutors()
     $scope.courseOptions = []
-    $scope.getAllAppointments= getAllAppointments
+    //$scope.getAllAppointments= getAllAppointments
     $scope.events = []
-    var vm = this;
-    $scope.vm=vm
     function init(){
       
       renderCalendar('myCalendar')
       getAllAppointments()
-      
-      // events
-      // getAllAppointments()
-      // $scope.events =
-      // $scope.events = getAllAppointments()
-      
+
     }
     init()
     //console.log('events: ', $scope.events)
@@ -45,11 +38,7 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
     //   {title: 'Birthday Party',start: new Date(y, m, d + 1, 19, 0),end: new Date(y, m, d + 1, 22, 30),allDay: false},
     //   {title: 'Click for Google',start: new Date(y, m, 28),end: new Date(y, m, 29),url: 'http://google.com/'}
     // ]
-    
-    // console.log('$scope.events: ', $scope.events)
-    // let test = getAllAppointments()
-    // console.log('getAllAppointments(): ', test)
-    // $scope.events = getAllAppointments()
+
 
     /* event source that calls a function on every view switch */
  /*   $scope.eventsF = function (start, end, timezone, callback) {
@@ -166,21 +155,19 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
             icon: 'right-single-arrow',
             click: function() {
                  uiCalendarConfig.calendars.myCalendar.fullCalendar('next');//ugly way to access calendar object method, advances month.
-                 getAllAppointments()
-            }
+             }
           },
           prev: {
             icon: 'left-single-arrow',
             click: function() {
                 uiCalendarConfig.calendars.myCalendar.fullCalendar('prev');//ugly way to access calendar object method, goes back month.
-                getAllAppointments()
-            }
+                //probably useless now, since this turned out not to be the issue.
+             }
           },
           today: {
             text: 'today',
             click: function() {
                 uiCalendarConfig.calendars.myCalendar.fullCalendar('today');//goes back to current month.
-                getAllAppointments()
             }
           }
       },
@@ -273,7 +260,8 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
             
             //console.log(appointments.data)
             for(let i = 0; i < appointments.data.length; i++){
-              let obj = {title: 'Test', start: Date.parse(appointments.data[i].date), end: Date.parse(appointments.data[i].date)}
+              let obj = {title: 'Test', start: Date.parse(appointments.data[i].date), end: Date.parse(appointments.data[i].date), stick:true}
+              //stick property in events object necessary to make events persist on view changes.
               $scope.events.push(obj)
             }
             // console.log('temp: ', temp)
