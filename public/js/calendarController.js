@@ -11,9 +11,10 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
     $scope.studentOptions = getAllStudents()
     $scope.tutorOptions = getAllTutors()
     $scope.courseOptions = []
-    // $scope.getAllAppointments= getAllAppointments
+    $scope.getAllAppointments= getAllAppointments
     $scope.events = []
-
+    var vm = this;
+    $scope.vm=vm
     function init(){
       
       renderCalendar('myCalendar')
@@ -70,19 +71,19 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
     // };
 
     /* alert on eventClick */
-    $scope.alertOnEventClick = function( date, jsEvent, view){
+   /* $scope.alertOnEventClick = function( date, jsEvent, view){
         $scope.alertMessage = (date.title + ' was clicked ');
-    };
+    };*/
 
     /* alert on Drop */
-     $scope.alertOnDrop = function(event, delta, revertFunc, jsEvent, ui, view){
+  /*   $scope.alertOnDrop = function(event, delta, revertFunc, jsEvent, ui, view){
        $scope.alertMessage = ('Event Droped to make dayDelta ' + delta);
-    };
+    };*/
 
     /* alert on Resize */
-    $scope.alertOnResize = function(event, delta, revertFunc, jsEvent, ui, view ){
+  /*  $scope.alertOnResize = function(event, delta, revertFunc, jsEvent, ui, view ){
        $scope.alertMessage = ('Event Resized to make dayDelta ' + delta);
-    };
+    };*/
 
     // add and removes an event source of choice 
    /* $scope.addRemoveEventSource = function(sources,source) {
@@ -140,7 +141,7 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
     };
 
      /* Render Tooltip */
-    $scope.eventRender = function( event, element, view ) {
+  /*  $scope.eventRender = function( event, element, view ) {
       // console.log('eventRender:')
       // console.log('event: ', event)
       // console.log('element: ', element)
@@ -148,11 +149,11 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
         element.attr({'tooltip': event.title,
                       'tooltip-append-to-body': true});
         $compile(element)($scope);
-    };
+    };*/
 
     function selectAppointment(start, end){
-      let title = prompt('Appointment title?')
-      console.log(start + ' ' + end)
+      //let title = prompt('Appointment title?')
+      //console.log(start + ' ' + end)
     }
 
     /* config object */
@@ -160,6 +161,29 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
       calendar:{
         height: 500,
         editable: false,
+        customButtons: {
+          next: {
+            icon: 'right-single-arrow',
+            click: function() {
+                 uiCalendarConfig.calendars.myCalendar.fullCalendar('next');//ugly way to access calendar object method, advances month.
+                 getAllAppointments()
+            }
+          },
+          prev: {
+            icon: 'left-single-arrow',
+            click: function() {
+                uiCalendarConfig.calendars.myCalendar.fullCalendar('prev');//ugly way to access calendar object method, goes back month.
+                getAllAppointments()
+            }
+          },
+          today: {
+            text: 'today',
+            click: function() {
+                uiCalendarConfig.calendars.myCalendar.fullCalendar('today');//goes back to current month.
+                getAllAppointments()
+            }
+          }
+      },
         header:{
           left: 'title',
           center: '',
@@ -175,6 +199,8 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
         select: $scope.selectAppointment
       }
     };
+    
+    
 
     /* event sources array*/
     // $scope.eventSources = [$scope.events, $scope.eventSource, $scope.eventsF];
@@ -287,7 +313,7 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
                 }
               if(contains == false){
                 let obj = {title: 'Test', start: Date.parse(data.date), end: Date.parse(data.date)}
-                console.log(obj)
+                //console.log(obj)
                 $scope.events.push(obj)
                 }
               $scope.clearDropdowns()
