@@ -21,6 +21,18 @@ get rid of the scrollbar on the monthly calendar? */
   color: red;
 }
 
+.display-1 {
+   font-family: Impact, Haettenschweiler, "Franklin Gothic Bold", Charcoal, "Helvetica Inserat", 
+   "Bitstream Vera Sans Bold", "Arial Black", sans serif;
+   font-size: 5em;
+   font-weight: bold;
+   text-align: center;
+   color: black;
+   -webkit-text-fill-color: white; 
+   -webkit-text-stroke-width: 3px;
+   -webkit-text-stroke-color: black;
+}
+
 /*#landing-page {*/
 /*    background: url("background.jpg") no-repeat center center fixed; */
 /*   -webkit-background-size: cover;*/
@@ -48,23 +60,28 @@ get rid of the scrollbar on the monthly calendar? */
     /* Extra Small Devices, Phones */ 
     @media only screen and (min-width : 480px) {
 
+
     }
 
     /* Small Devices, Tablets */
     @media only screen and (min-width : 768px) {
 
+
     }
 
     /* Medium Devices, Desktops */
     @media (min-width : 992px) {
+
       #site-logo {
               max-height: 50%;
               max-width: 50%;
-      }
     }
+      }
+    
 
     /* Large Devices, Wide Screens */
     @media (min-width : 1200px) {
+
       #site-logo {
               max-height: 50%;
               max-width: 50%;
