@@ -20,7 +20,7 @@ let app = express();
 
 //includes the routes, probably a way to just batch include all of them
 //but, I don't know how (yet)
-let indexRoutes = require('./routes/indexRoutes');
+// let indexRoutes = require('./routes/indexRoutes');
 let whateverRoutes = require('./routes/whateverRoutes');
 let errorRoutes = require('./routes/errorRoutes');
 let controllerRoutes = require('./routes/controllerRoutes');
@@ -49,7 +49,7 @@ app.set('view engine', 'ejs');
 
 //appends '/api/' to all of the api routes
 app.use('/api/', require('./routes/apiRoutes'))
-
+app.use('/index', require('./routes/indexRoutes'))
 //node modules path for normal cdn stuff
 app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
 app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist/css/'));
@@ -59,7 +59,7 @@ app.use('/bower_components', express.static(__dirname + '/bower_components/'))
 //fire routes
 controllerRoutes(app);
 loginRoutes(app,passport);
-indexRoutes(app);
+// indexRoutes(app);
 calendarRoutes(app)
 whateverRoutes(app);
 appointmentRoutes(app);

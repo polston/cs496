@@ -12,10 +12,34 @@ const Appointment = require('../models/appointmentModel')
 // with all associated information
 
 //get all users
+//TODO: probably a way to put it all in a promise and return the correct thing
+// in the end, instead of just checking permissions and doing a seperate query in each
 router.get('/users', function(req, res, next){
-  User.find({}).then(function(users){
-    res.json(users)
-  })
+  // let found = ''
+  console.log(req.session.views)
+  if(req.user.permissions == 'Admin'){
+    User.find({}).then(function(users){
+      res.json(users)
+      // found = JSON.parse()
+    })
+  }
+  else if(req.user.permissions == 'Supervisor'){
+    User.find({permissions: 'Student', permissions: 'Tutor'}).then(function(users){
+      res.json(users)
+      // found = users
+    })
+  }
+  else if(req.user.permissions == 'Student'){
+    User.find({permissions: 'Tutor'}).then(function(users){
+      res.json(users)
+      
+      // console.log('users: ' + users)
+      // found = users
+    })
+  }
+  // console.log('found: ' + found.body)
+  // res.json(found)
+  // next()
 })
 
 //get user by id
