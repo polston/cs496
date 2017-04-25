@@ -260,7 +260,8 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
             
             //console.log(appointments.data)
             for(let i = 0; i < appointments.data.length; i++){
-              let obj = {title: 'Test', start: Date.parse(appointments.data[i].date), end: Date.parse(appointments.data[i].date), stick:true}
+              let obj = {title: 'Test', start: Date.parse(appointments.data[i].date), 
+              end: Date.parse(appointments.data[i].date), stick:true}
               //stick property in events object necessary to make events persist on view changes.
               $scope.events.push(obj)
             }
@@ -300,7 +301,8 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
                   }
                 }
               if(contains == false){
-                let obj = {title: 'Test', start: Date.parse(data.date), end: Date.parse(data.date)}
+                let obj = {title: 'Test', start: Date.parse(data.date), 
+                end: Date.parse(data.date), stick:true}
                 //console.log(obj)
                 $scope.events.push(obj)
                 }

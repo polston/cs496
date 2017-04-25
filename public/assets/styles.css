@@ -1,3 +1,13 @@
+html {
+    background: url("background.jpg") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  /*position: absolute;*/
+  background-size: cover;
+  height:100%;
+
+}
 
 
 .container-fluid {
@@ -24,7 +34,7 @@ get rid of the scrollbar on the monthly calendar? */
 .display-1 {
    font-family: Impact, Haettenschweiler, "Franklin Gothic Bold", Charcoal, "Helvetica Inserat", 
    "Bitstream Vera Sans Bold", "Arial Black", sans serif;
-   font-size: 5em;
+   font-size: 4.5em;
    font-weight: bold;
    text-align: center;
    color: black;
