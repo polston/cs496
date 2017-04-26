@@ -20,82 +20,11 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
 
     }
     init()
-    //console.log('events: ', $scope.events)
-  /*  $scope.changeTo = 'Hungarian';
-    //event source that pulls from google.com 
-    $scope.eventSource = {
-            url: "http://www.google.com/calendar/feeds/usa__en%40holiday.calendar.google.com/public/basic",
-            className: 'gcal-event',           // an option!
-            currentTimezone: 'America/Chicago' // an option!
-    };*/
 
-    /* event source that contains custom events on the scope */
-    // $scope.events = [
-    //   {title: 'All Day Event',start: new Date(y, m, 1)},
-    //   {title: 'Long Event',start: new Date(y, m, d - 5),end: new Date(y, m, d - 2)},
-    //   {id: 999,title: 'Repeating Event',start: new Date(y, m, d - 3, 16, 0),allDay: false},
-    //   {id: 999,title: 'Repeating Event',start: new Date(y, m, d + 4, 16, 0),allDay: false},
-    //   {title: 'Birthday Party',start: new Date(y, m, d + 1, 19, 0),end: new Date(y, m, d + 1, 22, 30),allDay: false},
-    //   {title: 'Click for Google',start: new Date(y, m, 28),end: new Date(y, m, 29),url: 'http://google.com/'}
-    // ]
-
-
-    /* event source that calls a function on every view switch */
- /*   $scope.eventsF = function (start, end, timezone, callback) {
-      var s = new Date(start).getTime() / 1000;
-      var e = new Date(end).getTime() / 1000;
-      var m = new Date(start).getMonth();
-      var events = [{title: 'Feed Me ' + m,start: s + (50000),end: s + (100000),allDay: false, className: ['customFeed']}];
-      callback(events);
-    };*/
-
-    // $scope.calEventsExt = {
-    //   color: '#f00',
-    //   textColor: 'yellow',
-    //   events: [
-    //       {type:'party',title: 'Lunch',start: new Date(y, m, d, 12, 0),end: new Date(y, m, d, 14, 0),allDay: false},
-    //       {type:'party',title: 'Lunch 2',start: new Date(y, m, d, 12, 0),end: new Date(y, m, d, 14, 0),allDay: false},
-    //       {type:'party',title: 'Click for Google',start: new Date(y, m, 28),end: new Date(y, m, 29),url: 'http://google.com/'}
-    //     ]
-    // };
 
     /* alert on eventClick */
    /* $scope.alertOnEventClick = function( date, jsEvent, view){
         $scope.alertMessage = (date.title + ' was clicked ');
-    };*/
-
-    /* alert on Drop */
-  /*   $scope.alertOnDrop = function(event, delta, revertFunc, jsEvent, ui, view){
-       $scope.alertMessage = ('Event Droped to make dayDelta ' + delta);
-    };*/
-
-    /* alert on Resize */
-  /*  $scope.alertOnResize = function(event, delta, revertFunc, jsEvent, ui, view ){
-       $scope.alertMessage = ('Event Resized to make dayDelta ' + delta);
-    };*/
-
-    // add and removes an event source of choice 
-   /* $scope.addRemoveEventSource = function(sources,source) {
-      var canAdd = 0;
-      angular.forEach(sources,function(value, key){
-        if(sources[key] === source){
-          sources.splice(key,1);
-          canAdd = 1;
-        }
-      });
-      if(canAdd === 0){
-        sources.push(source);
-      }
-    };*/
-
-    /* add custom event*/
-  /*  $scope.addEvent = function() {
-      $scope.events.push({
-        title: 'Open Sesame',
-        start: new Date(y, m, 28),
-        end: new Date(y, m, 29),
-        className: ['openSesame']
-      });
     };*/
 
     /* remove event */
@@ -107,20 +36,6 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
     $scope.changeView = function(view,calendar) {
       uiCalendarConfig.calendars[calendar].fullCalendar('changeView',view);
     };
-    /* Change View */
-    // $scope.renderCalender = function(calendar) {
-    //   $timeout(function() {
-    //     if(uiCalendarConfig.calendars[calendar]){
-    //       uiCalendarConfig.calendars[calendar].fullCalendar('render');
-    //     }
-    //   });
-    // };
-    // $scope.renderCalendar = function() {
-    //     $timeout(function(){
-    //             $('#calendar').fullCalendar('render');
-    //             $('#calendar').fullCalendar('rerenderEvents');
-    //         }, 0);
-    // };
 
     function renderCalendar(calendarId) {
       $timeout(function () {
@@ -128,17 +43,6 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
         calendarTag.fullCalendar('render');
       }, 0);
     };
-
-     /* Render Tooltip */
-  /*  $scope.eventRender = function( event, element, view ) {
-      // console.log('eventRender:')
-      // console.log('event: ', event)
-      // console.log('element: ', element)
-      // console.log('view: ', view)
-        element.attr({'tooltip': event.title,
-                      'tooltip-append-to-body': true});
-        $compile(element)($scope);
-    };*/
 
     function selectAppointment(start, end){
       //let title = prompt('Appointment title?')
@@ -187,12 +91,8 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
       }
     };
     
-    
-
-    /* event sources array*/
-    // $scope.eventSources = [$scope.events, $scope.eventSource, $scope.eventsF];
+    // Celndar needs eventSource to render events.
     $scope.eventSources = [$scope.events]
-    // $scope.eventSources2 = [$scope.calEventsExt, $scope.eventsF, $scope.events];
 
     function getAllStudents(){
       $http.get('/api/users').then(
@@ -202,7 +102,6 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
               let names = []
               for(let i = 0; i < students.data.length; i++){
                 if(students.data[i]['permissions'] == 'Student'){
-                 // console.log(students.data[i])
                   allStudents.push(students.data[i])
                   names.push(students.data[i].name.firstName + " " + students.data[i].name.lastName);
                 }
@@ -260,9 +159,13 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
             
             //console.log(appointments.data)
             for(let i = 0; i < appointments.data.length; i++){
-              let obj = {title: 'Test', start: Date.parse(appointments.data[i].date), 
-              end: Date.parse(appointments.data[i].date), stick:true}
+              let endTime = new Date(appointments.data[i].date)
+              let obj = {title: 'Tutoring', start: Date.parse(appointments.data[i].date), 
+              end: Date.parse(endTime.toISOString(endTime.setHours(endTime.getHours() + 1))), stick:true,
+              color:  '#B30000'
+              }
               //stick property in events object necessary to make events persist on view changes.
+              //only way to modify an ISO string is to pass back to date object, modify, then covert back to date.
               $scope.events.push(obj)
             }
             // console.log('temp: ', temp)
@@ -294,19 +197,13 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
 
         $http.post('/api/calendar', data).then(
             function(result){
-              let contains = false
-              for(let i = 0;  i < $scope.events.length; i++){
-                if($scope.events[i]['_id']==data['_id']){
-                  contains = true
-                  }
-                }
-              if(contains == false){
-                let obj = {title: 'Test', start: Date.parse(data.date), 
-                end: Date.parse(data.date), stick:true}
-                //console.log(obj)
+                let endTime = new Date(data.date)
+                let obj = {title: 'Tutoring', start: Date.parse(data.date), 
+                 end: Date.parse(endTime.toISOString(endTime.setHours(endTime.getHours() + 1))), stick:true,
+                 color:  '#B30000'
+                 }
                 $scope.events.push(obj)
-                }
-              $scope.clearDropdowns()
+                $scope.clearDropdowns()
             },
             function(err){
                 console.log('err: ', err)

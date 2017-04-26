@@ -1,17 +1,32 @@
 html {
-    background: url("background.jpg") no-repeat center center fixed; 
+  background: url("tower.jpg") no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   /*position: absolute;*/
   background-size: cover;
   height:100%;
-
 }
 
+.modalPrompt {
+  text-align:center;
+}
+
+.fa-window-close{
+  color:#B30000;
+  
+}
+
+.calBody {
+  background-color: transparent;
+}
 
 .container-fluid {
   background-color: blue;
+}
+
+.col-sm-8{
+  background-color: #EFEFEF;
 }
 
 .col-sm-6 {
