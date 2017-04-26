@@ -177,6 +177,7 @@ router.route('/calendar')
 .post(function(req, res, next){
   let appointment = new Appointment(req.body)
   console.log('appointment: ', appointment)
+  //error handling inside model
   appointment.validate(function(error){
     if(error) {
       res.json({error : error}) //sent back from post
@@ -189,6 +190,8 @@ router.route('/calendar')
       res.json({error : error})
     }
   })
+  //TODO: can tutors make their own appointments?
+  //admins and supervisors can create appointments
   if(req.user.permissions == 'Admin' || req.user.permissions == 'Supervisor'){
     Appointment.create(req.body).then(function(appointment){
       console.log('\n\ncalendar post res: ' + JSON.stringify(req.body))
@@ -200,30 +203,63 @@ router.route('/calendar')
   
 })
 
-
-//get appointment by id
-router.get('/calendar/:id', function(req, res, next){
-  Appointment.findById(req.params.id).then(function(appointment){
-    res.json(appointment)
-  })
-})
-
-
-//remove appointment from database
-router.delete('/calendar/:id', function(req, res, next){
-  Appointment.findByIdAndRemove(req.params.id).then(function(appointment){
-    res.json(appointment)
-  })
-})
-
-//update appointment in database
-router.put('/calendar/:id', function(req, res, next){
-  Appointment.findByIdAndUpdate(req.params.id, req.body).then(function(){
+router.route('/calendar/:id')
+//get specific appointment by its id and user permissions
+.get(function(req, res, next){
+  //admins can get any appointment
+  if(req.user.permissions == 'Admin' || req.user.permissions == 'Supervisor'){
     Appointment.findById(req.params.id).then(function(appointment){
-      //console.log('test' + user)
       res.json(appointment)
     })
-  })
+  }
+  //tutors can only get their own appointments, and those that are available
+  else if(req.user.permissions == 'Tutor'){
+    Appointment.findById(req.params.id).then(function(appointment){
+      //FIXME: this may or may not work
+      if(appointment.tutor === req.user._id || !appointment.hasOwnProperty('student')){
+        res.json(appointment)
+      }
+    })
+  }
+  //students can only get their own appointments, and those that are available
+  else if(req.user.permissions == 'Student'){
+    Appointment.findById(req.params.id).then(function(appointment){
+      //FIXME: this may or may not work
+      if(appointment.student === req.user._id || !appointment.hasOwnProperty('student')){
+        res.json(appointment)
+      }
+    })
+  }
+})
+//remove appointment from database based on user permissions
+.delete(function(req, res, next){
+  //only admins and supervisors can remove appointments
+  if(req.user.permissions == 'Admin' || req.user.permissions == 'Supervisor'){
+    Appointment.findByIdAndRemove(req.params.id).then(function(appointment){
+      res.json(appointment)
+    })
+  }
+})
+.put(function(req, res, next){
+  //admins and supervisors can update any appointment
+  if(req.user.permissions == 'Admin' || req.user.permissions == 'Supervisor'){
+    Appointment.findByIdAndUpdate(req.params.id, req.body).then(function(){
+      Appointment.findById(req.params.id).then(function(appointment){
+        //console.log('test' + user)
+        res.json(appointment)
+      })
+    })
+  }
+  //TODO: does this even work?
+  //students can only update the student field of an appointment
+  else if(req.user.permissions == 'Student' || req.user.permissions == 'Tutor'){
+    Appointment.findByIdAndUpdate(req.params.id, {student: req.user._id}).then(function(){
+      Appointment.findById(req.params.id).then(function(appointment){
+        //console.log('test' + user)
+        res.json(appointment)
+      })
+    })
+  }
 })
 
 module.exports = router
