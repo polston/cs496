@@ -141,6 +141,7 @@ router.route('/users/:id')
 // ../users/:id
 
 //get user by courses
+//TODO: does this need permission restrictions?
 router.route('/users/:courses')
 .get(function(req, res, next){
   User.findById(req.params.id).then(function(user){
@@ -149,7 +150,7 @@ router.route('/users/:courses')
 })
 // ../users/:courses
 
-//get all appointments
+//get all appointments based on user id and permissions
 router.route('/calendar')
 .get(function(req, res, next){
   //admins and supervisors can see all appointments
@@ -158,9 +159,47 @@ router.route('/calendar')
       res.json(appointments)
     })
   }
-
-
+  //these two below could be reconciled into one, but I'm going to leave it like this for readability
+  // tutors can see available tutors, and their own appointments
+  else if(req.user.permissions == 'Tutor'){
+    Appointment.find({student: {"$exists": false}, tutor: req.user._id}).then(function(appointments){
+      res.json(appointments)
+    })
+  }
+  //students can see available tutors and their own appointments
+  else if(req.user.permissions == 'Student'){
+    Appointment.find({student: {"$exists": false}, student: req.user._id}).then(function(appointments){
+      res.json(appointments)
+    })
+  }
 })
+//add new appointment to the database
+.post(function(req, res, next){
+  let appointment = new Appointment(req.body)
+  console.log('appointment: ', appointment)
+  appointment.validate(function(error){
+    if(error) {
+      res.json({error : error}) //sent back from post
+      //printed to the server console
+      if (error.name == 'ValidationError') {
+        for (field in error.errors) {
+            console.log(error.errors[field].message)
+        }
+      }
+      res.json({error : error})
+    }
+  })
+  if(req.user.permissions == 'Admin' || req.user.permissions == 'Supervisor'){
+    Appointment.create(req.body).then(function(appointment){
+      console.log('\n\ncalendar post res: ' + JSON.stringify(req.body))
+      res.json(appointment)
+    }).catch(next, function(next){
+      console.log('next: ' + next)
+    })
+  }
+  
+})
+
 
 //get appointment by id
 router.get('/calendar/:id', function(req, res, next){
@@ -169,32 +208,6 @@ router.get('/calendar/:id', function(req, res, next){
   })
 })
 
-//add new appointment to the database
-router.post('/calendar', function(req, res, next){
-  
-  let appointment = new Appointment(req.body)
-  console.log('appointment: ', appointment)
-  appointment.validate(function(error){
-    if(error) {
-      // res.json({error : error}) //sent back from post
-      //printed to the server console
-      if (error.name == 'ValidationError') {
-        // for (field in error.errors) {
-        //     console.log(error.errors[field].message)
-        // }
-        console.log('you fucked up')
-      }
-      res.json({error : error})
-  }
-})
-
-  Appointment.create(req.body).then(function(appointment){
-    console.log('\n\ncalendar post res: ' + JSON.stringify(req.body))
-    res.json(appointment)
-  }).catch(next, function(next){
-    console.log('next' + next)
-  })
-})
 
 //remove appointment from database
 router.delete('/calendar/:id', function(req, res, next){

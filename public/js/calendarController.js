@@ -179,7 +179,8 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
     // $scope.eventSources = [$scope.events, $scope.eventSource, $scope.eventsF];
     $scope.eventSources = [$scope.events]
     // $scope.eventSources2 = [$scope.calEventsExt, $scope.eventsF, $scope.events];
-
+    
+    //TODO: these getALL functions are handled mostly by the API now, and need to be adjusted
     function getAllStudents(){
       $http.get('/api/users').then(
             function(students){
