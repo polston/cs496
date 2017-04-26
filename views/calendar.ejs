@@ -47,15 +47,15 @@
                     <br>
                     <div class="btn-toolbar">
                         <div class="btn-group">
-                            <button class="btn btn-success" ng-click="changeView('agendaDay', 'myCalendar')">Agenda Day</button>
-                            <button class="btn btn-success" ng-click="changeView('agendaWeek', 'myCalendar')">Agenda Week</button>
-                            <button class="btn btn-success" ng-click="changeView('basicDay', 'myCalendar')">Basic Day</button>
-                            <button class="btn btn-success" ng-click="changeView('basicWeek', 'myCalendar')">Basic Week</button>
-                            <button class="btn btn-success" ng-click="changeView('month', 'myCalendar')">Month</button>
+                            <button class="btn btn-primary" ng-click="changeView('agendaDay', 'myCalendar')">Agenda Day</button>
+                            <button class="btn btn-primary" ng-click="changeView('agendaWeek', 'myCalendar')">Agenda Week</button>
+                            <button class="btn btn-primary" ng-click="changeView('basicDay', 'myCalendar')">Basic Day</button>
+                            <button class="btn btn-primary" ng-click="changeView('basicWeek', 'myCalendar')">Basic Week</button>
+                            <button class="btn btn-primary" ng-click="changeView('month', 'myCalendar')">Month</button>
                             </div>
                             <div class='btn-toolbar pull-right'>
                                 <div class="btn-group">
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#bs-example-modal-md">Add Appointment</button>
+                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#bs-example-modal-md">Add Appointment</button>
                             </div>
                         </div>
                         </div>
@@ -67,9 +67,12 @@
                         <div class="alert alert-info">
                             <!--{{e.start | date:"MMM dd: h:mma" : 'UTC'}} - {{e.end | date:"h:mma" : 'UTC'}}-->
                             <b>{{e.start | date:"MMM dd:"}}</b> {{e.start | date:" h:mma" : 'UTC'}} - {{e.end | date:"h:mma" : 'UTC'}}
+                            <a data-toggle="modal" data-target="#editModal" class="pull-right" ng-click="bindModal(e)">
+                            <i class="fa fa-pencil-square-o fa-lg"></i></a>
                             <br>
                             <b style="font-size:18px; color:#003f7f">  {{e.title}}</b>
-                            <a data-toggle="modal" data-target="#deleteModal" class="pull-right"><i class="fa fa-window-close"></i></a>
+                            <a data-toggle="modal" data-target="#deleteModal" class="pull-right" ng-click="bindModal(e)">
+                            <i class="fa fa-window-close fa-lg"></i></a>
                         </div>
                     </ul>
                 </div>
@@ -140,7 +143,7 @@
                         <div class="modal-header">
                             <h4 class="modal-title" id="myModalLabel">Delete an Appointment?</h4>
                         </div>
-                        <h4 class="modal-prompt">Are you sure you want to delete this appointment?</h4>
+                        <h4 class="display-4">Are you sure you want to delete this appointment?</h4>
                         <form name="modalForm2">
                             <div class="modal-body">
 
@@ -149,9 +152,10 @@
                                 <div class="btn-group">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                             </div>
+                            <span>{{temp}}</span>
                             </div>
                             <button class="btn btn-danger"
-                             ng-click="remove($index)" data-dismiss="modal">Delete</button>
+                             ng-click="deleteAppointment($index.id)" data-dismiss="modal">Delete</button>
                         </div>
                     </form>
                     </div>
@@ -159,6 +163,68 @@
             </div>
             </div>
                                                      <!--Delete Appoint modal-->
+                                                     
+                                                     <!--Edit Appointment modal-->
+            <div id="editModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+                <div class="modal-dialog modal-md" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="myModalLabel">Change an Appointment?</h4>
+                        </div>
+                        <form name="modalForm3">
+                            <div class="modal-body">
+                        <h4 class="modal-title">Student</h4>
+                        <select ng-model="student" ng-options="option._id as option.name.firstName + ' ' + option.name.lastName for option in studentOptions" 
+                        class="form-control" ng-trim="true" name="studentPicker" required>
+                            <option value="" disabled selected>Select a Student</option>
+
+                            {{option}}
+                        </select>
+                        <span ng-show="modalForm.studentPicker.$error.required" class="error">Student Required</span>
+                      
+                        <h4 class="modal-title">Tutor</h4>
+                        <select ng-model="tutor" ng-options="option._id as option.name.firstName + ' ' + option.name.lastName for option in tutorOptions" 
+                        class="form-control" ng-trim="true" ng-change="getTutorCourses(tutor)" name="tutorPicker" required>
+                            <option value="" disabled selected>Select a Tutor</option>
+
+                            {{option}}
+
+                        </select>
+
+                        <span ng-show="modalForm.tutorPicker.$error.required" class="error">Tutor Required</span>
+
+                        <h4 class="modal-title">Course</h4>
+                        
+                        <!--... this ng-options syntax is extremely confusing here, but it works-->
+                        <select ng-model="course" ng-options="option as option for option in courseOptions" class="form-control" ng-trim="true" 
+                        name="coursePicker" required>
+    
+                            <option value="" disabled selected>Select a Course</option>
+                            {{option}}
+                        </select>
+
+                        <span ng-show="modalForm.coursePicker.$error.required" class="error">Course Required</span>
+
+                        <h4 class="modal-title">Date</h4>
+                        <input ng-model="date" ng-model-options="{timezone: 'UTC'}" type="datetime-local" 
+                        class="form-control" type="date" placeholder="yyyy-MM-ddHH:mm:ss" name="datePicker" required/>
+                        <span ng-show="modalForm.datePicker.$error.required" class="error">Date Required</span>
+                        <div class="modal-footer">
+                                <div class='btn-toolbar pull-left'>
+                                <div class="btn-group">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                            <span>{{temp}}</span>
+                            </div>
+                            <button class="btn btn-info"
+                             ng-click="deleteAppointment($index.id)" data-dismiss="modal">Change Appointment</button>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+            </div>
+            </div>
+                                                     <!--Edit Appointment modal-->
         </section>
     </div>
 </div>

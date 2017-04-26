@@ -8,8 +8,10 @@ html {
   height:100%;
 }
 
-.modalPrompt {
-  text-align:center;
+
+.fa-pencil-square-o{
+  color:#006600;
+  
 }
 
 .fa-window-close{
@@ -56,6 +58,10 @@ get rid of the scrollbar on the monthly calendar? */
    -webkit-text-fill-color: white; 
    -webkit-text-stroke-width: 3px;
    -webkit-text-stroke-color: black;
+}
+
+.display-4 {
+  text-align: center;
 }
 
 /*#landing-page {*/
