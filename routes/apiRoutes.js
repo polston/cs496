@@ -3,7 +3,7 @@ const router = express.Router()
 const User = require('../models/userModel')
 const Appointment = require('../models/appointmentModel')
 
-//TODO: add 404 handler for invalid id
+//TODO: add 404 handler for invalid id/course
 
 
 // http://mongoosejs.com/docs/populate.html
@@ -11,53 +11,39 @@ const Appointment = require('../models/appointmentModel')
 // so that only certain fields are returned to the front end and not an entire document
 // with all associated information
 
+// function 
+
 //get all users
 //TODO: probably a way to put it all in a promise and return the correct thing
 // in the end, instead of just checking permissions and doing a seperate query in each
-router.get('/users', function(req, res, next){
-  // let found = ''
-  console.log(req.session.views)
+
+router.route('/users')
+//returns json of all users based on logged on user's permissions
+.get(function(req, res, next){
+  // console.log(req.session.views)
+  //if the logged in user is an admin
   if(req.user.permissions == 'Admin'){
     User.find({}).then(function(users){
       res.json(users)
       // found = JSON.parse()
     })
   }
+  //if the logged in user is a supervisor
   else if(req.user.permissions == 'Supervisor'){
     User.find({permissions: 'Student', permissions: 'Tutor'}).then(function(users){
       res.json(users)
       // found = users
     })
   }
-  else if(req.user.permissions == 'Student'){
+  //if the logged in user is a student or tutor
+  else if(req.user.permissions == 'Student' || req.user.permissions == 'Tutor'){
     User.find({permissions: 'Tutor'}).then(function(users){
       res.json(users)
-      
-      // console.log('users: ' + users)
-      // found = users
     })
   }
-  // console.log('found: ' + found.body)
-  // res.json(found)
-  // next()
 })
 
-//get user by id
-router.get('/users/:id', function(req, res, next){
-  User.findById(req.params.id).then(function(user){
-    res.json(user)
-  })
-})
-
-//get user by courses
-router.get('/users/:courses', function(req, res, next){
-  User.findById(req.params.id).then(function(user){
-    res.json(user)
-  })
-})
-
-//add new user to the database
-router.post('/users', function(req, res, next){
+.post(function(req, res, next){
   let user = new User(req.body)
   user.validate(function(error){
     if(error) {
@@ -71,38 +57,109 @@ router.post('/users', function(req, res, next){
       res.json({error : error})
     }
     else {
-      User.create(user).then(function(user){
-        res.json(user)
-      }).catch(next)
+      //only admins and supervisors can create users
+      if(req.user.permissions == 'Admin' || req.user.permissions == 'Supervisor'){
+        //only admins can create admins
+        if(user.permissions == 'Admin' && req.user.permissions == 'Admin'){
+          User.create(user).then(function(user){
+            res.json(user)
+          }).catch(next)
+        }
+        //supervisors can create anything but admins
+        else if(user.permissions != 'Admin'){
+          User.create(user).then(function(user){
+            res.json(user)
+          }).catch(next)
+        }
+      }
     }
   })
-  // User.create(req.body).then(function(user){
-  //   res.json(user)
-  // }).catch(next)
 })
+// ../users
 
-//remove user from database
-router.delete('/users/:id', function(req, res, next){
-  User.findByIdAndRemove(req.params.id).then(function(user){
+router.route('/users/:id')
+//get user by id
+//TODO: not really sure if this should be restricted by permissions?
+.get(function(req, res, next){
+  User.findById(req.params.id).then(function(user){
     res.json(user)
   })
 })
-
-//update user in database
-router.put('/users/:id', function(req, res, next){
-  User.findByIdAndUpdate(req.params.id, req.body).then(function(){
-    User.findById(req.params.id).then(function(user){
-      //console.log('test' + user)
+//remove user from database
+.delete(function(req, res, next){
+  //admins can remove anyone
+  if(req.user.permissions == 'Admin'){
+    User.findByIdAndRemove(req.params.id).then(function(user){
       res.json(user)
     })
+  }
+  //supervisors can't remove admins or other supervisors
+  else if(req.user.permissions == 'Supervisor'){
+    User.findById(req.params.id).then(function(user){
+      if(user.permissions != 'Admin' && user.permissions != 'Supervisor'){
+        User.findByIdAndRemove(req.params.id).then(function(user){
+          res.json(user)
+        })
+      }
+    })
+  }
+  
+})
+//update user in database
+.put(function(req, res, next){
+  //admins can update anyone
+  if(req.user.permissions == 'Admin'){
+    User.findByIdAndUpdate(req.params.id, req.body).then(function(){
+      User.findById(req.params.id).then(function(user){
+        //console.log('test' + user)
+        res.json(user)
+      })
+    })
+  }
+  //supervisors can't update admins or other supervisors
+  else if(req.user.permissions == 'Supervisor'){
+    User.findById(req.params.id).then(function(user){
+      if(user.permissions != 'Admin' && user.permissions != 'Supervisor'){
+        User.findById(req.params.id).then(function(user){
+          //console.log('test' + user)
+          res.json(user)
+        })
+      }
+    })
+  }
+  //users can update themselves? This probably works?
+  //TODO: write tests for this specifically...
+  else if(req.user._id === req.params.id){
+    User.findByIdAndUpdate(req.params.id, req.body).then(function(){
+      User.findById(req.params.id).then(function(user){
+        //console.log('test' + user)
+        res.json(user)
+      })
+    })
+  }
+})
+// ../users/:id
+
+//get user by courses
+router.route('/users/:courses')
+.get(function(req, res, next){
+  User.findById(req.params.id).then(function(user){
+    res.json(user)
   })
 })
+// ../users/:courses
 
-//get all appointment
-router.get('/calendar', function(req, res, next){
-  Appointment.find({}).then(function(appointment){
-    res.json(appointment)
-  })
+//get all appointments
+router.route('/calendar')
+.get(function(req, res, next){
+  //admins and supervisors can see all appointments
+  if(req.user.permissions == 'Admin' || req.user.permissions == 'Supervisor'){
+    Appointment.find({}).then(function(appointments){
+      res.json(appointments)
+    })
+  }
+
+
 })
 
 //get appointment by id
