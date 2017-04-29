@@ -1,35 +1,109 @@
+/* Styling to prevent white space "bump" from scrolling on mobile */
 html {
+    overflow: hidden;
+    height: 100%;
+}
+body {
+    height: 100%;
+    overflow: auto;
+}
+/* Styling to prevent white space "bump" from scrolling on mobile */
+
+
+#cal-BG{
   background: url("tower.jpg") no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
-  /*position: absolute;*/
   background-size: cover;
   height:100%;
 }
 
 
+#landing-page{
+    background: url("background.jpg") no-repeat center center fixed; 
+   -webkit-background-size: cover;
+   -moz-background-size: cover;
+   -o-background-size: cover;
+  background-size: cover;
+  height:100%;
+}
+
+#index-page{
+    background: url("campus.jpg") no-repeat center center fixed; 
+   -webkit-background-size: cover;
+   -moz-background-size: cover;
+   -o-background-size: cover;
+  background-size: cover;
+  height:100%;
+}
+
+.index-body{
+  background-color: transparent;
+}
+
+.container-fluid{
+  background-color: transparent;
+}
+
+/* Font Awesome Icons */
 .fa-pencil-square-o{
-  color:#006600;
+  color:green;
   
+}
+
+.fa-pencil-square{
+  color:green;
+  
+}
+
+.fa-plus{
+  color:LimeGreen;
+}
+
+.fa-minus-circle{
+  color:red;
 }
 
 .fa-window-close{
   color:#B30000;
   
 }
+/* Font Awesome Icons */
 
-.calBody {
-  background-color: transparent;
-}
-
-.container-fluid {
-  background-color: blue;
-}
-
-.col-sm-8{
+/* Calendar Styling */
+.fc-day{
   background-color: #EFEFEF;
 }
+
+.fc-day-header{
+  background-color: #EFEFEF;
+}
+
+.fc-left{
+  color:black;
+    -webkit-text-stroke-width: 1px;
+   -webkit-text-stroke-color: black;
+}
+
+.cal-body{
+  background-color: transparent;
+}
+/* Calendar Styling */
+
+/* Agenda-View Specific Styling*/
+.fc-day-grid{
+  background-color: #EFEFEF;
+}
+
+.fc-head-container{
+  background-color: #EFEFEF;
+}
+
+.fc-axis{
+  background-color: #EFEFEF;
+}
+/* Agenda-View Specific Styling*/
 
 .col-sm-6 {
   background-color: red;
@@ -38,14 +112,24 @@ html {
 .center-text {
   text-align: center;
 }
-/*TODO: so, this doesn't work, but we need to  probably 
-get rid of the scrollbar on the monthly calendar? */
+
 #calendar {
   height: 100%;
 }
+#cal {
+  margin-bottom: 15px;
+}
 
 .error {
-  color: red;
+  color: white;
+  font-weight: bold;
+  font-size: 2em;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: red;
+}
+
+.img-responsive {
+  margin:0 auto;
 }
 
 .display-1 {
@@ -64,15 +148,49 @@ get rid of the scrollbar on the monthly calendar? */
   text-align: center;
 }
 
-/*#landing-page {*/
-/*    background: url("background.jpg") no-repeat center center fixed; */
-/*   -webkit-background-size: cover;*/
-/*   -moz-background-size: cover;*/
-/*   -o-background-size: cover;*/
-   /*position: absolute;*/
-/*  background-size: cover;*/
-/*  height:100%;*/
-/*}*/
+.col-sm-4 > .col-centered{
+    float: none;
+    margin: 0 auto !important;
+    padding: 0;
+}
+
+.table-head{
+  background-color:#B30000;
+  color:white;
+}
+
+.table-striped>tbody>tr:nth-child(even)>td,
+.found{
+    background-color:#CECBCB;
+}
+
+tbody{
+   font-weight:bold;
+   color:black;
+}
+
+h1{
+  color:white;
+  text-align:center;
+}
+
+h2{
+  color:white;
+  text-align:center;
+}
+
+.input-title{
+  color:white;
+  font-size: 1.5em;
+  -webkit-text-stroke-width: 0.25px;
+  -webkit-text-stroke-color: black;
+}
+h{
+  font-size: 1.5em;
+}
+
+
+
 
 /*==================================================
 =            Bootstrap 3 Media Queries             =

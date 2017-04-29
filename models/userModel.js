@@ -9,14 +9,15 @@ const UserSchema = new Schema({
     id: String, //google.id
     token: String,
     email: String,
-    name: String
+    name: String,
+    image: String
   },
   name: {
     firstName: {
       type: String,
       minlength: [1, 'Last name must contain at least one character'],
       maxlength: [25, 'Last name is too long.'],
-      required: [true, 'First name requried.'],
+      required: [true, 'First name required.'],
       trim: true
     },
     lastName: {

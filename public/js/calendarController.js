@@ -121,23 +121,25 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
               for(let i = 0; i < tutors.data.length; i++){
                 if(tutors.data[i]['permissions'] == 'Tutor'){
                   allTutors.push(tutors.data[i])
-                  names.push(tutors.data[i].name.firstName + " " + tutors.data[i].name.lastName);
-                  courses.push(tutors.data[i].courses)
                 }
                   
               }
               $scope.tutorOptions = allTutors
+              console.log($scope.tutorOptions)
             },
             function(err) {
                 console.log(err)
         })
     }
+   
     
     $scope.getTutorCourses = function(tutor){
               let courses = []
               for(let i = 0; i < $scope.tutorOptions.length; i++){
                 if($scope.tutorOptions[i]['_id']==tutor){
-                  courses.push($scope.tutorOptions[i].courses)
+                  for(let j=0; j<$scope.tutorOptions[i].courses.length; j++){
+                    courses.push($scope.tutorOptions[i].courses[j])
+                  }
                 }
               }
               $scope.courseOptions = courses
