@@ -17,11 +17,21 @@ const Appointment = require('../models/appointmentModel')
 //TODO: probably a way to put it all in a promise and return the correct thing
 // in the end, instead of just checking permissions and doing a seperate query in each
 
+// if(process.env.TEST == 'true'){
+//   router.use(function(req, res, next){
+//     req.session.permissions = 'Admin'
+//     res.session.permissions = 'Admin'
+//     console.log('router: ' + req.user)
+//     next()
+//   })
+// }
+
 router.route('/users')
 //returns json of all users based on logged on user's permissions
 .get(function(req, res, next){
   // console.log(req.session.views)
   //if the logged in user is an admin
+  console.log('\n\nres: ' + JSON.stringify(req.body, null, 2))
   if(req.user.permissions == 'Admin'){
     User.find({}).then(function(users){
       res.json(users)

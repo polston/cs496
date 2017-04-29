@@ -56,6 +56,8 @@ app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist/c
 app.use('/angular', express.static(__dirname + '/node_modules/angular/'))
 app.use('/bower_components', express.static(__dirname + '/bower_components/'))
 
+
+
 //fire routes
 controllerRoutes(app);
 loginRoutes(app,passport);

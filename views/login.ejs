@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html ng-app="LoginApp">
+    
+<head>
+<% include ./partials/head %>
+<!--<script src="../public/js/indexController.js"></script>-->
+</head>
+
+
+
+<body id="landing-page" class="container-fluid">
+
+<form action="/login" method="post">
+    <div>
+        <label>Username:</label>
+        <input type="text" name="user.name.firstName"/>
+    </div>
+    <div>
+        <label>Password:</label>
+        <input type="password" name="user.name.lastName"/>
+    </div>
+    <div>
+        <input type="submit" value="Log In"/>
+    </div>
+</form>
+    
+
+</body>
+</html>
