@@ -1,16 +1,13 @@
+
+  //Line below this is needed for 401 errors in controllers.!! Don't delete!
+  //res.status(401).render('../views/errors/401.ejs');
+
 const express = require('express')
 // const cookieParser = require('cookie-parser')
 const passport = require('passport')
 const router = express.Router()
 const User = require('../models/userModel')
 // const User = require('../models/userModel')
-
-  //there's definitely a better way to do '/' and '/index'
-
-  // app.get('/', function(req, res){
-  //   console.log(req.url);
-  //   res.render('../views/index');
-  // });
 
 // router.get('/', function(req, res, next){
 //   console.log(req.url);
@@ -22,6 +19,7 @@ const User = require('../models/userModel')
 //   // console.log(req.body);
 //   res.render('../views/index');
 // })
+
 // a middleware function with no mount path. This code is executed for every request to the router
 router.use(function (req, res, next) {
   // console.log('Time:', Date.now())

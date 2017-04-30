@@ -6,105 +6,26 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
     var d = date.getDate();
     var m = date.getMonth();
     var y = date.getFullYear();
+    var isCreated = false
     $scope.remove = remove
     $scope.selectAppointment = selectAppointment
     $scope.studentOptions = getAllStudents()
     $scope.tutorOptions = getAllTutors()
-    // $scope.getAllAppointments= getAllAppointments
+    $scope.courseOptions = []
+    //$scope.getAllAppointments= getAllAppointments
     $scope.events = []
-
     function init(){
       
       renderCalendar('myCalendar')
       getAllAppointments()
-      
-      // events
-      // getAllAppointments()
-      // $scope.events =
-      // $scope.events = getAllAppointments()
-      
+
     }
     init()
-    console.log('events: ', $scope.events)
-  /*  $scope.changeTo = 'Hungarian';
-    //event source that pulls from google.com 
-    $scope.eventSource = {
-            url: "http://www.google.com/calendar/feeds/usa__en%40holiday.calendar.google.com/public/basic",
-            className: 'gcal-event',           // an option!
-            currentTimezone: 'America/Chicago' // an option!
-    };*/
 
-    /* event source that contains custom events on the scope */
-    // $scope.events = [
-    //   {title: 'All Day Event',start: new Date(y, m, 1)},
-    //   {title: 'Long Event',start: new Date(y, m, d - 5),end: new Date(y, m, d - 2)},
-    //   {id: 999,title: 'Repeating Event',start: new Date(y, m, d - 3, 16, 0),allDay: false},
-    //   {id: 999,title: 'Repeating Event',start: new Date(y, m, d + 4, 16, 0),allDay: false},
-    //   {title: 'Birthday Party',start: new Date(y, m, d + 1, 19, 0),end: new Date(y, m, d + 1, 22, 30),allDay: false},
-    //   {title: 'Click for Google',start: new Date(y, m, 28),end: new Date(y, m, 29),url: 'http://google.com/'}
-    // ]
-    
-    // console.log('$scope.events: ', $scope.events)
-    // let test = getAllAppointments()
-    // console.log('getAllAppointments(): ', test)
-    // $scope.events = getAllAppointments()
-
-    /* event source that calls a function on every view switch */
- /*   $scope.eventsF = function (start, end, timezone, callback) {
-      var s = new Date(start).getTime() / 1000;
-      var e = new Date(end).getTime() / 1000;
-      var m = new Date(start).getMonth();
-      var events = [{title: 'Feed Me ' + m,start: s + (50000),end: s + (100000),allDay: false, className: ['customFeed']}];
-      callback(events);
-    };*/
-
-    // $scope.calEventsExt = {
-    //   color: '#f00',
-    //   textColor: 'yellow',
-    //   events: [
-    //       {type:'party',title: 'Lunch',start: new Date(y, m, d, 12, 0),end: new Date(y, m, d, 14, 0),allDay: false},
-    //       {type:'party',title: 'Lunch 2',start: new Date(y, m, d, 12, 0),end: new Date(y, m, d, 14, 0),allDay: false},
-    //       {type:'party',title: 'Click for Google',start: new Date(y, m, 28),end: new Date(y, m, 29),url: 'http://google.com/'}
-    //     ]
-    // };
 
     /* alert on eventClick */
-    $scope.alertOnEventClick = function( date, jsEvent, view){
+   /* $scope.alertOnEventClick = function( date, jsEvent, view){
         $scope.alertMessage = (date.title + ' was clicked ');
-    };
-
-    /* alert on Drop */
-     $scope.alertOnDrop = function(event, delta, revertFunc, jsEvent, ui, view){
-       $scope.alertMessage = ('Event Droped to make dayDelta ' + delta);
-    };
-
-    /* alert on Resize */
-    $scope.alertOnResize = function(event, delta, revertFunc, jsEvent, ui, view ){
-       $scope.alertMessage = ('Event Resized to make dayDelta ' + delta);
-    };
-
-    // add and removes an event source of choice 
-   /* $scope.addRemoveEventSource = function(sources,source) {
-      var canAdd = 0;
-      angular.forEach(sources,function(value, key){
-        if(sources[key] === source){
-          sources.splice(key,1);
-          canAdd = 1;
-        }
-      });
-      if(canAdd === 0){
-        sources.push(source);
-      }
-    };*/
-
-    /* add custom event*/
-  /*  $scope.addEvent = function() {
-      $scope.events.push({
-        title: 'Open Sesame',
-        start: new Date(y, m, 28),
-        end: new Date(y, m, 29),
-        className: ['openSesame']
-      });
     };*/
 
     /* remove event */
@@ -116,20 +37,6 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
     $scope.changeView = function(view,calendar) {
       uiCalendarConfig.calendars[calendar].fullCalendar('changeView',view);
     };
-    /* Change View */
-    // $scope.renderCalender = function(calendar) {
-    //   $timeout(function() {
-    //     if(uiCalendarConfig.calendars[calendar]){
-    //       uiCalendarConfig.calendars[calendar].fullCalendar('render');
-    //     }
-    //   });
-    // };
-    // $scope.renderCalendar = function() {
-    //     $timeout(function(){
-    //             $('#calendar').fullCalendar('render');
-    //             $('#calendar').fullCalendar('rerenderEvents');
-    //         }, 0);
-    // };
 
     function renderCalendar(calendarId) {
       $timeout(function () {
@@ -138,20 +45,8 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
       }, 0);
     };
 
-     /* Render Tooltip */
-    $scope.eventRender = function( event, element, view ) {
-      // console.log('eventRender:')
-      // console.log('event: ', event)
-      // console.log('element: ', element)
-      // console.log('view: ', view)
-        element.attr({'tooltip': event.title,
-                      'tooltip-append-to-body': true});
-        $compile(element)($scope);
-    };
-
     function selectAppointment(start, end){
-      let title = prompt('Appointment title?')
-      console.log(start + ' ' + end)
+      //let title = prompt('Appointment title?')
     }
 
     /* config object */
@@ -159,6 +54,27 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
       calendar:{
         height: 500,
         editable: false,
+        customButtons: {
+          next: {
+            icon: 'right-single-arrow',
+            click: function() {
+                 uiCalendarConfig.calendars.myCalendar.fullCalendar('next');//ugly way to access calendar object method, advances month.
+             }
+          },
+          prev: {
+            icon: 'left-single-arrow',
+            click: function() {
+                uiCalendarConfig.calendars.myCalendar.fullCalendar('prev');//ugly way to access calendar object method, goes back month.
+                //probably useless now, since this turned out not to be the issue.
+             }
+          },
+          today: {
+            text: 'today',
+            click: function() {
+                uiCalendarConfig.calendars.myCalendar.fullCalendar('today');//goes back to current month.
+            }
+          }
+      },
         header:{
           left: 'title',
           center: '',
@@ -174,27 +90,25 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
         select: $scope.selectAppointment
       }
     };
-
-    /* event sources array*/
-    // $scope.eventSources = [$scope.events, $scope.eventSource, $scope.eventsF];
+    
+    // Calendar needs eventSource to render events.
     $scope.eventSources = [$scope.events]
+
     // $scope.eventSources2 = [$scope.calEventsExt, $scope.eventsF, $scope.events];
     
     //TODO: these getALL functions are handled mostly by the API now, and need to be adjusted
+
     function getAllStudents(){
       $http.get('/api/users').then(
             function(students){
-              console.log(students.data)
               let allStudents = []
               let names = []
               for(let i = 0; i < students.data.length; i++){
                 if(students.data[i]['permissions'] == 'Student'){
-                  console.log(students.data[i])
                   allStudents.push(students.data[i])
                   names.push(students.data[i].name.firstName + " " + students.data[i].name.lastName);
                 }
               }
-              $scope.studentNames = names
               $scope.studentOptions = allStudents
             },
             function(err) {
@@ -205,72 +119,116 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
     function getAllTutors(){
       $http.get('/api/users').then(
             function(tutors){
-              console.log(tutors.data)
               let allTutors = []
               let courses = []
               let names = []
               for(let i = 0; i < tutors.data.length; i++){
                 if(tutors.data[i]['permissions'] == 'Tutor'){
                   allTutors.push(tutors.data[i])
-                  names.push(tutors.data[i].name.firstName + " " + tutors.data[i].name.lastName);
-                  courses.push(tutors.data[i].courses)
                 }
                   
               }
-              $scope.courseOptions = courses
               $scope.tutorOptions = allTutors
-              $scope.tutorNames = names
+              console.log($scope.tutorOptions)
             },
             function(err) {
                 console.log(err)
         })
     }
+   
     
-    
+    $scope.getTutorCourses = function(tutor){
+              let courses = []
+              for(let i = 0; i < $scope.tutorOptions.length; i++){
+                if($scope.tutorOptions[i]['_id']==tutor){
+                  for(let j=0; j<$scope.tutorOptions[i].courses.length; j++){
+                    courses.push($scope.tutorOptions[i].courses[j])
+                  }
+                }
+              }
+              $scope.courseOptions = courses
+    }
     function getAllAppointments() {
-      let temp = []
       $http.get('/api/calendar').then(
           function(appointments){
-            
-            console.log(appointments.data)
-            for(let i = 0; i < appointments.data.length; i++){
-              let obj = {title: 'Test', start: Date.parse(appointments.data[i].date), end: Date.parse(appointments.data[i].date)}
-              // temp.push(obj)
-              $scope.events.push(obj)
+            if (isCreated == false){
+                for(let i = 0; i < appointments.data.length; i++){
+                  let endTime = new Date(appointments.data[i].date)
+                  let obj = {title: 'Tutoring', start: Date.parse(appointments.data[i].date), 
+                  end: Date.parse(endTime.toISOString(endTime.setHours(endTime.getHours() + 1))), stick:true,
+                  color:  '#B30000', id: appointments.data[i]['_id']
+                  }
+                  $scope.events.push(obj)
+                }
             }
-            // console.log('temp: ', temp)
-            // $scope.events = temp
-            // console.log('appt events: ', $scope.events)
+            else
+              if($scope.events.length != appointments.data.length){
+                 let i = appointments.data.length-1
+                  let endTime = new Date(appointments.data[i].date)
+                  let obj = {title: 'Tutoring', start: Date.parse(appointments.data[i].date), 
+                  end: Date.parse(endTime.toISOString(endTime.setHours(endTime.getHours() + 1))), stick:true,
+                  color:  '#B30000', id: appointments.data[i]['_id']
+                }
+              $scope.events.push(obj)
+              isCreated = false
+                }
+              //stick property in events object necessary to make events persist on view changes.
+              //only way to modify an ISO string is to pass back to date object, modify, then covert back to date.
           },
           function(err) {
               console.log(err)
       })
     }
     
-    //function updateCalendar(event){
-    //  let obj = {title: 'Test', start: Date.parse(event.data.date), end: Date.parse(event.data.date)}
-    //  $scope.events.push(obj)
-    //}
 
-    $scope.createAppointment = function(student,tutor,course,date){
-     // console.log(JSON.parse(tutor)._id)
-    // console.log('tutor: ', )
-      console.log('student: ', student)
-      console.log('tutor: ', tutor)
-      console.log('course: ', course)
-      console.log('date: ', date)
-      
+    $scope.createAppointment = function(student, tutor, course, date){
+
       let data = { date: date,
-                   course: course.trim(),
-                   tutor: JSON.parse(tutor)._id,
-                   student: JSON.parse(student)._id };
+                   course: course,
+                   tutor: tutor,
+                   student: student,
+                    };
 
         $http.post('/api/calendar', data).then(
             function(result){
-              getAllAppointments()
+                let endTime = new Date(data.date)
+                let obj = {title: 'Tutoring', start: Date.parse(data.date), 
+                 end: Date.parse(endTime.toISOString(endTime.setHours(endTime.getHours() + 1))), stick:true,
+                 color:  '#B30000', id: data['_id']
+                 }
+                isCreated = true
+                getAllAppointments()
+                $scope.clearDropdowns()
             },
             function(err){
                 console.log('err: ', err)
         })
+    }
+    
+    $scope.bindModal = function(event){
+      $scope.temp = []
+      $scope.temp = event.id
+    }
+    
+    $scope.deleteAppointment = function () {
+      let appointment = $scope.temp
+      console.log(appointment)
+        $http.delete('/api/calendar/' + appointment).then(
+            function(result){
+              for(let i = 0; i < $scope.events.length; i++){
+                if($scope.events[i].id == appointment)
+                 $scope.events.splice(i,1)
+              }
+            },
+            function(err){
+                console.log(err)
+        })
+    }
+    
+    $scope.clearDropdowns = function(){
+      $scope.student = ""
+      $scope.tutor = ""
+      $scope.date = ""
+      $scope.course = ""
     }
 }

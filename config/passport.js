@@ -18,7 +18,7 @@ module.exports = function(passport) {
             done(err, user);
         });
     });
-
+    //for the testing suite, because issuing a token to a dummy account is an exercise in futility
     if(process.env.TEST == 'true'){
         passport.use('local', new LocalStrategy({
             usernameField: '_id',
@@ -42,10 +42,11 @@ module.exports = function(passport) {
                         }
                         return done(null, user);
                     });
-                }//)
-            // }
-    )}))
+                })
+
+        }))
     }
+    //for actual users
     else{
         passport.use('google', new GoogleStrategy({
 
@@ -54,10 +55,6 @@ module.exports = function(passport) {
             callbackURL     : configAuth.googleAuth.callbackURL,
 
         },
-        
-        
-        // This is the strategy?
-        // Yes.
         function(accessToken, refreshToken, profile, done) {
             
             console.log('accessToken: ' + accessToken + '\nrefreshToken: ' + refreshToken + '\nprofile: ' + JSON.stringify(profile))
@@ -68,8 +65,6 @@ module.exports = function(passport) {
                     if (err){
                         return done(err, user);
                     }
-
-                        //just seeing if his shit will actually work.
                     if (user) {
                         // if a user is found, log them in
                         console.log('profile: ' + profile)
@@ -80,10 +75,11 @@ module.exports = function(passport) {
                         newUser.name.firstName = profile.name.givenName
                         newUser.name.lastName =  profile.name.familyName
                         newUser.google.id    = profile.id; //w
-                        newUser.google.token = accessToken; //?                                                                               //from google
+                        newUser.google.token = accessToken; //?
                         newUser.google.name  = profile.displayName;
                         newUser.google.email = profile.emails[0].value;
-                    
+                        newUser.google.image = profile.photos[0].value
+                      
                         newUser.save(function(err) {
                             if (err)
                                 throw err;
