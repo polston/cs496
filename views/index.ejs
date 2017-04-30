@@ -13,6 +13,7 @@
 
 
     <div class="container" ng-controller="IndexController">
+        <div ng-model="currentUser" ng-if="currentUser.permissions=='Admin' || 'Supervisor'">
         <h1>User Management</h1>
         <span class="input-title"><h>Add A User</h></span>
         <br>
@@ -46,6 +47,7 @@
         <button class="btn btn-success" ng-click="updateUser(user)">Update</button>
         <button class="btn btn-basic" ng-click="clearOptions()">Clear</button>
 
+        </div>
 
         <div><h2>User List</h2></div>
 
@@ -62,8 +64,10 @@
                          <td>{{$index + 1 }}</td><td><img src="{{user.google.image}}" class="img-rounded"></td>
                          <td>{{ user.name.firstName }}</td><td>{{ user.name.lastName }}</td>
                          <td>{{ user.google.email }}</td><td>{{ user.courses.join(", ") }}</td><td>{{ user.permissions }}</td>
-                         <td class="text-center"><a ng-click="editUser(user._id)"><i class="fa fa-pencil-square fa-2x"></i></a></td>
-                         <td class="text-center"> <a ng-click="deleteUser(user._id)"><i class="fa fa-window-close fa-2x"></i></a></td>
+                         <td class="text-center" ng-if="currentUser.permissions=='Admin' || 'Supervisor'">
+                             <a ng-click="editUser(user._id)"><i class="fa fa-pencil-square fa-2x"></i></a></td>
+                         <td class="text-center" ng-if="currentUser.permissions=='Admin' || 'Supervisor'"> 
+                             <a ng-click="deleteUser(user._id)"><i class="fa fa-window-close fa-2x"></i></a></td>
                     </tr>
                 </tbody>
             </table>

@@ -18,6 +18,7 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
       
       renderCalendar('myCalendar')
       getAllAppointments()
+      getCurrentUser()
 
     }
     init()
@@ -97,6 +98,17 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
     // $scope.eventSources2 = [$scope.calEventsExt, $scope.eventsF, $scope.events];
     
     //TODO: these getALL functions are handled mostly by the API now, and need to be adjusted
+    
+    function getCurrentUser(){
+      $http.get('/api/user').then(
+          function(user){
+             $scope.currentUser = user.data
+              console.log($scope.currentUser)
+            },
+            function(err) {
+                console.log(err)
+        })
+    }
 
     function getAllStudents(){
       $http.get('/api/users').then(
@@ -110,6 +122,7 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
                 }
               }
               $scope.studentOptions = allStudents
+              console.log($scope.studentOptions)
             },
             function(err) {
                 console.log(err)
@@ -129,7 +142,7 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
                   
               }
               $scope.tutorOptions = allTutors
-              console.log($scope.tutorOptions)
+             // console.log($scope.tutorOptions)
             },
             function(err) {
                 console.log(err)
