@@ -15,34 +15,34 @@ https://community.c9.io/t/setting-up-mongodb/1717
 Navigate to the project directory via the terminal.
 
 While in the terminal inside the project directory type:
-npm install
+**npm install
 
 This will install all of the packages and dependencies indicated by the package.json file.
 
 You will also need to install bower type:
-npm install -g bower
+**npm install -g bower
 
 Then type:
-bower install
+**bower install
 
 This will install the bower dependencies located in bower.json
 
-Optionally\* in the terminal type:
-npm install -g nodemon
+*Optionally\* *in the terminal type:
+**npm install -g nodemon
 
 While still in the directory, in the terminal type:
-node app.js
-Or, if you followed the optional route type:
-nodemon app.js
+**node app.js
+**Or, if you followed the optional route type:
+**nodemon app.js
 
 This will start the server.
 
-Go to your browser and naviate to localhost:4000.
-Or, if you're on cloud9, click preview>running application, and copy that url and put it into another tab for reference
+Go to your browser and naviate to *localhost:4000.
+*Or, if you're on cloud9, click *preview>running application*, and copy that url and put it into another tab for reference
 
 The views/landing.ejs will be rendered.
 
 
 
-NOTE:
+**NOTE:
 \* Not actually optional, because it saves so much time nodemon restarts the server every time a .js file is changed(saved).
