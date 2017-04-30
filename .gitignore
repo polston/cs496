@@ -4,7 +4,8 @@
 ### auth secrets ###
 config/authsecrets.js
 
-
+### google test account config ###
+test/googleTestAccount.js
 ### bower components ###
 bower_components
 

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
+const bcrypt = require('bcrypt-nodejs')
 
 const validPermissions = ['Admin', 'Supervisor', 'Tutor', 'Student']
 
@@ -9,14 +10,15 @@ const UserSchema = new Schema({
     id: String, //google.id
     token: String,
     email: String,
-    name: String
+    name: String,
+    image: String
   },
   name: {
     firstName: {
       type: String,
       minlength: [1, 'Last name must contain at least one character'],
       maxlength: [25, 'Last name is too long.'],
-      required: [true, 'First name requried.'],
+      required: [true, 'First name required.'],
       trim: true
     },
     lastName: {
@@ -27,6 +29,7 @@ const UserSchema = new Schema({
       trim: true
   }
 },
+  password: String, //this is only used by the testing environment
   courses: [String],
   permissions: {
     type: String, 
@@ -40,16 +43,23 @@ const UserSchema = new Schema({
       message: "Invalid permissions"
     },
   }
-
-    //austin's branch is here, validators will be missing
-    //until we resolve how to use them with the oauth routing
-  //   firstName: String,// firstName: {type: String, required: true},
-  //   lastName: String// lastName: {type: String, required: true}
-  // },
-  // courses: [String],
-  // permissions: {type: String, default: 'Student', required: true},
-  // email: String// email: {type: String, required: true}
 })
+
+// generating a hash
+UserSchema.methods.generateHash = function(password) {
+    return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null)
+}
+
+// checking if password is valid
+UserSchema.methods.validPassword = function(password) {
+    return bcrypt.compareSync(password, this.local.password)
+}
+
+//for the testing suite...
+UserSchema.methods.dummyPasswordChecker = function(){
+  console.log('test?')
+  return true
+}
 
 const User = mongoose.model('user', UserSchema)
 
