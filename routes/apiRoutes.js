@@ -17,14 +17,7 @@ const Appointment = require('../models/appointmentModel')
 //TODO: probably a way to put it all in a promise and return the correct thing
 // in the end, instead of just checking permissions and doing a seperate query in each
 
-// if(process.env.TEST == 'true'){
-//   router.use(function(req, res, next){
-//     req.session.permissions = 'Admin'
-//     res.session.permissions = 'Admin'
-//     console.log('router: ' + req.user)
-//     next()
-//   })
-// }
+router.use(require('./permissionsMiddleware'))
 
 router.route('/user')
 .get(function(req, res, next){

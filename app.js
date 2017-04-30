@@ -18,15 +18,14 @@ mongoose.connect(dbconfig.db)
 //mostly magic
 let app = express();
 
-//includes the routes, probably a way to just batch include all of them
-//but, I don't know how (yet)
-// let indexRoutes = require('./routes/indexRoutes');
+
+//TODO: convert these into router middleware
 let whateverRoutes = require('./routes/whateverRoutes');
 let errorRoutes = require('./routes/errorRoutes');
 let controllerRoutes = require('./routes/controllerRoutes');
-let calendarRoutes = require('./routes/calendarRoutes');
+// let calendarRoutes = require('./routes/calendarRoutes');
 let loginRoutes = require('./routes/login');
-let appointmentRoutes = require('./routes/appointmentsRoute');
+// let appointmentRoutes = require('./routes/appointmentsRoute');
 
 
 
@@ -49,8 +48,11 @@ require('./config/passport')(passport);
 app.set('view engine', 'ejs');
 
 //appends '/api/' to all of the api routes
+// app.use(require('./routes/permissionsMiddleware'))
 app.use('/api/', require('./routes/apiRoutes'))
 app.use('/index', require('./routes/indexRoutes'))
+app.use('/calendar', require('./routes/calendarRoutes'))
+app.use('/appointments', require('./routes/appointmentRoutes'))
 //node modules path for normal cdn stuff
 app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
 app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist/css/'));
@@ -60,12 +62,10 @@ app.use('/bower_components', express.static(__dirname + '/bower_components/'))
 
 
 //fire routes
+//TODO: convert to router middleware
 controllerRoutes(app);
 loginRoutes(app,passport);
-// indexRoutes(app);
-calendarRoutes(app)
 whateverRoutes(app);
-appointmentRoutes(app);
 errorRoutes(app);
 
 

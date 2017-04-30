@@ -2,10 +2,10 @@ module.exports = function(app, passport){
 
 
 // Home Page Route    
-  app.get('/', function(req, res){
-    console.log('\nget / : ' + JSON.stringify(req.body) + '\n');
-    res.render('../views/landing');
-  });
+app.get('/', function(req, res){
+  console.log('\nget / : ' + JSON.stringify(req.body) + '\n');
+  res.render('../views/landing');
+});
   
 app.get('/home', isLoggedIn, function(req, res) {
   console.log('\nget /home' + JSON.stringify(req.body) + '\n') 
@@ -84,7 +84,7 @@ else{
     });
   }
 
-}
+// }
 
 
 function isLoggedIn(req, res, next) {
