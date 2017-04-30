@@ -34,9 +34,17 @@ app.get('/auth/google/callback',
   passport.authenticate('google', {failureRedirect: '/'}),
   function(req, res) {
     console.log('\n get /auth/google/callback/ \nreq:' + JSON.stringify(req.body) + '\nres: ' + JSON.stringify(res.body) + '\n')
-      res.redirect('/home');
+      res.redirect('/calendar');
   });
-};
+
+
+app.get('/logout', function(req, res) {
+req.session.destroy(function() {
+    res.clearCookie('connect.sid');
+    res.redirect('/');
+});
+});
+}
 
 
 function isLoggedIn(req, res, next) {

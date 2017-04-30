@@ -1,4 +1,6 @@
 module.exports = function(app){
+  //Line below this is needed for 401 errors in controllers.!! Don't delete!
+  //res.status(401).render('../views/errors/401.ejs');
 
   //there's definitely a better way to do '/' and '/index'
 
