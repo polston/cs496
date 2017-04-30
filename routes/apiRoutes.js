@@ -11,14 +11,13 @@ const Appointment = require('../models/appointmentModel')
 // so that only certain fields are returned to the front end and not an entire document
 // with all associated information
 
-// function 
-
 //get all users
 //TODO: probably a way to put it all in a promise and return the correct thing
 // in the end, instead of just checking permissions and doing a seperate query in each
 
 router.use(require('./permissionsMiddleware'))
 
+//gets your own user object/information
 router.route('/user')
 .get(function(req, res, next){
   User.findById(req.user._id).then(function(user){
@@ -29,26 +28,23 @@ router.route('/user')
 router.route('/users')
 //returns json of all users based on logged on user's permissions
 .get(function(req, res, next){
-  // console.log(req.session.views)
   //if the logged in user is an admin
   console.log('\n\nres: ' + JSON.stringify(req.body, null, 2))
   if(req.user.permissions == 'Admin'){
-    User.find({}).then(function(users){
+    User.find().then(function(users){
       res.json(users)
-      // found = JSON.parse()
     })
   }
   //if the logged in user is a supervisor
   else if(req.user.permissions == 'Supervisor'){
-    User.find({permissions: 'Student', permissions: 'Tutor', _id: req.user._id}).then(function(users){
+    User.find().or([{permissions: 'Student'}, {permissions: 'Tutor'}, {_id: req.user._id}]).then(function(users){
       res.json(users)
-      // found = users
     })
   }
   //if the logged in user is a student or tutor
   else if(req.user.permissions == 'Student' || req.user.permissions == 'Tutor'){
     console.log('req user:' + req.user._id)
-    User.find({permissions: 'Tutor', _id: req.user._id}).then(function(users){
+    User.find().or([{permissions: 'Tutor'}, {_id: req.user._id}]).then(function(users){
       res.json(users)
     })
   }
@@ -114,7 +110,6 @@ router.route('/users/:id')
       }
     })
   }
-  
 })
 //update user in database
 .put(function(req, res, next){
@@ -140,7 +135,10 @@ router.route('/users/:id')
   }
   //users can update themselves? This probably works?
   //TODO: write tests for this specifically...
+  //FIXME: this should probably be put into api/user, and changed so that you can't
+  //       change your permissions, possibly go through the model?
   else if(req.user._id === req.params.id){
+    if(req.user.permissions == )
     User.findByIdAndUpdate(req.params.id, req.body).then(function(){
       User.findById(req.params.id).then(function(user){
         //console.log('test' + user)
@@ -166,20 +164,20 @@ router.route('/calendar')
 .get(function(req, res, next){
   //admins and supervisors can see all appointments
   if(req.user.permissions == 'Admin' || req.user.permissions == 'Supervisor'){
-    Appointment.find({}).then(function(appointments){
+    Appointment.find().then(function(appointments){
       res.json(appointments)
     })
   }
   //these two below could be reconciled into one, but I'm going to leave it like this for readability
   // tutors can see available tutors, and their own appointments
   else if(req.user.permissions == 'Tutor'){
-    Appointment.find({student: {"$exists": false}, tutor: req.user._id}).then(function(appointments){
+    Appointment.find().or([{student: {"$exists": false}}, {tutor: req.user._id}]).then(function(appointments){
       res.json(appointments)
     })
   }
   //students can see available tutors and their own appointments
   else if(req.user.permissions == 'Student'){
-    Appointment.find({student: {"$exists": false}, student: req.user._id}).then(function(appointments){
+    Appointment.find().or([{student: {"$exists": false}}, {student: req.user._id}]).then(function(appointments){
       res.json(appointments)
     })
   }
@@ -187,7 +185,6 @@ router.route('/calendar')
 //add new appointment to the database
 .post(function(req, res, next){
   let appointment = new Appointment(req.body)
-  console.log('appointment: ', appointment)
   //error handling inside model
   appointment.validate(function(error){
     if(error) {
@@ -211,7 +208,6 @@ router.route('/calendar')
       console.log('next: ' + next)
     })
   }
-  
 })
 
 router.route('/calendar/:id')
@@ -262,7 +258,7 @@ router.route('/calendar/:id')
     })
   }
   //TODO: does this even work?
-  //students can only update the student field of an appointment
+  //students/tutors can only update the student field of an appointment with themselves
   else if(req.user.permissions == 'Student' || req.user.permissions == 'Tutor'){
     Appointment.findByIdAndUpdate(req.params.id, {student: req.user._id}).then(function(){
       Appointment.findById(req.params.id).then(function(appointment){
