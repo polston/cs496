@@ -138,7 +138,6 @@ router.route('/users/:id')
   //FIXME: this should probably be put into api/user, and changed so that you can't
   //       change your permissions, possibly go through the model?
   else if(req.user._id === req.params.id){
-    if(req.user.permissions == )
     User.findByIdAndUpdate(req.params.id, req.body).then(function(){
       User.findById(req.params.id).then(function(user){
         //console.log('test' + user)
