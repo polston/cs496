@@ -27,7 +27,7 @@ module.exports = function(passport) {
             passReqToCallback: true
             },
             function(req, id, password, done) {
-                console.log('\n\nreq: ' + req + '\n\nid:' + id + ' \n\npassword: '+ password)
+                // console.log('\n\nreq: ' + req + '\n\nid:' + id + ' \n\npassword: '+ password)
                 process.nextTick(function(){
                     User.findById(id, function (err, user) {
                         if (err) { return done(err); }
@@ -38,10 +38,8 @@ module.exports = function(passport) {
                         //     return done(null, false, { message: 'Incorrect password.' });
                         // }
                         if (!user.dummyPasswordChecker()) {
-                            console.log('Incorrect password.')
                             return done(null, false, { message: 'Incorrect password.' });
                         }
-                        console.log('\n\n\n\nadfadsfasfasfdasf\n\n\n\n')
                         return done(null, user);
                     });
                 }//)

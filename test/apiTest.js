@@ -195,10 +195,11 @@ describe('api tests', function(done) {
             // .expect('set-cookie', '/connect.sid/')
             // .expect(Headers())
             // .expect('Location', '/home')
-            .end(function(err, res){
+            .end(function(err, req){
                 if(err) return err
-                console.log('\n\ncookies?:' + JSON.stringify(res.cookies, null, 2))
-                console.log('\n\nres?: ' + JSON.stringify(res, null, 2))
+                cookie = req.header['set-cookie']
+                console.log('\n\ncookies?:' + JSON.stringify(req.cookies, null, 2))
+                console.log('\n\nres?: ' + JSON.stringify(req, null, 2))
                 done()
             })
         
