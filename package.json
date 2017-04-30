@@ -5,6 +5,7 @@
   "main": "app.js",
   "dependencies": {
     "angular": "^1.6.4",
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.17.1",
     "bootstrap": "^3.3.7",
     "chai": "^3.5.0",

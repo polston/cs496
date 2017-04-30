@@ -7,40 +7,49 @@ var User       = require('../models/userModel');
 module.exports = function(passport) {
     
     passport.serializeUser(function(user, done) {
-        console.log('\n\n---------------------serialized user: ', user)
+        // console.log('\n\n---------------------serialized user: ', user)
         done(null, user.id);
     });
 
     // used to deserialize the user
     passport.deserializeUser(function(id, done) {
         User.findById(id, function(err, user) {
-            console.log('\n\n--------------------id: ', id, '\n---------------user: \n', user)
+            // console.log('\n\n--------------------id: ', id, '\n---------------user: \n', user)
             done(err, user);
         });
     });
 
     if(process.env.TEST == 'true'){
-        passport.use(new LocalStrategy({
-            usernameField: 'user.name.firstName',
-            passwordField: 'user.name.lastName',
-            session: true
+        passport.use('local', new LocalStrategy({
+            usernameField: '_id',
+            passwordField: 'password',
+            // session: true,
+            passReqToCallback: true
             },
-            function(id, password, done) {
-                User.findById({ id }, function (err, user) {
-                    if (err) { return done(err); }
-                    if (!user) {
-                        return done(null, false, { message: 'Incorrect username.' });
-                    }
-                    if (!user.validPassword(password)) {
-                        return done(null, false, { message: 'Incorrect password.' });
-                    }
-                    return done(null, user);
-                });
-            }
-            ));
+            function(req, id, password, done) {
+                console.log('\n\nreq: ' + req + '\n\nid:' + id + ' \n\npassword: '+ password)
+                process.nextTick(function(){
+                    User.findById(id, function (err, user) {
+                        if (err) { return done(err); }
+                        if (!user) {
+                            return done(null, false, { message: 'Invalid user._id.' });
+                        }
+                        // if (!user.validPassword(password)) {
+                        //     return done(null, false, { message: 'Incorrect password.' });
+                        // }
+                        if (!user.dummyPasswordChecker()) {
+                            console.log('Incorrect password.')
+                            return done(null, false, { message: 'Incorrect password.' });
+                        }
+                        console.log('\n\n\n\nadfadsfasfasfdasf\n\n\n\n')
+                        return done(null, user);
+                    });
+                }//)
+            // }
+    )}))
     }
     else{
-        passport.use(new GoogleStrategy({
+        passport.use('google', new GoogleStrategy({
 
             clientID        : configAuth.googleAuth.clientID,
             clientSecret    : configAuth.googleAuth.clientSecret,
@@ -54,15 +63,6 @@ module.exports = function(passport) {
         function(accessToken, refreshToken, profile, done) {
             
             console.log('accessToken: ' + accessToken + '\nrefreshToken: ' + refreshToken + '\nprofile: ' + JSON.stringify(profile))
-            
-            if(process.env.TEST == 'true'){
-                console.log('\n\n\n\n\n\n\nsadfasdfsadfadsff\n\n\n\n\n\n\n')
-                User.findOne({ 'google.id' : 'testuserid' }, function(err, user) {
-                        console.log('profile: ' + user)
-                        console.log('err: ' + err)
-                        return done(null, user); //so this is passed back into login.js? should be?
-                    })
-            }
 
             process.nextTick(function() {
                 User.findOne({ 'google.id' : profile.id }, function(err, user) { //this is obviously always fail until we have someone in the database with a google.id

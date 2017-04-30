@@ -11,6 +11,7 @@ app.get('/home', isLoggedIn, function(req, res) {
   console.log('\nget /home' + JSON.stringify(req.body) + '\n') 
     res.render('../views/home', {
         user : req.body // get the user out of session and pass to template
+        
     });
 });
 
@@ -19,18 +20,52 @@ app.get('/home', isLoggedIn, function(req, res) {
 if(process.env.TEST == 'true'){
   // Home Page Route    
   app.get('/login', function(req, res){
-    console.log('\nget / : ' + JSON.stringify(req.body) + '\n');
+    console.log('\nget /login : ' + JSON.stringify(req.user) + '\n');
+    console.log('\nget /loing : ' + JSON.stringify(res.user) + '\n');
     res.render('../views/login');
   });
 
-  app.post('/login',
-    passport.authenticate('local', { failureRedirect: '/login' }),
-    function(req, res) {
-      console.log('req /login: ' + req)
-      console.log('res /login: ' + res)
-      res.redirect('/home')
-    }
-  );
+  app.post('/login', function(req, res, next){
+    console.log('post login')
+    console.log('req.body: ' + JSON.stringify(req.body, null, 2))
+    let user = { _id: req.body._id, password: req.body.password }
+    passport.authenticate('local', function(err, user, info){
+      console.log('info: ' + JSON.stringify(info))
+      console.log('auth req: ' + JSON.stringify(req.body))
+      if(err){
+        console.log('passport err: ' + err)
+      }
+      if(!user) {
+        console.log('no user?')
+        console.log(user)
+        return res.redirect('/login')
+      }
+      req.logIn(user, function(err){
+        if(err){
+          console.log('login err?: ' + err)
+          return next(err)
+        }
+        return res.redirect('/home')
+      })
+    })(req, res, next)
+    // function(req, res) {
+    //   console.log('req /login: ' + req)
+    //   console.log('res /login: ' + res)
+    //   res.redirect('/home')
+    // }
+
+  // }
+    
+  });
+
+  // app.post('/login',
+  //   passport.authenticate('local', { failureRedirect: '/login' }),
+  //   function(req, res) {
+  //     console.log('req /login: ' + req)
+  //     console.log('res /login: ' + res)
+  //     res.redirect('/home')
+  //   }
+  // );
 }
 else{
   // strategy = 'google'
@@ -78,12 +113,12 @@ else{
 
 
 function isLoggedIn(req, res, next) {
-  if(process.env.TEST == 'true'){
+  // if(process.env.TEST == 'true'){
     // req.session.passport = 
     console.log('logged in req.header: ' + JSON.stringify(req.user, null, 2))
     console.log('logged in res.session: ' + JSON.stringify(res.user, null, 2))
     console.log('req.isAuthenticated(): ' + req.isAuthenticated())
-  }
+  // }
   // if user is authenticated in the session, carry on
   console.log('\n\n isLoggedIn \n\nreq.header:' + JSON.stringify(req.heeader) + '\n\nres.header: ' + JSON.stringify(req.header) + '\n')
   console.log('req.session: ' + JSON.stringify(req.session, null, 2))

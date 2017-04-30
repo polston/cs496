@@ -26,6 +26,13 @@ const Appointment = require('../models/appointmentModel')
 //   })
 // }
 
+router.route('/user')
+.get(function(req, res, next){
+  User.findById(req.user._id).then(function(user){
+    res.json(user)
+  })
+})
+
 router.route('/users')
 //returns json of all users based on logged on user's permissions
 .get(function(req, res, next){
@@ -40,14 +47,15 @@ router.route('/users')
   }
   //if the logged in user is a supervisor
   else if(req.user.permissions == 'Supervisor'){
-    User.find({permissions: 'Student', permissions: 'Tutor'}).then(function(users){
+    User.find({permissions: 'Student', permissions: 'Tutor', _id: req.user._id}).then(function(users){
       res.json(users)
       // found = users
     })
   }
   //if the logged in user is a student or tutor
   else if(req.user.permissions == 'Student' || req.user.permissions == 'Tutor'){
-    User.find({permissions: 'Tutor'}).then(function(users){
+    console.log('req user:' + req.user._id)
+    User.find({permissions: 'Tutor', _id: req.user._id}).then(function(users){
       res.json(users)
     })
   }

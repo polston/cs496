@@ -24,20 +24,21 @@ let cookie
 
 
 describe('api tests', function(done) {
-    // const api = supertest.agent(app)
+    const api = supertest.agent(app)
 
     it('login user', loginUser())
 
     //create temporary user for each test
     beforeEach(function(done) {
-        api = supertest.agent(app)
+        // const api = supertest.agent(app)
         user = new User({
             name: {
                 firstName: 'TestFirstName',
                 lastName: 'TestLastName'
             },
+            // password: generateHash('testaroo'),
             courses: ['ClassOne', 'ClassTwo', 'ClassThree'],
-            permissions: 'Student',
+            permissions: 'Admin',
             google: {
                 id: 'testuserid', //google.id
                 token: 'testusertoken',
@@ -45,6 +46,9 @@ describe('api tests', function(done) {
                 name: 'testUserDisplayName'
             },
         })
+
+        user.password = user.generateHash('testaroo')
+        console.log(user)
         user.save(function(err, doc) {
             if(err) { done(err) }
             assert(!user.isNew)
@@ -179,17 +183,21 @@ describe('api tests', function(done) {
     })
 
     function loginUser(){
+        // console.log('loginUser: ' + user)
     return function(done){
         api.post('/login')
             
             .set('Connection', 'keep-alive')
-            .expect(302)
-            .send({'user.name.firstName': user.name.firstName}, {'user.name.lastName': user.name.lastName})
+            
+            // .expect(302)
+            .send({ '_id': user._id, 'password': user.password })
+            .expect('Location', '/home')
             // .expect('set-cookie', '/connect.sid/')
             // .expect(Headers())
             // .expect('Location', '/home')
             .end(function(err, res){
                 if(err) return err
+                console.log('\n\ncookies?:' + JSON.stringify(res.cookies, null, 2))
                 console.log('\n\nres?: ' + JSON.stringify(res, null, 2))
                 done()
             })

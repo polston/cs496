@@ -1,6 +1,6 @@
 let express = require('express');
 let mongoose = require('mongoose');
-let bodyParseer = require('body-parser');
+let bodyParser = require('body-parser');
 var passport = require('passport');
 var cookieParser = require('cookie-parser');
 
@@ -41,8 +41,9 @@ app.use(require('express-session')({
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true })) //this not being default behavior is a cruel joke
 require('./config/passport')(passport);
-app.use(bodyParseer.json())
 
 //set up template engine
 app.set('view engine', 'ejs');
