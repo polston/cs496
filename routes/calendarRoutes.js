@@ -5,7 +5,6 @@ const router = express.Router()
 
 router.use(require('./permissionsMiddleware'))
 
-
 router.route('/')
 .get(function(req, res, next){
   console.log(req.url);

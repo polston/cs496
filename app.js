@@ -3,7 +3,9 @@ let mongoose = require('mongoose');
 let bodyParser = require('body-parser');
 var passport = require('passport');
 var cookieParser = require('cookie-parser');
-
+//dev environment backdoor so you don't have to keep signing in
+//set it to 'false' when live
+process.env.dev = require('./env.config')['process.env.dev']
 
 //environment variable changes it to the testing db, when you're running tests
 let dbconfig = require('./dbconfig')
@@ -77,6 +79,7 @@ if(!module.parent){
 }
 
 
+console.log('process.env.dev: ' + process.env.dev)
 console.log('Server starting at ' + (process.env.IP || 'localhost') + ':' + (4000 || process.env.PORT ) + ', probably.' );
 
 //export for testing suites and stuff
