@@ -94,6 +94,10 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
     // Calendar needs eventSource to render events.
     $scope.eventSources = [$scope.events]
 
+    // $scope.eventSources2 = [$scope.calEventsExt, $scope.eventsF, $scope.events];
+    
+    //TODO: these getALL functions are handled mostly by the API now, and need to be adjusted
+
     function getAllStudents(){
       $http.get('/api/users').then(
             function(students){

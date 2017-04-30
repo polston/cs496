@@ -1,6 +1,6 @@
 let express = require('express');
 let mongoose = require('mongoose');
-let bodyParseer = require('body-parser');
+let bodyParser = require('body-parser');
 var passport = require('passport');
 var cookieParser = require('cookie-parser');
 
@@ -20,7 +20,7 @@ let app = express();
 
 //includes the routes, probably a way to just batch include all of them
 //but, I don't know how (yet)
-let indexRoutes = require('./routes/indexRoutes');
+// let indexRoutes = require('./routes/indexRoutes');
 let whateverRoutes = require('./routes/whateverRoutes');
 let errorRoutes = require('./routes/errorRoutes');
 let controllerRoutes = require('./routes/controllerRoutes');
@@ -41,25 +41,28 @@ app.use(require('express-session')({
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true })) //this not being default behavior is a cruel joke
 require('./config/passport')(passport);
-app.use(bodyParseer.json())
 
 //set up template engine
 app.set('view engine', 'ejs');
 
 //appends '/api/' to all of the api routes
 app.use('/api/', require('./routes/apiRoutes'))
-
+app.use('/index', require('./routes/indexRoutes'))
 //node modules path for normal cdn stuff
 app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
 app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist/css/'));
 app.use('/angular', express.static(__dirname + '/node_modules/angular/'))
 app.use('/bower_components', express.static(__dirname + '/bower_components/'))
 
+
+
 //fire routes
 controllerRoutes(app);
 loginRoutes(app,passport);
-indexRoutes(app);
+// indexRoutes(app);
 calendarRoutes(app)
 whateverRoutes(app);
 appointmentRoutes(app);
