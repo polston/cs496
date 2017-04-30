@@ -9,7 +9,7 @@ if(process.env.dev != 'true'){ //skip over if in development environment
       return next()
     }
     else{
-      res.redirect('/')
+      res.status(401).render('../views/errors/401.ejs');
     }
   })
 }

@@ -80,7 +80,7 @@
 
                             {{option}}
                         </select>
-                        <span ng-show="modalForm.studentPicker.$error.required" class="error">Student Required</span>
+                        <span ng-show="modalForm.studentPicker.$error.required" class="error-required">Student Required</span>
                       
                         <h4 class="modal-title">Tutor</h4>
                         <select ng-model="tutor" ng-options="option._id as option.name.firstName + ' ' + option.name.lastName for option in tutorOptions" 
@@ -91,7 +91,7 @@
 
                         </select>
 
-                        <span ng-show="modalForm.tutorPicker.$error.required" class="error">Tutor Required</span>
+                        <span ng-show="modalForm.tutorPicker.$error.required" class="error-required">Tutor Required</span>
 
                         <h4 class="modal-title">Course</h4>
                         
@@ -103,12 +103,12 @@
                             {{option}}
                         </select>
 
-                        <span ng-show="modalForm.coursePicker.$error.required" class="error">Course Required</span>
+                        <span ng-show="modalForm.coursePicker.$error.required" class="error-required">Course Required</span>
 
                         <h4 class="modal-title">Date</h4>
                         <input ng-model="date" ng-model-options="{timezone: 'UTC'}" type="datetime-local" 
                         class="form-control" type="date" placeholder="yyyy-MM-ddHH:mm:ss" name="datePicker" required/>
-                        <span ng-show="modalForm.datePicker.$error.required" class="error">Date Required</span>
+                        <span ng-show="modalForm.datePicker.$error.required" class="error-required">Date Required</span>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clearDropdowns()">Close</button>

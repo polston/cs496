@@ -16,8 +16,20 @@ function IndexController($scope, $http) {
     $scope.permissionOptions = ['Admin', 'Supervisor', 'Tutor', 'Student']
     function init(){
         getAllUsers()
+        getCurrentUser()
     }
     init()
+    
+    function getCurrentUser(){
+        $http.get('/api/user').then(
+            function(user){
+                $scope.currentUser = user.data
+                console.log($scope.currentUser)
+            },
+            function(err) {
+                console.log(err)
+        })
+    }
 
     function getAllUsers() {
         $http.get('/api/users').then(

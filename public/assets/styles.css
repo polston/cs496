@@ -120,6 +120,10 @@ body {
   margin-bottom: 15px;
 }
 
+.error-required{
+  color:red;
+}
+
 .error {
   color: white;
   font-weight: bold;
