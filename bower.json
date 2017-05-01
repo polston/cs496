@@ -1,0 +1,27 @@
+{
+  "name": "cs496",
+  "description": "CS496 group project",
+  "main": "app.js",
+  "authors": [
+    "Michael Polston",
+    "David Owens",
+    "Nathan Cartwright",
+    "Austin Little"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/polston/cs496",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-bootstrap": "^2.5.0",
+    "angular-ui-calendar": "https://github.com/angular-ui/ui-calendar.git#5171a36bf0ea66423f6de49e971b7cc389beba91",
+    "angular": "^1.6.4",
+    "angular-eonasdan-datetimepicker": "^0.3.9"
+  }
+}

@@ -1,25 +1,18 @@
-module.exports = function(app){
 
-  //there's definitely a better way to do '/' and '/index'
+  //Line below this is needed for 401 errors in controllers.!! Don't delete!
+  //res.status(401).render('../views/errors/401.ejs');
 
-  // app.get('/', function(req, res){
-  //   console.log(req.url);
-  //   res.render('../views/index');
-  // });
+const express = require('express')
+const passport = require('passport')
+const router = express.Router()
+const User = require('../models/userModel')
 
-  app.get('/', function(req, res){
-    console.log(req.url);
-    // res.sendFile(__dirname+ '/public/js/index.js')
-    res.render('../views/landing');
-  });
-  
-  app.get('/index', function(req, res){
-    // console.log(req.url);
-    res.render('../views/index');
-  });
-    app.get('/studentUser', function(req, res){
-    // console.log(req.url);
-    res.render('../views/studentUser');
-  });
 
-};
+router.use(require('./permissionsMiddleware'))
+
+router.route('/')
+.get(function(req, res, next){
+  res.render('../views/index')
+})
+
+module.exports = router

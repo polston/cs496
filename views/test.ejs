@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html ng-app="IndexApp">
+
+<head>
+<% include ./partials/head %>
+<script src="../public/js/indexController.js"></script>
+</head>
+
+<body>
+    TEEEEEEEEEEEEEEEEEEEEEEEEEEEEEST
+    <header>
+    </header>
+
+    <div class="container" ng-controller="IndexController">
+        <h2>Create User</h2>
+        <%
+        // error reporting  
+        %>
+        <div ng-if="validationError" class="error">
+            <div ng-repeat="error in validationError">
+                {{error}}
+            </div>
+        </div>
+        <input ng-model="user.name.firstName" class="form-control" type="text" placeholder="first name">
+        <input ng-model="user.name.lastName" class="form-control" type="text" placeholder="last name">
+        <input ng-model="user.courses" class="form-control" type="text" placeholder="Course">
+        <select ng-model="user.permissions" class="form-control" >
+            <option ng-repeat="option in permissionOptions">
+                {{option}}
+            </option>
+        </select>
+
+        <button class="btn btn-primary" ng-click="createUser(user)">Create</button>
+        <button class="btn btn-success" ng-click="updateUser(user)">Update</button>
+
+
+        <div><h1>All users:</h1></div>
+        <div ng-repeat="user in users" >
+            <h4>
+                {{user}}
+                <a ng-click="deleteUser(user._id)" class="pull-right"><span class="fa fa-times-circle-o"></span></a>
+                <a ng-click="editUser(user._id)" class="pull-right"><span class="fa fa-pencil-square-o"></span></a>
+            </h4>
+        </div>
+
+    </div>
+
+    <footer>
+    </footer>
+
+</body>
+
+</html>

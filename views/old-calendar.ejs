@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html ng-app="CalendarApp">
+
+<head>
+<% include ./partials/head %>
+<script src="../public/js/calendarController.js"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.min.js"></script>-->
+<link rel="stylesheet" href="bower_components/fullcalendar/dist/fullcalendar.css"/>
+<!-- jquery, moment, and angular have to get included before fullcalendar -->
+<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="bower_components/moment/min/moment.min.js"></script>
+<script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+<script type="text/javascript" src="bower_components/angular-ui-calendar/src/calendar.js"></script>
+<script type="text/javascript" src="bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
+<script type="text/javascript" src="bower_components/fullcalendar/dist/gcal.js"></script>
+
+
+<script>
+    $(function(){           
+        if (!Modernizr.inputtypes.date) {
+        // If not native HTML5 support, fallback to jQuery datePicker
+            $('input[type=date]').datepicker({
+                // Consistent format with the HTML5 picker
+                    dateFormat : 'yy-mm-dd'
+                },
+                // Localization
+                $.datepicker.regional['it']
+            );
+        }
+    });
+</script>
+</head>
+
+
+<body>
+<header>
+</header>
+
+<div class="container" ng-controller="CalendarController">
+        <h2>Create Appointment</h2>
+        <input ng-model="appointment.date" class="form-control" type="date" placeholder="MM/dd/yyyy" min="2013-01-01" required/>
+        <!-- <input ng-model="appointment.tutor" class="form-control" type="text" placeholder="first name"> -->
+        <span ng-show="appointment.date">date?</span>
+        <select ng-model="appointment.tutor" class="form-control" ng-trim="true" >
+            <option ng-repeat="option in tutorOptions track by option._id">
+                {{option}}
+            </option>
+        </select>
+
+        <select ng-model="appointment.student" class="form-control" ng-trim="true" >
+            <option ng-repeat="option in studentOptions track by option._id">
+                {{option}}
+            </option>
+        </select>
+        <input ng-model="appointment.course" class="form-control" type="text" placeholder="Underwater Basket Weaving" required/>
+        {{appointment.course}}
+        <button class="btn btn-primary" ng-click="createAppointment(appointment)">Create</button>
+        <button class="btn btn-success" ng-click="updateAppointment(appointment)">Update</button>
+        {{appointment}}
+        {{appointment.date | date:'yyyy-MM-dd'}}
+        <div><h1>All users:</h1></div>
+        <div ng-repeat="appointment in appointments" >
+            <h4>
+                {{appointment}}
+                <a ng-click="deleteAppointment(appointment._id)" class="pull-right"><span class="fa fa-times-circle-o"></span></a>
+                <a ng-click="editAppointment(appointment._id)" class="pull-right"><span class="fa fa-pencil-square-o"></span></a>
+            </h4>
+        </div>
+
+    </div>
+
+
+<footer>
+</footer>
+</body>
+
+</html>

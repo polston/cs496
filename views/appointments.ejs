@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html ng-app="AppointmentApp">
+
+<head>
+<% include ./partials/head %>
+<% include ./partials/header %>
+<script src="../public/js/appointmentsController.js"></script>
+<link id="bsdp-css" href="bootstrap-datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet">
+    
+</head>
+
+<body id="landing-page">
+    <header>
+    </header>
+
+    <div class="container" ng-controller="AppointmentController">
+        <h2>Create Appointment</h2>
+        <%
+        // error reporting  
+        %>
+        <div ng-if="validationError" class="error">
+            <div ng-repeat="error in validationError">
+                {{error}}
+            </div>
+        </div>
+        <!--TODO: future reference for firefox: https://uxsolutions.github.io/bootstrap-datepicker/-->
+        
+        <input ng-model="date" class="form-control" type="date" placeholder="MM/dd/yyyy" min="2017-04-01" required/>
+
+        <button class="btn btn-primary" ng-click="createAppointment(appointment)">Create</button>
+        <button class="btn btn-success" ng-click="updateAppointment(appointment)">Update</button>
+
+
+        <div><h1>All Appointments:</h1></div>
+        <div ng-repeat="appointment in appointments" >
+            <h4>
+                {{appointment}}
+                <a ng-click="deleteAppointment(appointment._id)" class="pull-right"><span class="fa fa-times-circle-o"></span></a>
+                <a ng-click="editAppointment(appointment._id)" class="pull-right"><span class="fa fa-pencil-square-o"></span></a>
+            </h4>
+        </div>
+
+    </div>
+
+    <footer>
+    </footer>
+
+</body>
+
+</html>

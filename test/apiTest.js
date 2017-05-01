@@ -7,37 +7,74 @@ const should = require('chai').should()
 const expect = require('chai').expect()
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
 const app = require('../app')
+app.use(cookieParser())
 mongoose.Promise = global.Promise
 
 const User = require('../models/userModel')
-const api = supertest(app)
+// const api = supertest.agent(app)
+// api.use(cookieParser())
 //const api = supertest(process.env.IP + ':'+ process.env.PORT + '/api')
+let user
+let cookie
+
+
+
+
 
 describe('api tests', function(done) {
-    let user
+    const api = supertest.agent(app)
+
+    it('login user', loginUser())
+
     //create temporary user for each test
     beforeEach(function(done) {
+        // const api = supertest.agent(app)
         user = new User({
             name: {
                 firstName: 'TestFirstName',
                 lastName: 'TestLastName'
             },
+            // password: generateHash('testaroo'),
             courses: ['ClassOne', 'ClassTwo', 'ClassThree'],
-            permissions: 'Student'
+            permissions: 'Admin',
+            google: {
+                id: 'testuserid', //google.id
+                token: 'testusertoken',
+                email: 'testuser@email.com',
+                name: 'testUserDisplayName'
+            },
         })
+
+        user.password = user.generateHash('testaroo')
+        console.log(user)
         user.save(function(err, doc) {
             if(err) { done(err) }
             assert(!user.isNew)
-            done()
+            // loginUser()
+            // done()
         })
+        loginUser()
+        done()
     })
 
     describe('get routes', function(done) {
+        // it('should test some shit', function(done){
+        //     api.get('/api/users', function(req, res){
+        //         console.log('\n\ncookies?:' + res.cookies)
+        //     })
+        // })
+
         it('should return a 200 response', function(done) {
+            loginUser()
             api.get('/api/users')
+            // .send({permissions: 'Admin'})
+            // .set('Cookie', cookie)
+            .set('Connection', 'keep-alive')
             .expect(200)
             .end(function(err, res) {
+                console.log('\n\ncookies?:' + JSON.stringify(res, null, 2))
                 if(err) { console.log('Error: ' + err) }
                 done()
             })
@@ -144,4 +181,39 @@ describe('api tests', function(done) {
             done()
         })
     })
+
+    function loginUser(){
+        // console.log('loginUser: ' + user)
+    return function(done){
+        api.post('/login')
+            
+            .set('Connection', 'keep-alive')
+            
+            // .expect(302)
+            .send({ '_id': user._id, 'password': user.password })
+            .expect('Location', '/home')
+            // .expect('set-cookie', '/connect.sid/')
+            // .expect(Headers())
+            // .expect('Location', '/home')
+            .end(function(err, req){
+                if(err) return err
+                cookie = req.header['set-cookie']
+                console.log('\n\ncookies?:' + JSON.stringify(req.cookies, null, 2))
+                console.log('\n\nres?: ' + JSON.stringify(req, null, 2))
+                done()
+            })
+        
+        // function onAuth(err, req, res){
+        //     console.log('\n\nprint you fuck: ' + JSON.stringify(req, null, 2))
+        //     console.log('\n\nprint you fuck: ' + JSON.stringify(res.header, null, 2))
+        //     console.log('\n\nasdfsdf: ' + req.cookie)
+        //     // console.log('\n\nprint you fuck: ' + JSON.stringify(req, null, 2))
+        //     if(err) throw err
+        //     // api.saveCookies(req)
+        //     cookie = req.headers['set-cookie']
+        //     console.log('cookie: ' + cookie)
+        //     return done()
+        // }
+    }
+}
 })
