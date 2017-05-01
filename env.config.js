@@ -1,3 +1,3 @@
 module.exports = {
-  'process.env.dev': 'true'
+  'process.env.dev': 'false'
 }

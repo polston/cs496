@@ -13,7 +13,7 @@ app.use(cookieParser())
 mongoose.Promise = global.Promise
 
 const User = require('../models/userModel')
-// const api = supertest.agent(app)
+let agent = supertest.agent()
 // api.use(cookieParser())
 //const api = supertest(process.env.IP + ':'+ process.env.PORT + '/api')
 let user
@@ -24,13 +24,14 @@ let cookie
 
 
 describe('api tests', function(done) {
-    const api = supertest.agent(app)
+    // let api = supertest.agent(app)
 
-    it('login user', loginUser())
+    // it('login user', )
 
     //create temporary user for each test
     beforeEach(function(done) {
         // const api = supertest.agent(app)
+        
         user = new User({
             name: {
                 firstName: 'TestFirstName',
@@ -48,14 +49,16 @@ describe('api tests', function(done) {
         })
 
         user.password = user.generateHash('testaroo')
-        console.log(user)
+        // console.log(user)
         user.save(function(err, doc) {
             if(err) { done(err) }
             assert(!user.isNew)
             // loginUser()
+            
             // done()
         })
-        loginUser()
+        // agent = authUser(user, done)
+        // loginUser()
         done()
     })
 
@@ -67,37 +70,59 @@ describe('api tests', function(done) {
         // })
 
         it('should return a 200 response', function(done) {
-            loginUser()
-            api.get('/api/users')
+            loginUser(user, function(agent){
+                agent.get('/api/users')
             // .send({permissions: 'Admin'})
             // .set('Cookie', cookie)
-            .set('Connection', 'keep-alive')
-            .expect(200)
-            .end(function(err, res) {
-                console.log('\n\ncookies?:' + JSON.stringify(res, null, 2))
-                if(err) { console.log('Error: ' + err) }
-                done()
+                // .set('Connection', 'keep-alive')
+                    .expect(200)
+                    .end(function(err, res) {
+                        // console.log('\n\ncookies?:' + JSON.stringify(res, null, 2))
+                        // if(err) { console.log('Error: ' + err) }
+                        done()
+                    })
             })
         })
 
         it('should return user object requested', function(done) {
-            api.get('/api/users/'+user._id)
-            .expect(200)
-            .end(function(err, res) {
-                if(err) { console.log('Error: ' + err) }
-                should.not.exist(err)
-                should.exist(res)
-                res.should.be.an('object')
-                res.body.should.have.property('_id').eql(user._id.toString())
-                done()
+            loginUser(user, function(agent){
+                agent.get('/api/users/'+user._id)
+                    .expect(200)
+                    .end(function(err, res) {
+                        // if(err) { console.log('Error: ' + err) }
+                        should.not.exist(err)
+                        should.exist(res)
+                        res.should.be.an('object')
+                        res.body.should.have.property('_id').eql(user._id.toString())
+                        done()
+                    })
             })
         })
+        
+        it('should return all users', function(done) {
+            loginUser(user, function(agent){
+                agent.get('/api/users')
+                .expect(200)
+                .end(function(err, res) {
+                    // if(err) { console.log('Error: ' + err) }
+                    // console.log('all users res: ' + JSON.stringify(res.body, null, 3))
+                    should.not.exist(err)
+                    should.exist(res)
+                    res.body.should.be.an('array')
+                    //res.body.should.have.property('_id').eql(user._id.toString())
+                    done()
+                })
+            })
+        })
+        
 
         it('should return all users', function(done) {
-            api.get('/api/users')
+            agent.get('/api/users')
+            .set('Cookie', cookie)
             .expect(200)
             .end(function(err, res) {
-                if(err) { console.log('Error: ' + err) }
+                // if(err) { console.log('Error: ' + err) }
+                // console.log('all users res: ' + JSON.stringify(res))
                 should.not.exist(err)
                 should.exist(res)
                 res.body.should.be.an('array')
@@ -119,11 +144,11 @@ describe('api tests', function(done) {
                   permissions: 'Student'
                 }
 
-            api.post('/api/users')
+            agent.post('/api/users')
             .send(postUser)
             .expect(200)
             .end(function(err, res) {
-                if(err) { console.log('Error: ' + err) }
+                // if(err) { console.log('Error: ' + err) }
                 res.body.should.be.an('object')
                 res.body.should.have.property('_id')
                 res.body.should.have.deep.property('name.firstName', 'PostTestUserFirstName')
@@ -144,11 +169,11 @@ describe('api tests', function(done) {
                   permissions: 'Tutor'
                 }
 
-            api.put('/api/users/'+user._id)
+            agent.put('/api/users/'+user._id)
             .send(putUser)
             .expect(200)
             .end(function(err, res) {
-                if(err) { console.log('Error: ' + err) }
+                // if(err) { console.log('Error: ' + err) }
                 res.body.should.be.an('object')
                 res.body.should.have.property('_id').eql(user._id.toString())
                 res.body.should.have.deep.property('name.firstName', 'PutTestUserFirstName')
@@ -161,10 +186,10 @@ describe('api tests', function(done) {
 
     describe('delete routes', function(done) {
         it('delete user in database', function(done) {
-            api.delete('/api/users/'+user._id)
+            agent.delete('/api/users/'+user._id)
             .expect(200)
             .end(function(err, res) {
-                if(err) { console.log('Error: ' + err) }
+                // if(err) { console.log('Error: ' + err) }
                 res.body.should.be.an('object')
                 res.body.should.have.property('_id').eql(user._id.toString())
                 res.body.should.have.deep.property('name.firstName', 'TestFirstName')
@@ -177,43 +202,33 @@ describe('api tests', function(done) {
     //drop the test user after every test
     afterEach(function(done) {
         User.remove({_id: user._id}, function(err, doc) {
-            if(err) { console.log(err) }
+            // if(err) { console.log(err) }
             done()
         })
     })
-
-    function loginUser(){
-        // console.log('loginUser: ' + user)
-    return function(done){
-        api.post('/login')
-            
-            .set('Connection', 'keep-alive')
-            
-            // .expect(302)
-            .send({ '_id': user._id, 'password': user.password })
-            .expect('Location', '/home')
-            // .expect('set-cookie', '/connect.sid/')
-            // .expect(Headers())
-            // .expect('Location', '/home')
-            .end(function(err, req){
-                if(err) return err
-                cookie = req.header['set-cookie']
-                console.log('\n\ncookies?:' + JSON.stringify(req.cookies, null, 2))
-                console.log('\n\nres?: ' + JSON.stringify(req, null, 2))
-                done()
-            })
-        
-        // function onAuth(err, req, res){
-        //     console.log('\n\nprint you fuck: ' + JSON.stringify(req, null, 2))
-        //     console.log('\n\nprint you fuck: ' + JSON.stringify(res.header, null, 2))
-        //     console.log('\n\nasdfsdf: ' + req.cookie)
-        //     // console.log('\n\nprint you fuck: ' + JSON.stringify(req, null, 2))
-        //     if(err) throw err
-        //     // api.saveCookies(req)
-        //     cookie = req.headers['set-cookie']
-        //     console.log('cookie: ' + cookie)
-        //     return done()
-        // }
-    }
-}
 })
+
+function authUser(person, done) {
+    var authReq = supertest.agent(app);
+    authReq.post('/login')
+        .send({ '_id': person._id, 'password': person.password })
+        .end(function(error, res) {
+            if (error) {
+                throw error;
+            } 
+            done(authReq)
+        });
+}
+
+
+function loginUser(loginInfo, done){
+    let agent = supertest.agent(app)
+    agent.post('/login')
+        .set('Connection', 'keep-alive')
+        .send({ '_id': loginInfo._id, 'password': loginInfo.password })
+        .expect('Location', '/home')
+        .end(function(err, req){
+            if(err) return err
+            done(agent)
+        })
+}

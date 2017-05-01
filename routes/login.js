@@ -21,18 +21,18 @@ app.get('/home', isLoggedIn, function(req, res) {
 if(process.env.TEST == 'true'){
   // Home Page Route    
   app.get('/login', function(req, res){
-    console.log('\nget /login : ' + JSON.stringify(req.user) + '\n');
-    console.log('\nget /loing : ' + JSON.stringify(res.user) + '\n');
+    // console.log('\nget /login : ' + JSON.stringify(req.user) + '\n');
+    // console.log('\nget /loing : ' + JSON.stringify(res.user) + '\n');
     res.render('../views/login');
   });
 
   app.post('/login', function(req, res, next){
-    console.log('post login')
-    console.log('req.body: ' + JSON.stringify(req.body, null, 2))
+    // console.log('post login')
+    // console.log('req.body: ' + JSON.stringify(req.body, null, 2))
     let user = { _id: req.body._id, password: req.body.password }
     passport.authenticate('local', function(err, user, info){
-      console.log('info: ' + JSON.stringify(info))
-      console.log('auth req: ' + JSON.stringify(req.body))
+      // console.log('info: ' + JSON.stringify(info))
+      // console.log('auth req: ' + JSON.stringify(req.body))
       if(err){
         console.log('passport err: ' + err)
       }

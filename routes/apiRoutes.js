@@ -114,6 +114,9 @@ router.route('/users/:id')
 //update user in database
 .put(function(req, res, next){
   //admins can update anyone
+  console.log(req.params.id)
+  console.log(req.user._id)
+  console.log(req.user._id == req.params.id)
   if(req.user.permissions == 'Admin'){
     User.findByIdAndUpdate(req.params.id, req.body).then(function(){
       User.findById(req.params.id).then(function(user){
@@ -137,7 +140,8 @@ router.route('/users/:id')
   //TODO: write tests for this specifically...
   //FIXME: this should probably be put into api/user, and changed so that you can't
   //       change your permissions, possibly go through the model?
-  else if(req.user._id === req.params.id){
+  else if(req.user._id == req.params.id){
+    console.log('test?')
     User.findByIdAndUpdate(req.params.id, req.body).then(function(){
       User.findById(req.params.id).then(function(user){
         //console.log('test' + user)
@@ -176,7 +180,7 @@ router.route('/calendar')
   }
   //students can see available tutors and their own appointments
   else if(req.user.permissions == 'Student'){
-    Appointment.find().or([{student: {"$exists": false}}, {student: req.user._id}]).then(function(appointments){
+    Appointment.find().or([{student: {$not: {$gt: []}}}, {student: req.user._id}]).then(function(appointments){
       res.json(appointments)
     })
   }
