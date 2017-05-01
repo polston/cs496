@@ -17,5 +17,9 @@ module.exports = function(app){
     // console.log(req.url);
     res.render('../views/index');
   });
+    app.get('/studentUser', function(req, res){
+    // console.log(req.url);
+    res.render('../views/studentUser');
+  });
 
 };
