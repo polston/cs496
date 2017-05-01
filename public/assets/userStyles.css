@@ -1,0 +1,34 @@
+html {
+    background: url("background.jpg") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  /*position: absolute;*/
+  background-size: cover;
+  height:100%;
+
+}
+body {
+    background: url("background.jpg") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  /*position: absolute;*/
+  background-size: cover;
+  height:100%;
+
+}
+
+#landing-page {
+  background: url("background.jpg") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  height:100%;
+}
+
+
+.img-responsive {
+  margin:0 auto;
+}
