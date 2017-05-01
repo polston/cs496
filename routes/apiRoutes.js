@@ -29,7 +29,6 @@ router.route('/users')
 //returns json of all users based on logged on user's permissions
 .get(function(req, res, next){
   //if the logged in user is an admin
-  console.log('\n\nres: ' + JSON.stringify(req.body, null, 2))
   if(req.user.permissions == 'Admin'){
     User.find().then(function(users){
       res.json(users)
@@ -114,9 +113,6 @@ router.route('/users/:id')
 //update user in database
 .put(function(req, res, next){
   //admins can update anyone
-  console.log(req.params.id)
-  console.log(req.user._id)
-  console.log(req.user._id == req.params.id)
   if(req.user.permissions == 'Admin'){
     User.findByIdAndUpdate(req.params.id, req.body).then(function(){
       User.findById(req.params.id).then(function(user){
@@ -141,7 +137,6 @@ router.route('/users/:id')
   //FIXME: this should probably be put into api/user, and changed so that you can't
   //       change your permissions, possibly go through the model?
   else if(req.user._id == req.params.id){
-    console.log('test?')
     User.findByIdAndUpdate(req.params.id, req.body).then(function(){
       User.findById(req.params.id).then(function(user){
         //console.log('test' + user)
@@ -205,7 +200,6 @@ router.route('/calendar')
   //admins and supervisors can create appointments
   if(req.user.permissions == 'Admin' || req.user.permissions == 'Supervisor'){
     Appointment.create(req.body).then(function(appointment){
-      console.log('\n\ncalendar post res: ' + JSON.stringify(req.body))
       res.json(appointment)
     }).catch(next, function(next){
       console.log('next: ' + next)

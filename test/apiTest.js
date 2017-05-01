@@ -23,15 +23,9 @@ let student
 let cookie
 
 
-
-
-
 describe('api tests', function(done) {
-    // let api = supertest.agent(app)
 
-    // it('login user', )
-
-    //create temporary user for each test
+    //create admin user for each test
     beforeEach(function(done) {
         // const api = supertest.agent(app)
         admin = new User({
@@ -57,27 +51,15 @@ describe('api tests', function(done) {
             assert(!admin.isNew)
         })
 
-        
         done()
     })
 
     describe('get routes', function(done) {
-        // it('should test some shit', function(done){
-        //     api.get('/api/users', function(req, res){
-        //         console.log('\n\ncookies?:' + res.cookies)
-        //     })
-        // })
-
         it('should return a 200 response', function(done) {
             loginUser(admin, function(agent){
                 agent.get('/api/users')
-            // .send({permissions: 'Admin'})
-            // .set('Cookie', cookie)
-                // .set('Connection', 'keep-alive')
                     .expect(200)
                     .end(function(err, res) {
-                        // console.log('\n\ncookies?:' + JSON.stringify(res, null, 2))
-                        // if(err) { console.log('Error: ' + err) }
                         done()
                     })
             })
@@ -88,7 +70,6 @@ describe('api tests', function(done) {
                 agent.get('/api/users/'+admin._id)
                     .expect(200)
                     .end(function(err, res) {
-                        // if(err) { console.log('Error: ' + err) }
                         should.not.exist(err)
                         should.exist(res)
                         res.should.be.an('object')
@@ -103,12 +84,9 @@ describe('api tests', function(done) {
                 agent.get('/api/users')
                 .expect(200)
                 .end(function(err, res) {
-                    // if(err) { console.log('Error: ' + err) }
-                    // console.log('all users res: ' + JSON.stringify(res.body, null, 3))
                     should.not.exist(err)
                     should.exist(res)
                     res.body.should.be.an('array')
-                    //res.body.should.have.property('_id').eql(user._id.toString())
                     done()
                 })
             })
@@ -130,7 +108,6 @@ describe('api tests', function(done) {
                     .send(postUser)
                     .expect(200)
                     .end(function(err, res) {
-                        // if(err) { console.log('Error: ' + err) }
                         res.body.should.be.an('object')
                         res.body.should.have.property('_id')
                         res.body.should.have.deep.property('name.firstName', 'PostTestUserFirstName')
@@ -159,7 +136,6 @@ describe('api tests', function(done) {
                     .send(putUser)
                     .expect(200)
                     .end(function(err, res) {
-                        // if(err) { console.log('Error: ' + err) }
                         res.body.should.be.an('object')
                         res.body.should.have.property('_id').eql(user._id.toString())
                         res.body.should.have.deep.property('name.firstName', 'PutTestUserFirstName')
@@ -180,7 +156,6 @@ describe('api tests', function(done) {
                 agent.delete('/api/users/'+user._id)
                     .expect(200)
                     .end(function(err, res) {
-                        // if(err) { console.log('Error: ' + err) }
                         res.body.should.be.an('object')
                         res.body.should.have.property('_id').eql(user._id.toString())
                         res.body.should.have.deep.property('name.firstName', user.name.firstName)
@@ -192,7 +167,7 @@ describe('api tests', function(done) {
         })
     })
 
-    //drop the test users after every test
+    //drop the admin test user after every test
     //probably better to just drop the whole collection
     afterEach(function(done) {
         User.remove({_id: admin._id}, function(err, doc) {
@@ -202,7 +177,7 @@ describe('api tests', function(done) {
     })
 })
 
-
+//logs in a user through the local passport strategy
 function loginUser(loginInfo, done){
     let agent = supertest.agent(app)
     agent.post('/login')
@@ -215,6 +190,7 @@ function loginUser(loginInfo, done){
         })
 }
 
+//used for making a temporary user in some tests
 function createUser(permission){
     user = new User({
         name: {
@@ -238,7 +214,6 @@ function createUser(permission){
         assert(!user.isNew)
         // done()
     })
-    console.log('id: ' + user._id)
     return user
 }
 

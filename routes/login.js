@@ -3,12 +3,12 @@ module.exports = function(app, passport){
 
 // Home Page Route    
 app.get('/', function(req, res){
-  console.log('\nget / : ' + JSON.stringify(req.body) + '\n');
+  // console.log('\nget / : ' + JSON.stringify(req.body) + '\n');
   res.render('../views/landing');
 });
   
 app.get('/home', isLoggedIn, function(req, res) {
-  console.log('\nget /home' + JSON.stringify(req.body) + '\n') 
+  // console.log('\nget /home' + JSON.stringify(req.body) + '\n') 
     res.render('../views/home', {
         user : req.body // get the user out of session and pass to template
         
@@ -71,7 +71,7 @@ else{
   app.get('/auth/google/callback',
     passport.authenticate('google', {failureRedirect: '/'}),
     function(req, res) {
-      console.log('\n\n get /auth/google/callback/ \n\nreq:' + JSON.stringify(req.body) + '\n\nres: ' + JSON.stringify(res.body) + '\n')
+      // console.log('\n\n get /auth/google/callback/ \n\nreq:' + JSON.stringify(req.body) + '\n\nres: ' + JSON.stringify(res.body) + '\n')
         res.redirect('/calendar');
     });
   };

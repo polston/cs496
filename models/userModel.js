@@ -57,7 +57,6 @@ UserSchema.methods.validPassword = function(password) {
 
 //for the testing suite...
 UserSchema.methods.dummyPasswordChecker = function(){
-  console.log('test?')
   return true
 }
 
