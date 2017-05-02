@@ -40,7 +40,9 @@
                         <!--</div>-->
                         <!--<div class='btn-toolbar pull-right'>-->
                             <!--<div class="btn-group">-->
-                                <button type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#bs-example-modal-md">Add Appointment</button>
+                                <button type="button" class="btn btn-success pull-right" 
+                                ng-if="currentUser.permissions=='Admin' || currentUser.permissions=='Supervisor'"
+                                data-toggle="modal" data-target="#bs-example-modal-md">Add Appointment</button>
                             <!--</div>-->
                             <br>
                         <!--</div>-->
@@ -52,11 +54,11 @@
                         <div class="alert alert-info">
                             <b>{{e.start | date:"MMM dd:"}}</b> {{e.start | date:" h:mma" : 'UTC'}} - {{e.end | date:"h:mma" : 'UTC'}}
                             <a data-toggle="modal" data-target="#editModal" class="pull-right" ng-click="bindModal(e)">
-                            <i class="fa fa-pencil-square-o fa-lg"></i></a>
+                            <i class="fa fa-pencil-square-o fa-lg" ng-if="currentUser.permissions=='Admin' || currentUser.permissions=='Supervisor'"></i></a>
                             <br>
                             <b style="font-size:18px; color:#003f7f">  {{e.title}}</b>
                             <a data-toggle="modal" data-target="#deleteModal" class="pull-right" ng-click="bindModal(e)">
-                            <i class="fa fa-window-close fa-lg"></i></a>
+                            <i class="fa fa-window-close fa-lg" ng-if="currentUser.permissions=='Admin' || currentUser.permissions=='Supervisor'"></i></a>
                         </div>
                     </ul>
                 </div>
@@ -74,16 +76,17 @@
                         <form name="modalForm">
                             <div class="modal-body">
                         <h4 class="modal-title">Student</h4>
-                        <select ng-model="student" ng-options="option._id as option.name.firstName + ' ' + option.name.lastName for option in studentOptions" 
+                        <select ng-model="student" ng-options="option as option.name.firstName + ' ' + option.name.lastName for option in studentOptions" 
                         class="form-control" ng-trim="true" name="studentPicker" required>
                             <option value="" disabled selected>Select a Student</option>
 
                             {{option}}
                         </select>
-                        <span ng-show="modalForm.studentPicker.$error.required" class="error-required">Student Required</span>
+                        <!--<span ng-show="modalForm.studentPicker.$error.required" class="error-required">Student Required</span>-->
                       
                         <h4 class="modal-title">Tutor</h4>
-                        <select ng-model="tutor" ng-options="option._id as option.name.firstName + ' ' + option.name.lastName for option in tutorOptions" 
+                        <!--<select ng-model="tutor" ng-options="option._id as option.name.firstName + ' ' + option.name.lastName for option in tutorOptions" -->
+                        <select ng-model="tutor" ng-options="option as option.name.firstName + ' ' + option.name.lastName for option in tutorOptions" 
                         class="form-control" ng-trim="true" ng-change="getTutorCourses(tutor)" name="tutorPicker" required>
                             <option value="" disabled selected>Select a Tutor</option>
 
@@ -113,10 +116,10 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clearDropdowns()">Close</button>
                             <!--TODO: I got rid of it needing a student so I could test stuff-->
-                            <!--<button class="btn btn-primary"-->
-                            <!--ng-click="createAppointment(student,tutor,course,date)" data-dismiss="modal">Create</button>-->
-                            <button class="btn btn-primary" ng-disabled="modalForm.$invalid"
+                            <button class="btn btn-primary"
                             ng-click="createAppointment(student,tutor,course,date)" data-dismiss="modal">Create</button>
+                            <!--<button class="btn btn-primary" ng-disabled="modalForm.$invalid"-->
+                            <!--ng-click="createAppointment(student,tutor,course,date)" data-dismiss="modal">Create</button>-->
                         </div>
                     </form>
                     </div>

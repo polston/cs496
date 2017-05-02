@@ -74,6 +74,7 @@ function IndexController($scope, $http) {
         $scope.clearOptions()
         $http.get('/api/users/'+user).then(
             function(result){
+                console.log('res: ' + JSON.stringify(result))
                  $scope.user = result.data
                  $scope.editCourses($scope.user)
             },
@@ -88,8 +89,10 @@ function IndexController($scope, $http) {
        
         user.permissions = user.permissions.trim()
         $scope.updateCourses(user)
+        console.log('res: ' + JSON.stringify(user))
         $http.put('/api/users/'+user._id, user).then(
             function(result){
+                console.log('res: ' + result)
                 getAllUsers()
             },
             function(err){
