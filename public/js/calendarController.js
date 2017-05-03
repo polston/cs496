@@ -25,9 +25,26 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
     init()
 
     /* alert on eventClick */
-   /* $scope.alertOnEventClick = function( date, jsEvent, view){
-        $scope.alertMessage = (date.title + ' was clicked ');
-    };*/
+    $scope.alertOnEventClick = function(date, jsEvent, view){
+            $('#dateTitle').html(date.title);
+            $('#dateBody').html("Book this Appointment?");
+             $('#dateSubmit').attr('class',"btn btn-success");
+              $('#dateSubmit').html('Book');
+            $('#dateObject').html(date);
+            $('#bookModal').modal();
+            $scope.eventToChange = date
+         
+         if(date.title.indexOf(' with ') > -1){
+            $('#dateTitle').html(date.title);
+            $('#dateBody').html("Cancel this Appointment?");
+            $('#dateSubmit').attr('class',"btn btn-danger");
+            $('#dateSubmit').attr('ng-click',"test()");
+            $('#dateSubmit').html('Cancel');
+            $('#dateObject').html(date);
+            $('#bookModal').modal();
+            $scope.eventToChange = date
+        }
+    };
 
     /* remove event */
     function remove (index) {
@@ -76,13 +93,13 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
             }
           },
           toggle: {
-            text: "My Appointments",
+            text: "View My Appointments",
             click: function() {
                 $scope.toggle($scope.isToggled)
                 if($scope.isToggled==true)
-                  $scope.uiConfig.calendar.customButtons.toggle.text ="Available Appointments"
+                  $scope.uiConfig.calendar.customButtons.toggle.text =" View Available Appointments"
                 else
-                   $scope.uiConfig.calendar.customButtons.toggle.text ="My Appointments"
+                     $scope.uiConfig.calendar.customButtons.toggle.text ="View My Appointments"
                 renderCalendar('myCalendar')
             }
           }
@@ -94,7 +111,7 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
         },
         selectable: true,
 			  selectHelper: true,
-        navLinks: true, //TODO: make this work
+        navLinks: true, 
         eventClick: $scope.alertOnEventClick,
         eventDrop: $scope.alertOnDrop,
         eventResize: $scope.alertOnResize,
@@ -106,8 +123,6 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
     // Calendar needs eventSource to render events.
     $scope.eventSources = [$scope.events]
 
-    // $scope.eventSources2 = [$scope.calEventsExt, $scope.eventsF, $scope.events];
-    
     $scope.toggle = function($isToggled){
       if($scope.isToggled == false){
         for(let k = 0; k < $scope.events.length; k++){
@@ -117,7 +132,6 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
         for(let i = 0; i < $scope.bookedEvents.length; i++){
           $scope.events.push($scope.bookedEvents[i])
         }
-        $scope.buttonLabel = "My Appointments"
         return $scope.isToggled = true
       }
        if($scope.isToggled == true){
@@ -126,15 +140,14 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
           $scope.events.push($scope.tempSource[j])
         }
         $scope.tempSource = []
-        //$scope.buttonLabel = "My Appointments"
         return $scope.isToggled = false
        }
     }
     
     function getCurrentUser(){
-      $http.get('/api/user').then(
+     return $http.get('/api/user').then(
           function(user){
-             $scope.currentUser = user.data
+            return $scope.currentUser = user.data
             },
             function(err) {
                 console.log(err)
@@ -165,7 +178,6 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
                 if(tutors.data[i]['permissions'] == 'Tutor'){
                   allTutors.push(tutors.data[i])
                 }
-                  
               }
               $scope.tutorOptions = allTutors
             },
@@ -186,51 +198,15 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
               }
               $scope.courseOptions = courses
     }
-/* 
-                                ,_-=(!7(7/zs_.
-                             .='  ' .`/,/!(=)Zm.
-               .._,,._..  ,-`- `,\ ` -` -`\\7//WW.
-          ,v=~/.-,-\- -!|V-s.)iT-|s|\-.'   `///mK%.
-        v!`i!-.e]-g`bT/i(/[=.Z/m)K(YNYi..   /-]i44M.
-      v`/,`|v]-DvLcfZ/eV/iDLN\D/ZK@%8W[Z..   `/d!Z8m
-     //,c\(2(X/NYNY8]ZZ/bZd\()/\7WY%WKKW)   -'|(][%4.
-   ,\\i\c(e)WX@WKKZKDKWMZ8(b5/ZK8]Z7%ffVM,   -.Y!bNMi
-   /-iit5N)KWG%%8%%%%W8%ZWM(8YZvD)XN(@.  [   \]!/GXW[
-  / ))G8\NMN%W%%%%%%%%%%8KK@WZKYK*ZG5KMi,-   vi[NZGM[
- i\!(44Y8K%8%%%**~YZYZ@%%%%%4KWZ/PKN)ZDZ7   c=//WZK%!
-,\v\YtMZW8W%%f`,`.t/bNZZK%%W%%ZXb*K(K5DZ   -c\\/KM48
--|c5PbM4DDW%f  v./c\[tMY8W%PMW%D@KW)Gbf   -/(=ZZKM8[
-2(N8YXWK85@K   -'c|K4/KKK%@  V%@@WD8e~  .//ct)8ZK%8`
-=)b%]Nd)@KM[  !'\cG!iWYK%%|   !M@KZf    -c\))ZDKW%`
-YYKWZGNM4/Pb  '-VscP4]b@W%     'Mf`   -L\///KM(%W!
-!KKW4ZK/W7)Z. '/cttbY)DKW%     -`  .',\v)K(5KW%%f
-'W)KWKZZg)Z2/,!/L(-DYYb54%  ,,`, -\-/v(((KK5WW%f
- \M4NDDKZZ(e!/\7vNTtZd)8\Mi!\-,-/i-v((tKNGN%W%%
- 'M8M88(Zd))///((|D\tDY\\KK-`/-i(=)KtNNN@W%%%@%[
-  !8%@KW5KKN4///s(\Pd!ROBY8/=2(/4ZdzKD%K%%%M8@%%
-   '%%%W%dGNtPK(c\/2\[Z(ttNYZ2NZW8W8K%%%%YKM%M%%.
-     *%%W%GW5@/%!e]_tZdY()v)ZXMZW%W%%%*5Y]K%ZK%8[
-      '*%%%%8%8WK\)[/ZmZ/Zi]!/M%%%%@f\ \Y/NNMK%%!
-        'VM%%%%W%WN5Z/Gt5/b)((cV@f`  - |cZbMKW%%|
-           'V*M%%%WZ/ZG\t5((+)L'-,,/  -)X(NWW%%
-                `~`MZ/DZGNZG5(((\,    ,t\\Z)KW%@
-                   'M8K%8GN8\5(5///]i!v\K)85W%%f
-                     YWWKKKKWZ8G54X/GGMeK@WM8%@
-                      !M8%8%48WG@KWYbW%WWW%%%@
-                        VM%WKWK%8K%%8WWWW%%%@`
-                          ~*%%%%%%W%%%%%%%@~
-                             ~*MM%%%%%%@f`
-                                 '''''
-  this is a euphanism for how the function below is structured
-*/
+
     
-    //abandon all hope ye who enter here
+    
     function getAllAppointments() {
       $http.get('/api/calendar').then(
           function(appointments){
-            if ($scope.isCreated == false){
+            if ($scope.events.length == 0){
                 for(let i = 0; i < appointments.data.length; i++){
-                  if(appointments.data[i].student.name.firstName == undefined){    //if available
+                  if(appointments.data[i].student.name.firstName == "temp"){    //if available
                       let endTime = new Date(appointments.data[i].date)
                       let obj = {
                       title: appointments.data[i].course + " tutored by: " + appointments.data[i].tutor.name.firstName, 
@@ -252,18 +228,34 @@ YYKWZGNM4/Pb  '-VscP4]b@W%     'Mf`   -L\///KM(%W!
                   }
                 }
             }
-            else
-              if($scope.events.length != appointments.data.length){
-                let i = appointments.data.length-1
-                let endTime = new Date(appointments.data[i].date)
-                let obj = {
-                  title: 'Tutoring', start: Date.parse(appointments.data[i].date), 
-                  end: Date.parse(endTime.toISOString(endTime.setHours(endTime.getHours() + 1))), stick:true,
-                  color:  '#B30000', id: appointments.data[i]['_id']
-                }
-                $scope.events.push(obj)
-                $scope.isCreated = false
+            else{
+              $scope.events.splice(0,$scope.events.length)
+              $scope.bookedEvents.splice(0,$scope.bookedEvents.length)
+              $scope.isToggled = false
+              $scope.uiConfig.calendar.customButtons.toggle.text ="View My Appointments"
+              for(let j = 0; j < appointments.data.length; j++){
+                  if(appointments.data[j].student.name.firstName == "temp"){    //if available
+                      let endTime = new Date(appointments.data[j].date)
+                      let obj = {
+                      title: appointments.data[j].course + " tutored by: " + appointments.data[j].tutor.name.firstName, 
+                      start: Date.parse(appointments.data[j].date), 
+                      end: Date.parse(endTime.toISOString(endTime.setHours(endTime.getHours() + 1))), stick:true,
+                      color:  '#B30000', id: appointments.data[j]['_id']
+                    }
+                      $scope.events.push(obj)
+                   }
+                  else{
+                    let endTime = new Date(appointments.data[j].date)
+                    let obj = {
+                      title: appointments.data[j].course + ' with ' + appointments.data[j].tutor.name.firstName,
+                      start: Date.parse(appointments.data[j].date), 
+                      end: Date.parse(endTime.toISOString(endTime.setHours(endTime.getHours() + 1))), stick:true,
+                      color:  '#B30000', id: appointments.data[j]['_id']
+                    }
+                       $scope.bookedEvents.push(obj)
+                  }
               }
+            }
               
               //stick property in events object necessary to make events persist on view changes.
               //only way to modify an ISO string is to pass back to date object, modify, then covert back to date.
@@ -271,11 +263,33 @@ YYKWZGNM4/Pb  '-VscP4]b@W%     'Mf`   -L\///KM(%W!
           function(err) {
               console.log(err)
       })
+      $scope.isToggled = false
     }
     
     $scope.createAppointment = function(student, tutor, course, date){
-
-      let data = { date: date,
+      let data
+      if(student==undefined){
+         data = { date: date,
+                    course: course,
+                    tutor: { 
+                      name: {
+                        firstName: tutor.name.firstName,
+                        lastName:  tutor.name.lastName,
+                      },
+                      id: tutor._id,
+                    },
+                    student: { 
+                      name:  {
+                        firstName: "temp",
+                        lastName:  "temp",
+                      },
+                      id: tutor._id,
+                    }
+                  }
+        
+      }
+      else{
+         data = { date: date,
                    course: course,
                    tutor: { 
                      name: {
@@ -292,7 +306,7 @@ YYKWZGNM4/Pb  '-VscP4]b@W%     'Mf`   -L\///KM(%W!
                      id: student._id,
                    }
                 }
-
+      }
         $http.post('/api/calendar', data).then(
             function(result){
                 let endTime = new Date(data.date)
@@ -330,6 +344,44 @@ YYKWZGNM4/Pb  '-VscP4]b@W%     'Mf`   -L\///KM(%W!
         })
     }
     
+    $scope.updateAppointment = function () {
+    $scope.isCreated = true
+      getCurrentUser().then(function(user){
+          $scope.queryResult = $scope.getAppointmentByID($scope.eventToChange.id)
+          $scope.queryResult.then(function(query){
+           if($scope.isToggled==false){
+            query.student.name.firstName = user.name.firstName
+            query.student.name.lastName = user.name.lastName
+            query.student.id = user._id
+           }
+           else{
+            query.student.name.firstName = "temp"
+            query.student.name.lastName = "temp"
+            query.student.id = query.tutor._id
+           }
+           
+        $http.put('/api/calendar/' + query._id, query).then(
+            function(result){
+              init()
+            },
+            function(err){
+                console.log(err)
+        })
+      })
+    })
+    }
+    
+    
+    $scope.getAppointmentByID = function(id){
+     return $http.get('/api/calendar/' + id).then(
+            function(appointment){
+             return appointment.data
+            },
+            function(err) {
+                console.log(err)
+        })
+      
+    }
 
     $scope.clearDropdowns = function(){
       $scope.student = undefined
@@ -337,4 +389,5 @@ YYKWZGNM4/Pb  '-VscP4]b@W%     'Mf`   -L\///KM(%W!
       $scope.date = ""
       $scope.course = ""
     }
+    
 }

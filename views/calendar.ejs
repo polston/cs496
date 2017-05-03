@@ -214,6 +214,34 @@
             </div>
             </div>
                                                      <!--Edit Appointment modal-->
+                                                     
+                                                       <!--Book Appointment modal-->
+            <div id="bookModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+                <div class="modal-dialog modal-md" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="dateTitle"></h4>
+                        </div>
+                        <h4 class="display-4" id="dateBody"></h4>
+                         <h4 class="display-4" id="dateObject"></h4>
+                        <form name="modalForm2">
+                            <div class="modal-body">
+                                   
+                        <div class="modal-footer">
+                            <div class="btn-group pull-left">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                             <div class="btn-group pull-right">
+                            <button class="btn btn-success" id="dateSubmit"
+                             ng-click="updateAppointment()" data-dismiss="modal">Book</button>
+                             </div>    
+                        </div>
+                    </form>
+                    </div>
+                </div>
+            </div>
+            </div>
+                                                     <!--Book Appointment modal-->
         </section>
     </div>
 </div>
