@@ -6,86 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <% include ./partials/head %>
 </head>
-<style>
+    <% include ./partials/header %>
   
-  .navbar {
-      
-      font-family: Montserrat, sans-serif;
-      margin-bottom: 0;
-      background-color: #2d2d30;
-      border: 0;
-      font-size: 11px !important;
-      letter-spacing: 4px;
-      opacity: 0.9;
-  }
-  .navbar li a, .navbar .navbar-brand { 
-      color: #d5d5d5 !important;
-  }
-  .navbar-nav li a:hover {
-      color: #fff !important;
-  }
-  .navbar-nav li.active a {
-      color: #fff !important;
-      background-color: #29292c !important;
-  }
-  .navbar-default .navbar-toggle {
-      border-color: transparent;
-  }
-  .open .dropdown-toggle {
-      color: #fff;
-      background-color: #555 !important;
-  }
-  .dropdown-menu li a {
-      color: #000 !important;
-  }
-  .dropdown-menu li a:hover {
-      background-color: red !important;
-  }
-  
-    .hilltopperFlag{
-        height:35px; 
-        width:35px;
-        margin-top:8px;
-    }
-    /*body{
-        background-image: url("/assets/WKUfootballfield.jpg");
-        background-repeat: no-repeat;
-    
-    }*/
-  </style>
     <body id="user-page" class="container-fluid">
-
-    <!--Header fore each User page-->
-    <nav class="navbar navbar-inverse">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <img class="hilltopperFlag" src="assets/hilltoppers.png">
-            </div>
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="#">DASHBOARD</a></li>
-                <li><a href="#">CALENDAR</a></li>
-                <li><a href="#">MY PROFILE</a></li>
-            </ul>
-            <div class="collapse navbar-collapse" id="myNavbar">
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown">
-                        <a data-toggle="dropdown" href="#">
-                            <span class="fa fa-user"></span>
-                            <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">FirstName<br>LastName</a></li>
-                            <li><a href="#">Western<br>Kentucky<br>University</a></li>
-                            <li><a href="#">Help</a></li>
-                            <li><a href="#">Logout</a></li>
-                        </ul>
-                    </li>
-                    <li>&nbsp;</li> 
-                </ul>
-            </div>
-        </div>
-    </nav>
-
     <!--End of header-->
     <div style="margin-top: 5px;" class="container-fluid">
         <div class = "row text-center">       
