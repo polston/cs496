@@ -17,10 +17,6 @@ let agent = supertest.agent()
 // api.use(cookieParser())
 //const api = supertest(process.env.IP + ':'+ process.env.PORT + '/api')
 let admin
-let supervisor
-let tutor
-let student
-let cookie
 
 
 describe('api tests', function(done) {
