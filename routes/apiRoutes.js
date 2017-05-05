@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const mongoose = require('mongoose')
 const User = require('../models/userModel')
 const Appointment = require('../models/appointmentModel')
 
@@ -180,10 +181,11 @@ router.route('/calendar')
   }
   //students can see available tutors and their own appointments
   else if(req.user.permissions == 'Student'){
-    Appointment.find().or([{'student.id': {$not: {$gt: []}}}, {'student.id': req.user._id}]).then(function(appointments){
+    Appointment.find().or([{'student.id': {$not: {$gt: []}}}, {'student.id': mongoose.Types.ObjectId(req.user._id)}]).then(function(appointments){
       // .where('student').equals(req.user._id)
       // .or([{student: {'$exists': false}}])
       // .then(function(appointments){
+      console.log(req.user)
       console.log(appointments)
       res.json(appointments)
     })
@@ -267,9 +269,14 @@ router.route('/calendar/:id')
   //TODO: does this even work?
   //students/tutors can only update the student field of an appointment with themselves
   else if(req.user.permissions == 'Student' || req.user.permissions == 'Tutor'){
-    Appointment.findByIdAndUpdate(req.params.id, {'student.id': req.user._id}).then(function(){
+    console.log('\n\nput user' + JSON.stringify(req.body.student, null, 2))
+    Appointment.findByIdAndUpdate(req.params.id, 
+      {'student.id': req.body.student.id, 
+      'student.name.firstName': req.body.student.name.firstName,
+      'student.name.lastName': req.body.student.name.lastName,}).then(function(){
       Appointment.findById(req.params.id).then(function(appointment){
         //console.log('test' + user)
+        console.log('\n\nput appointment: ' + appointment)
         res.json(appointment)
       })
     })

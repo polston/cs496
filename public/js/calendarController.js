@@ -176,6 +176,7 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
               let allTutors = []
               for(let i = 0; i < tutors.data.length; i++){
                 if(tutors.data[i]['permissions'] == 'Tutor'){
+                  console.log(tutors)
                   allTutors.push(tutors.data[i])
                 }
               }
@@ -190,6 +191,8 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
     $scope.getTutorCourses = function(tutor){
               let courses = []
               for(let i = 0; i < $scope.tutorOptions.length; i++){
+                console.log($scope.tutorOptions[i]['_id'])
+                console.log(tutor._id)
                 if($scope.tutorOptions[i]['_id']==tutor._id){
                   for(let j=0; j<$scope.tutorOptions[i].courses.length; j++){
                     courses.push($scope.tutorOptions[i].courses[j])
@@ -202,11 +205,15 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
     
     
     function getAllAppointments() {
+      getCurrentUser()
       $http.get('/api/calendar').then(
           function(appointments){
+            console.log($scope.currentUser._id)
             if ($scope.events.length == 0){
                 for(let i = 0; i < appointments.data.length; i++){
-                  if(appointments.data[i].student.name.firstName == "temp"){    //if available
+                  console.log(appointments.data[i])
+                  if(appointments.data[i].student.name.id == $scope.currentUser._id || $scope.currentUser.permissions == 'Admin' || $scope.currentUser.permissions == 'Supervisor'){    //if available
+                      console.log('firstget')
                       let endTime = new Date(appointments.data[i].date)
                       let obj = {
                       title: appointments.data[i].course + " tutored by: " + appointments.data[i].tutor.name.firstName, 
@@ -224,7 +231,7 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
                       end: Date.parse(endTime.toISOString(endTime.setHours(endTime.getHours() + 1))), stick:true,
                       color:  '#B30000', id: appointments.data[i]['_id']
                     }
-                      $scope.bookedEvents.push(obj)
+                      $scope.events.push(obj)
                   }
                 }
             }
@@ -234,7 +241,8 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
               $scope.isToggled = false
               $scope.uiConfig.calendar.customButtons.toggle.text ="View My Appointments"
               for(let j = 0; j < appointments.data.length; j++){
-                  if(appointments.data[j].student.name.firstName == "temp"){    //if available
+                  if(typeof appointments.data[j].student._id === 'null'){    //if available
+                    console.log('secondget')
                       let endTime = new Date(appointments.data[j].date)
                       let obj = {
                       title: appointments.data[j].course + " tutored by: " + appointments.data[j].tutor.name.firstName, 
@@ -268,7 +276,9 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
     
     $scope.createAppointment = function(student, tutor, course, date){
       let data
-      if(student==undefined){
+      console.log('student')
+      console.log(student)
+      if(student == undefined){
          data = { date: date,
                     course: course,
                     tutor: { 
@@ -280,10 +290,10 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
                     },
                     student: { 
                       name:  {
-                        firstName: "temp",
-                        lastName:  "temp",
+                        firstName: null,
+                        lastName:  null,
                       },
-                      id: tutor._id,
+                      id: null,
                     }
                   }
         
@@ -307,6 +317,7 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
                    }
                 }
       }
+      console.log(data)
         $http.post('/api/calendar', data).then(
             function(result){
                 let endTime = new Date(data.date)
@@ -315,6 +326,7 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
                   end: Date.parse(endTime.toISOString(endTime.setHours(endTime.getHours() + 1))), stick:true,
                   color:  '#B30000', id: data['_id']
                 }
+                console.log(result)
                 $scope.isCreated = true
                 getAllAppointments()
                 $scope.clearDropdowns()
@@ -334,6 +346,7 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
       console.log(appointment)
         $http.delete('/api/calendar/' + appointment).then(
             function(result){
+              console.log(result)
               for(let i = 0; i < $scope.events.length; i++){
                 if($scope.events[i].id == appointment)
                   $scope.events.splice(i,1)
@@ -354,14 +367,17 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
             query.student.name.lastName = user.name.lastName
             query.student.id = user._id
            }
+           //cancelling an appointment?
            else{
-            query.student.name.firstName = "temp"
-            query.student.name.lastName = "temp"
-            query.student.id = query.tutor._id
+             console.log('where am i')
+            query.student.name.firstName = null
+            query.student.name.lastName = null
+            query.student.id = null
            }
            
         $http.put('/api/calendar/' + query._id, query).then(
             function(result){
+              console.log(query)
               init()
             },
             function(err){
