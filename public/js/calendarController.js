@@ -319,16 +319,16 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
 
         $http.post('/api/calendar', data).then( //submit post request to API with our built object
             function(result){
-                let endTime = new Date(data.date)
-                let obj = {
-                  title: 'Tutoring', start: Date.parse(data.date), 
-                  end: Date.parse(endTime.toISOString(endTime.setHours(endTime.getHours() + 1))), stick:true,
-                  color:  '#B30000', id: data['_id']
-                }
+                // let endTime = new Date(data.date)
+                // let obj = {
+                //   title: 'Tutoring', start: Date.parse(data.date), 
+                //   end: Date.parse(endTime.toISOString(endTime.setHours(endTime.getHours() + 1))), stick:true,
+                //   color:  '#B30000', id: data['_id']
+                // }
 
                 // $scope.isCreated = true //???? was in HEAD but not in the commit?
 
-                getAllAppointments()
+               init()
                 $scope.clearDropdowns()
             },
             function(err){

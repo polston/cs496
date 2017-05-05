@@ -57,7 +57,7 @@ All the commented properties, like ng-model, are called directives.
                 <div class="col-sm-4">
                     <!--We use ng-repeat to iterate through events populated within the scope-->
                     <ul ng-repeat="e in events" class="col-centered">
-                        <div class="alert alert-info">
+                        <div class="alert alert-danger">
                             <!-- The {{ }} format is used to display a property of value of the iterated collection-->
                             <b>{{e.start | date:"MMM dd:"}}</b> {{e.start | date:" h:mma" : 'UTC'}} - {{e.end | date:"h:mma" : 'UTC'}}
                             <!--Each bound value can be filtered based on certain parameters. We specify to angular that the e.end or e.start value 
