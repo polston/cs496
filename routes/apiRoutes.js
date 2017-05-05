@@ -30,7 +30,6 @@ router.route('/users')
 //returns json of all users based on logged on user's permissions
 .get(function(req, res, next){
   //if the logged in user is an admin
-  console.log('\n\nres: ' + JSON.stringify(req.body, null, 2))
   if(req.user.permissions == 'Admin'){
     User.find().then(function(users){
       res.json(users)
@@ -181,12 +180,16 @@ router.route('/calendar')
   }
   //students can see available tutors and their own appointments
   else if(req.user.permissions == 'Student'){
+<<<<<<< HEAD
     Appointment.find().or([{'student.id': {$not: {$gt: []}}}, {'student.id': mongoose.Types.ObjectId(req.user._id)}]).then(function(appointments){
       // .where('student').equals(req.user._id)
       // .or([{student: {'$exists': false}}])
       // .then(function(appointments){
       console.log(req.user)
       console.log(appointments)
+=======
+    Appointment.find().or([{student: {$not: {$gt: []}}}, {student: req.user._id}]).then(function(appointments){
+>>>>>>> e8bc0c0c636e2325d783ecb85ecee989f308cb5c
       res.json(appointments)
     })
   }
@@ -211,7 +214,6 @@ router.route('/calendar')
   //admins and supervisors can create appointments
   if(req.user.permissions == 'Admin' || req.user.permissions == 'Supervisor'){
     Appointment.create(req.body).then(function(appointment){
-      console.log('\n\ncalendar post res: ' + JSON.stringify(req.body))
       res.json(appointment)
     }).catch(next, function(next){
       console.log('next: ' + next)
