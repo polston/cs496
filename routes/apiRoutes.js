@@ -181,12 +181,17 @@ router.route('/calendar')
   //students can see available tutors and their own appointments
   else if(req.user.permissions == 'Student'){
 // <<<<<<< HEAD
-    Appointment.find().or([{'student.id': {$not: {$gt: []}}}, {'student.id': mongoose.Types.ObjectId(req.user._id)}]).then(function(appointments){
+
+// User.find().or([{permissions: 'Tutor'}, {_id: req.user._id}]).then(function(users){
+//       res.json(users)
+//     })
+    // Appointment.find().or([{'student.id': {$not: {$gt: []}}}, {'student.id': req.user._id}]).then(function(appointments){
+      Appointment.find().or([{'student.id':  null}, {'student.id': req.user._id}]).then(function(appointments){
       // .where('student').equals(req.user._id)
       // .or([{student: {'$exists': false}}])
       // .then(function(appointments){
-      console.log(req.user)
-      console.log(appointments)
+      console.log('\n\nreq.user'+ req.user)
+      console.log('\n\nreq.user'+appointments)
 // =======
 //     Appointment.find().or([{student: {$not: {$gt: []}}}, {student: req.user._id}]).then(function(appointments){
 // >>>>>>> e8bc0c0c636e2325d783ecb85ecee989f308cb5c
