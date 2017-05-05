@@ -1,18 +1,16 @@
 angular.module('calendarController', ['ui.calendar', 'ui.bootstrap']) //import modules
         .controller('CalendarCtrl', CalendarCtrl);
-<<<<<<< HEAD
 //this is a change
-function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $document, $http) {
-    var date = new Date();
-    var d = date.getDate();
-    var m = date.getMonth();
-    var y = date.getFullYear();
-    $scope.isCreated = false
-=======
+// function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $document, $http) {
+//     var date = new Date();
+//     var d = date.getDate();
+//     var m = date.getMonth();
+//     var y = date.getFullYear();
+//     $scope.isCreated = false
+
 
 function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $document, $http) { //loading dependecies
->>>>>>> a61cffa070f08b5a3705c1b24ce1863b3eb0c651
-    $scope.isToggled = false
+    $scope.isToggled = false //true -> on my appointments      false -> on available appointments
     $scope.selectAppointment = selectAppointment
     $scope.studentOptions = getAllStudents()
     $scope.tutorOptions = getAllTutors()
@@ -53,19 +51,19 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
             $('#bookModal').modal();
             $scope.eventToChange = date
         }
-    };
+    }
 
     /* changes the display of the calendar with provided options*/
     $scope.changeView = function(view,calendar) {
       uiCalendarConfig.calendars[calendar].fullCalendar('changeView',view); //calling one of fullcalendar's functions
-    };
+    }
 
     function renderCalendar(calendarId) { //Method necessary to actually render the calendar object
       $timeout(function () {
-        calendarTag = $('#' + calendarId);
-        calendarTag.fullCalendar('render');
-      }, 0);
-    };
+        calendarTag = $('#' + calendarId)
+        calendarTag.fullCalendar('render')
+      }, 0)
+    }
 
     function selectAppointment(start, end){
     //For whatever reason, this function is necessary to make the calendar render. As such, we don't actually use it
@@ -101,10 +99,10 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
             text: "View My Appointments",
             click: function() { //call a custom function (rather than fullcalendar one) on click
                 $scope.toggle($scope.isToggled) //call the toggle function, passing in a global toggle flag
-                if($scope.isToggled==true) //if button has been clicked
-                  $scope.uiConfig.calendar.customButtons.toggle.text =" View Available Appointments" //change display
+                if($scope.isToggled == true) //if button has been clicked
+                  $scope.uiConfig.calendar.customButtons.toggle.text ="View Available Appointments" //change display
                 else
-                     $scope.uiConfig.calendar.customButtons.toggle.text ="View My Appointments" //if button is unclicked, change display
+                  $scope.uiConfig.calendar.customButtons.toggle.text ="View My Appointments" //if button is unclicked, change display
                 renderCalendar('myCalendar') //re-render calendar to reflect changes of event sources
             }
           }
@@ -123,7 +121,7 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
         eventRender: $scope.eventRender,
         select: $scope.selectAppointment
       }
-    };
+    }
     
     // Calendar needs eventSource to render events.
     $scope.eventSources = [$scope.events]
@@ -184,14 +182,8 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
             function(tutors){
               let allTutors = []
               for(let i = 0; i < tutors.data.length; i++){
-<<<<<<< HEAD
-                if(tutors.data[i]['permissions'] == 'Tutor'){
-                  console.log(tutors)
-                  allTutors.push(tutors.data[i])
-=======
                 if(tutors.data[i]['permissions'] == 'Tutor'){ //check permissions
                   allTutors.push(tutors.data[i]) //push each tutor object into an array of tutors
->>>>>>> a61cffa070f08b5a3705c1b24ce1863b3eb0c651
                 }
               }
               $scope.tutorOptions = allTutors //assign to scope for modal dropdown binding
@@ -203,52 +195,26 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
    
     //this function is passed a tutor object and gets all of the courses that belong to that tutor object 
     $scope.getTutorCourses = function(tutor){
-<<<<<<< HEAD
-              let courses = []
-              for(let i = 0; i < $scope.tutorOptions.length; i++){
-                console.log($scope.tutorOptions[i]['_id'])
-                console.log(tutor._id)
-                if($scope.tutorOptions[i]['_id']==tutor._id){
-                  for(let j=0; j<$scope.tutorOptions[i].courses.length; j++){
-                    courses.push($scope.tutorOptions[i].courses[j])
-=======
               let courses = [] //temp array
               for(let i = 0; i < $scope.tutorOptions.length; i++){ //iterate through array of tutors gathered earlier
                 if($scope.tutorOptions[i]['_id']==tutor._id){ //if ids match (you find the correct tutor)
                   for(let j=0; j<$scope.tutorOptions[i].courses.length; j++){ //courses is an array, iterate through it
                     courses.push($scope.tutorOptions[i].courses[j]) //push each course into the array so get the course list
->>>>>>> a61cffa070f08b5a3705c1b24ce1863b3eb0c651
                   }
                 }
               }
               $scope.courseOptions = courses //bind to scope to see options in dropdown
     }
-
     
     //Really busy function that pulls all appointments objects from API and binds them to events that are then populated on the calendar
     function getAllAppointments() {
       getCurrentUser()
       $http.get('/api/calendar').then(
           function(appointments){
-<<<<<<< HEAD
-            console.log($scope.currentUser._id)
-            if ($scope.events.length == 0){
-                for(let i = 0; i < appointments.data.length; i++){
-                  console.log(appointments.data[i])
-                  if(appointments.data[i].student.name.id == $scope.currentUser._id || $scope.currentUser.permissions == 'Admin' || $scope.currentUser.permissions == 'Supervisor'){    //if available
-                      console.log('firstget')
-                      let endTime = new Date(appointments.data[i].date)
-                      let obj = {
-                      title: appointments.data[i].course + " tutored by: " + appointments.data[i].tutor.name.firstName, 
-                      start: Date.parse(appointments.data[i].date), 
-                      end: Date.parse(endTime.toISOString(endTime.setHours(endTime.getHours() + 1))), stick:true,
-                      color:  '#B30000', id: appointments.data[i]['_id']
-                    }
-                      $scope.events.push(obj)
-=======
             if ($scope.events.length == 0){ //if the calendar is loaded for the first time
                 for(let i = 0; i < appointments.data.length; i++){ //iterate through the appointments 
-                  if(appointments.data[i].student.name.firstName == "temp"){   //available appointments have temp assigned to student properties 
+                  console.log('first: ' + appointments.data[i].student.id)
+                  if(appointments.data[i].student.id === null){   //available appointments have null assigned to student properties 
                       let endTime = new Date(appointments.data[i].date) //get the start date of the appointments
                       let obj = { //build event object with properties of appointment object 
                       title: appointments.data[i].course + " tutored by: " + appointments.data[i].tutor.name.firstName, //create a title relevent to the appointment
@@ -257,32 +223,15 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
                       color:  '#B30000', id: appointments.data[i]['_id']                                          //convert the date to ISO string, add an hour
                     }                                                                                             //then parse back to date and assign to end time
                       $scope.events.push(obj) //events is available appointments.
->>>>>>> a61cffa070f08b5a3705c1b24ce1863b3eb0c651
+
                    }
-                  else{ //if the student object doesn't have a temp value, appointment is booked
+                  else{ //if the student object doesn't have a null value, appointment is booked
                     let endTime = new Date(appointments.data[i].date) //all events objects are built the same. 
                     let obj = {
                       title: appointments.data[i].course + ' with ' + appointments.data[i].tutor.name.firstName,
                       start: Date.parse(appointments.data[i].date), 
-<<<<<<< HEAD
-                      end: Date.parse(endTime.toISOString(endTime.setHours(endTime.getHours() + 1))), stick:true,
-                      color:  '#B30000', id: appointments.data[i]['_id']
-                    }
-                      $scope.events.push(obj)
-                  }
-                }
-            }
-            else{
-              $scope.events.splice(0,$scope.events.length)
-              $scope.bookedEvents.splice(0,$scope.bookedEvents.length)
-              $scope.isToggled = false
-              $scope.uiConfig.calendar.customButtons.toggle.text ="View My Appointments"
-              for(let j = 0; j < appointments.data.length; j++){
-                  if(typeof appointments.data[j].student._id === 'null'){    //if available
-                    console.log('secondget')
-=======
                       end: Date.parse(endTime.toISOString(endTime.setHours(endTime.getHours() + 1))), stick:true, //stick property makes events persist thru view changes
-                      color:  '#B30000', id: appointments.data[i]['_id'] //all events have an option ID parameter that we make use of to directly bind an event to
+                      color:  '#00b250', id: appointments.data[i]['_id'] //all events have an option ID parameter that we make use of to directly bind an event to
                     }                                                    //and appointments object. Since all appointments have a unique object ID, this allows use to have
                       $scope.bookedEvents.push(obj)                      //a direct reference.
                   }   //booked events are events with students
@@ -294,8 +243,8 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
               $scope.isToggled = false //reset toggle state to default 
               $scope.uiConfig.calendar.customButtons.toggle.text ="View My Appointments" //reset button label to default
               for(let j = 0; j < appointments.data.length; j++){ //All the same logic as above for the rest of the function
-                  if(appointments.data[j].student.name.firstName == "temp"){    
->>>>>>> a61cffa070f08b5a3705c1b24ce1863b3eb0c651
+                console.log('second: ' + appointments.data[j].student.id)
+                  if(appointments.data[j].student.id === null){
                       let endTime = new Date(appointments.data[j].date)
                       let obj = {
                       title: appointments.data[j].course + " tutored by: " + appointments.data[j].tutor.name.firstName, 
@@ -311,7 +260,7 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
                       title: appointments.data[j].course + ' with ' + appointments.data[j].tutor.name.firstName,
                       start: Date.parse(appointments.data[j].date), 
                       end: Date.parse(endTime.toISOString(endTime.setHours(endTime.getHours() + 1))), stick:true,
-                      color:  '#B30000', id: appointments.data[j]['_id']
+                      color:  '#00b250', id: appointments.data[j]['_id']
                     }
                        $scope.bookedEvents.push(obj)
                   }
@@ -324,18 +273,11 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
       $scope.isToggled = false
     }
     
-<<<<<<< HEAD
-    $scope.createAppointment = function(student, tutor, course, date){
-      let data
-      console.log('student')
-      console.log(student)
-      if(student == undefined){
-=======
     //function that creates an appointment for admin use
     $scope.createAppointment = function(student, tutor, course, date){ //pass in objects selected in modal
       let data //declar object 
-      if(student==undefined){ //if students object is undefined, then this will be an open appointments 
->>>>>>> a61cffa070f08b5a3705c1b24ce1863b3eb0c651
+      if(student == undefined){ //if students object is undefined, then this will be an open appointments 
+
          data = { date: date,
                     course: course,
                     tutor: { 
@@ -347,19 +289,12 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
                     },
                     student: { 
                       name:  {
-<<<<<<< HEAD
-                        firstName: null,
+                        firstName: null, //since this is open, we assign null values to the student properties
                         lastName:  null,
                       },
-                      id: null,
-=======
-                        firstName: "temp", //since this is open, we assign temporary values to the student properties
-                        lastName:  "temp",
-                      },
-                      id: tutor._id, //when this appointment is booked, the propery student ID will be passed in here. placeholder.
->>>>>>> a61cffa070f08b5a3705c1b24ce1863b3eb0c651
-                    }
-                  }
+                      id: null, //when this appointment is booked, the propery student ID will be passed in here. placeholder.
+                    }           //important note: id is actually type ObjectID inside of mongoDB, and is held by reference
+                  }             //                the mongoose model will not accept anything except an ObjectID or null for the value
         
       }
       else{ //if student has value, then this a booked appointment
@@ -381,12 +316,8 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
                    }
                 }
       }
-<<<<<<< HEAD
-      console.log(data)
-        $http.post('/api/calendar', data).then(
-=======
+
         $http.post('/api/calendar', data).then( //submit post request to API with our built object
->>>>>>> a61cffa070f08b5a3705c1b24ce1863b3eb0c651
             function(result){
                 let endTime = new Date(data.date)
                 let obj = {
@@ -394,12 +325,9 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
                   end: Date.parse(endTime.toISOString(endTime.setHours(endTime.getHours() + 1))), stick:true,
                   color:  '#B30000', id: data['_id']
                 }
-<<<<<<< HEAD
-                console.log(result)
-                $scope.isCreated = true
-=======
-                
->>>>>>> a61cffa070f08b5a3705c1b24ce1863b3eb0c651
+
+                // $scope.isCreated = true //???? was in HEAD but not in the commit?
+
                 getAllAppointments()
                 $scope.clearDropdowns()
             },
@@ -420,12 +348,8 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
       console.log(appointment)
         $http.delete('/api/calendar/' + appointment).then(
             function(result){
-<<<<<<< HEAD
               console.log(result)
-              for(let i = 0; i < $scope.events.length; i++){
-=======
               for(let i = 0; i < $scope.events.length; i++){ //iterating through events to find which one matches the deleted appointment
->>>>>>> a61cffa070f08b5a3705c1b24ce1863b3eb0c651
                 if($scope.events[i].id == appointment)
                   $scope.events.splice(i,1) //when found, remove that event from the calendar. 
               }
@@ -440,34 +364,23 @@ function CalendarCtrl($scope, $compile, $timeout, uiCalendarConfig, $uibModal, $
       getCurrentUser().then(function(user){
           $scope.queryResult = $scope.getAppointmentByID($scope.eventToChange.id) //since this is in scope, the ID is bound to the modal and pass this to lookup 
           $scope.queryResult.then(function(query){                                //only that specific appointment. We then chain this to another promise that looks
-           if($scope.isToggled==false){                                           //up the current user 
+          //booking appointment                                                 //up the current user 
+           if($scope.isToggled==false){
             query.student.name.firstName = user.name.firstName
             query.student.name.lastName = user.name.lastName
             query.student.id = user._id
            }
-<<<<<<< HEAD
-           //cancelling an appointment?
-           else{
-             console.log('where am i')
+           //cancelling appointment
+           else{ //based on the toggle flag, we know if this is a booked or unbooked event being changed. We either add or remove the student name accordingly.
             query.student.name.firstName = null
             query.student.name.lastName = null
             query.student.id = null
-=======
-           else{ //based on the toggle flag, we know if this is a booked or unbooked event being changed. We either add or remove the student name accordingly.
-            query.student.name.firstName = "temp"
-            query.student.name.lastName = "temp"
-            query.student.id = query.tutor._id
->>>>>>> a61cffa070f08b5a3705c1b24ce1863b3eb0c651
            }
            
         $http.put('/api/calendar/' + query._id, query).then( //post update to the DB
             function(result){
-<<<<<<< HEAD
               console.log(query)
-              init()
-=======
               init() //then we initialize the calendar again, which will update the events accordingly and re-render the calendar
->>>>>>> a61cffa070f08b5a3705c1b24ce1863b3eb0c651
             },
             function(err){
                 console.log(err)
