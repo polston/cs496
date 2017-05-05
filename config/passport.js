@@ -7,14 +7,12 @@ var User       = require('../models/userModel');
 module.exports = function(passport) {
     
     passport.serializeUser(function(user, done) {
-        // console.log('\n\n---------------------serialized user: ', user)
         done(null, user.id);
     });
 
     // used to deserialize the user
     passport.deserializeUser(function(id, done) {
         User.findById(id, function(err, user) {
-            // console.log('\n\n--------------------id: ', id, '\n---------------user: \n', user)
             done(err, user);
         });
     });
@@ -48,7 +46,7 @@ module.exports = function(passport) {
     }
     //for actual users
     else{
-        passport.use('google', new GoogleStrategy({
+        passport.use('google', new GoogleStrategy({ //we need to define a strategy to determine what we do when we get a token back from google
 
             clientID        : configAuth.googleAuth.clientID,
             clientSecret    : configAuth.googleAuth.clientSecret,
@@ -56,11 +54,14 @@ module.exports = function(passport) {
 
         },
         function(accessToken, refreshToken, profile, done) {
-            
-            console.log('accessToken: ' + accessToken + '\nrefreshToken: ' + refreshToken + '\nprofile: ' + JSON.stringify(profile))
 
             process.nextTick(function() {
-                User.findOne({ 'google.id' : profile.id }, function(err, user) { //this is obviously always fail until we have someone in the database with a google.id
+                User.findOne({ 'google.id' : profile.id }, function(err, user) { //this looks to see if the user's google profile id is in the DB.
+                //if it isn't then they are added to the DB. This can essentially be anything. This current setup literally anyone with a google account can access our app.
+                //if we wanted to lock this down, we could do something like:  User.findOne({ 'google.email' : profile.emails[0].value }
+                //that will find all users whose google.email property is equal to the email we got back from google. This would require that an email is known beforehand
+                //by the product owner, and we would need to extend functionality in our user management page as well. 
+                //if that email isn't found, we could do: res.redirect('/') to send them back to login and display an error message explaining why.
                     console.log('\n\nin passport.js :\n\nerror: ' + err + '\n\nuser: ' + user + '\n')
                     if (err){
                         return done(err, user);

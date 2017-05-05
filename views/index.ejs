@@ -5,14 +5,17 @@
 <% include ./partials/head %>
 <% include ./partials/header %>
 <script src="../public/js/indexController.js"></script>
-
+<!--
+This is all of the markup for the index page (user management) I explained most of the angular directives and their binding to html in the calendar.ejs file.
+As such I will only comment areas that differ or need explanation
+-->
 <body class="index-body">
 
     <header>
     </header>
 
-
-    <div class="container" ng-controller="IndexController">
+   <!--With ng-controller, we specify the controller with which the markup should look to for binding values-->
+    <div class="container" ng-controller="IndexController"> 
         <div ng-model="currentUser" ng-if="currentUser.permissions=='Admin' || currentUser.permissions=='Supervisor'">
         <h1>User Management</h1>
         <span class="input-title"><h>Add A User</h></span>
@@ -33,6 +36,7 @@
         <div ng-repeat="course in courses.courses"> 
             <input type="text" ng-model="courses[$index]" class="form" placeholder="Course:">
             <a ng-if="$last"ng-click="addField()"><i class="fa fa-plus fa-lg"></i></a>
+            <!--$last specifies if it is the last element in collection. $first specifies if first-->
             <a ng-if="$last && !$first"ng-click="removeField($index)"><i class="fa fa-minus-circle fa-lg"></i></a>
         </div>
         
