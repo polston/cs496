@@ -77,9 +77,9 @@ else{
   };
   
   app.get('/logout', function(req, res) {
-    req.session.destroy(function() {      //this might be req.user destroy instead?
-        res.clearCookie('connect.sid');
-            res.redirect('/');
+    req.session.destroy(function() {      
+        res.clearCookie('connect.sid'); //This function will destroy the session ,clear the cookie, and redirect the user to the 
+            res.redirect('/');          //login page in a logout event.
         });
     });
   }
