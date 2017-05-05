@@ -53,6 +53,7 @@ app.set('view engine', 'ejs');
 // app.use(require('./routes/permissionsMiddleware'))
 app.use('/api/', require('./routes/apiRoutes'))
 app.use('/index', require('./routes/indexRoutes'))
+app.use('/profile', require('./routes/profileRoutes'))
 app.use('/calendar', require('./routes/calendarRoutes'))
 app.use('/appointments', require('./routes/appointmentRoutes'))
 //node modules path for normal cdn stuff
