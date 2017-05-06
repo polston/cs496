@@ -3,12 +3,12 @@ module.exports = function(app, passport){
 
 // Home Page Route    
 app.get('/', function(req, res){
-  console.log('\nget / : ' + JSON.stringify(req.body) + '\n');
+  // console.log('\nget / : ' + JSON.stringify(req.body) + '\n');
   res.render('../views/landing');
 });
   
 app.get('/home', isLoggedIn, function(req, res) {
-  console.log('\nget /home' + JSON.stringify(req.body) + '\n') 
+  // console.log('\nget /home' + JSON.stringify(req.body) + '\n') 
     res.render('../views/home', {
         user : req.body // get the user out of session and pass to template
         
@@ -21,18 +21,18 @@ app.get('/home', isLoggedIn, function(req, res) {
 if(process.env.TEST == 'true'){
   // Home Page Route    
   app.get('/login', function(req, res){
-    console.log('\nget /login : ' + JSON.stringify(req.user) + '\n');
-    console.log('\nget /loing : ' + JSON.stringify(res.user) + '\n');
+    // console.log('\nget /login : ' + JSON.stringify(req.user) + '\n');
+    // console.log('\nget /loing : ' + JSON.stringify(res.user) + '\n');
     res.render('../views/login');
   });
 
   app.post('/login', function(req, res, next){
-    console.log('post login')
-    console.log('req.body: ' + JSON.stringify(req.body, null, 2))
+    // console.log('post login')
+    // console.log('req.body: ' + JSON.stringify(req.body, null, 2))
     let user = { _id: req.body._id, password: req.body.password }
     passport.authenticate('local', function(err, user, info){
-      console.log('info: ' + JSON.stringify(info))
-      console.log('auth req: ' + JSON.stringify(req.body))
+      // console.log('info: ' + JSON.stringify(info))
+      // console.log('auth req: ' + JSON.stringify(req.body))
       if(err){
         console.log('passport err: ' + err)
       }
@@ -71,15 +71,15 @@ else{
   app.get('/auth/google/callback',
     passport.authenticate('google', {failureRedirect: '/'}),
     function(req, res) {
-      console.log('\n\n get /auth/google/callback/ \n\nreq:' + JSON.stringify(req.body) + '\n\nres: ' + JSON.stringify(res.body) + '\n')
+      // console.log('\n\n get /auth/google/callback/ \n\nreq:' + JSON.stringify(req.body) + '\n\nres: ' + JSON.stringify(res.body) + '\n')
         res.redirect('/calendar');
     });
   };
   
   app.get('/logout', function(req, res) {
-    req.session.destroy(function() {      //this might be req.user destroy instead?
-        res.clearCookie('connect.sid');
-            res.redirect('/');
+    req.session.destroy(function() {      
+        res.clearCookie('connect.sid'); //This function will destroy the session ,clear the cookie, and redirect the user to the 
+            res.redirect('/');          //login page in a logout event.
         });
     });
   }

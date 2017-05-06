@@ -5,15 +5,18 @@
 <% include ./partials/head %>
 
 <script src="../public/js/indexController.js"></script>
-
+<!--
+This is all of the markup for the index page (user management) I explained most of the angular directives and their binding to html in the calendar.ejs file.
+As such I will only comment areas that differ or need explanation
+-->
 <body class="index-body">
 <% include ./partials/header %>
     <header>
     </header>
 
-
-    <div class="container" ng-controller="IndexController">
-        <div ng-model="currentUser" ng-if="currentUser.permissions=='Admin' || 'Supervisor'">
+   <!--With ng-controller, we specify the controller with which the markup should look to for binding values-->
+    <div class="container" ng-controller="IndexController"> 
+        <div ng-model="currentUser" ng-if="currentUser.permissions=='Admin' || currentUser.permissions=='Supervisor'">
         <h1>User Management</h1>
         <span class="input-title"><h>Add A User</h></span>
         <br>
@@ -33,6 +36,7 @@
         <div ng-repeat="course in courses.courses"> 
             <input type="text" ng-model="courses[$index]" class="form" placeholder="Course:">
             <a ng-if="$last"ng-click="addField()"><i class="fa fa-plus fa-lg"></i></a>
+            <!--$last specifies if it is the last element in collection. $first specifies if first-->
             <a ng-if="$last && !$first"ng-click="removeField($index)"><i class="fa fa-minus-circle fa-lg"></i></a>
         </div>
         
@@ -56,7 +60,9 @@
                 <thead>
                     <tr class="table-head">
                         <th>#</th><th>Image</th><th>First Name</th> <th>Last Name</th> <th>Email</th> 
-                        <th>Courses</th> <th>Permissions</th><th class="text-center">Edit User</th><th class="text-center">Delete User</th></th>
+                        <th>Courses</th> <th>Permissions</th>
+                        <th class="text-center" ng-if="currentUser.permissions=='Admin' || currentUser.permissions=='Supervisor'">Edit User</th>
+                        <th class="text-center" ng-if="currentUser.permissions=='Admin' || currentUser.permissions=='Supervisor'">Delete User</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -64,10 +70,10 @@
                          <td>{{$index + 1 }}</td><td><img src="{{user.google.image}}" class="img-rounded"></td>
                          <td>{{ user.name.firstName }}</td><td>{{ user.name.lastName }}</td>
                          <td>{{ user.google.email }}</td><td>{{ user.courses.join(", ") }}</td><td>{{ user.permissions }}</td>
-                         <td class="text-center" ng-if="currentUser.permissions=='Admin' || 'Supervisor'">
-                             <a ng-click="editUser(user._id)"><i class="fa fa-pencil-square fa-2x"></i></a></td>
-                         <td class="text-center" ng-if="currentUser.permissions=='Admin' || 'Supervisor'"> 
-                             <a ng-click="deleteUser(user._id)"><i class="fa fa-window-close fa-2x"></i></a></td>
+                         <td class="text-center" ng-if="currentUser.permissions=='Admin' || currentUser.permissions=='Supervisor'">
+                             <a ng-click="editUser(user._id)"><i class="fa fa-pencil-square fa-2x" ></i></a></td>
+                         <td class="text-center" ng-if="currentUser.permissions=='Admin' || currentUser.permissions=='Supervisor'"> 
+                         <a ng-click="deleteUser(user._id)"><i class="fa fa-window-close fa-2x" ></i></a></td>
                     </tr>
                 </tbody>
             </table>

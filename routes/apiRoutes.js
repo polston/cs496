@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const mongoose = require('mongoose')
 const User = require('../models/userModel')
 const Appointment = require('../models/appointmentModel')
 
@@ -29,7 +30,6 @@ router.route('/users')
 //returns json of all users based on logged on user's permissions
 .get(function(req, res, next){
   //if the logged in user is an admin
-  console.log('\n\nres: ' + JSON.stringify(req.body, null, 2))
   if(req.user.permissions == 'Admin'){
     User.find().then(function(users){
       res.json(users)
@@ -123,21 +123,22 @@ router.route('/users/:id')
     })
   }
   //supervisors can't update admins or other supervisors
+  //this one is broken... lol
   else if(req.user.permissions == 'Supervisor'){
     User.findById(req.params.id).then(function(user){
-      if(user.permissions != 'Admin' && user.permissions != 'Supervisor'){
-        User.findById(req.params.id).then(function(user){
+      // if(user.permissions != 'Admin' && user.permissions != 'Supervisor'){
+        User.update({_id: req.params.id}, req.body).then(function(user){
           //console.log('test' + user)
           res.json(user)
         })
-      }
+      // }
     })
   }
   //users can update themselves? This probably works?
   //TODO: write tests for this specifically...
   //FIXME: this should probably be put into api/user, and changed so that you can't
   //       change your permissions, possibly go through the model?
-  else if(req.user._id === req.params.id){
+  else if(req.user._id == req.params.id){
     User.findByIdAndUpdate(req.params.id, req.body).then(function(){
       User.findById(req.params.id).then(function(user){
         //console.log('test' + user)
@@ -161,6 +162,8 @@ router.route('/users/:courses')
 //get all appointments based on user id and permissions
 router.route('/calendar')
 .get(function(req, res, next){
+  console.log('student: ' + req.user._id)
+  console.log('student: ' + res.user)
   //admins and supervisors can see all appointments
   if(req.user.permissions == 'Admin' || req.user.permissions == 'Supervisor'){
     Appointment.find().then(function(appointments){
@@ -170,13 +173,28 @@ router.route('/calendar')
   //these two below could be reconciled into one, but I'm going to leave it like this for readability
   // tutors can see available tutors, and their own appointments
   else if(req.user.permissions == 'Tutor'){
-    Appointment.find().or([{student: {"$exists": false}}, {tutor: req.user._id}]).then(function(appointments){
+    
+    Appointment.find({'tutor.id': req.user._id}).then(function(appointments){
       res.json(appointments)
     })
   }
   //students can see available tutors and their own appointments
   else if(req.user.permissions == 'Student'){
-    Appointment.find().or([{student: {"$exists": false}}, {student: req.user._id}]).then(function(appointments){
+// <<<<<<< HEAD
+
+// User.find().or([{permissions: 'Tutor'}, {_id: req.user._id}]).then(function(users){
+//       res.json(users)
+//     })
+    // Appointment.find().or([{'student.id': {$not: {$gt: []}}}, {'student.id': req.user._id}]).then(function(appointments){
+      Appointment.find().or([{'student.id':  null}, {'student.id': req.user._id}]).then(function(appointments){
+      // .where('student').equals(req.user._id)
+      // .or([{student: {'$exists': false}}])
+      // .then(function(appointments){
+      console.log('\n\nreq.user'+ req.user)
+      console.log('\n\nreq.user'+appointments)
+// =======
+//     Appointment.find().or([{student: {$not: {$gt: []}}}, {student: req.user._id}]).then(function(appointments){
+// >>>>>>> e8bc0c0c636e2325d783ecb85ecee989f308cb5c
       res.json(appointments)
     })
   }
@@ -187,7 +205,7 @@ router.route('/calendar')
   //error handling inside model
   appointment.validate(function(error){
     if(error) {
-      res.json({error : error}) //sent back from post
+      // res.json({error : error}) //sent back from post
       //printed to the server console
       if (error.name == 'ValidationError') {
         for (field in error.errors) {
@@ -201,7 +219,6 @@ router.route('/calendar')
   //admins and supervisors can create appointments
   if(req.user.permissions == 'Admin' || req.user.permissions == 'Supervisor'){
     Appointment.create(req.body).then(function(appointment){
-      console.log('\n\ncalendar post res: ' + JSON.stringify(req.body))
       res.json(appointment)
     }).catch(next, function(next){
       console.log('next: ' + next)
@@ -222,7 +239,7 @@ router.route('/calendar/:id')
   else if(req.user.permissions == 'Tutor'){
     Appointment.findById(req.params.id).then(function(appointment){
       //FIXME: this may or may not work
-      if(appointment.tutor === req.user._id || !appointment.hasOwnProperty('student')){
+      if(appointment.tutor.id == req.user._id || !appointment.hasOwnProperty('student')){
         res.json(appointment)
       }
     })
@@ -231,7 +248,7 @@ router.route('/calendar/:id')
   else if(req.user.permissions == 'Student'){
     Appointment.findById(req.params.id).then(function(appointment){
       //FIXME: this may or may not work
-      if(appointment.student === req.user._id || !appointment.hasOwnProperty('student')){
+      if(appointment.student.id == req.user._id || !appointment.hasOwnProperty('student')){
         res.json(appointment)
       }
     })
@@ -259,9 +276,14 @@ router.route('/calendar/:id')
   //TODO: does this even work?
   //students/tutors can only update the student field of an appointment with themselves
   else if(req.user.permissions == 'Student' || req.user.permissions == 'Tutor'){
-    Appointment.findByIdAndUpdate(req.params.id, {student: req.user._id}).then(function(){
+    console.log('\n\nput user' + JSON.stringify(req.body.student, null, 2))
+    Appointment.findByIdAndUpdate(req.params.id, 
+      {'student.id': req.body.student.id, 
+      'student.name.firstName': req.body.student.name.firstName,
+      'student.name.lastName': req.body.student.name.lastName,}).then(function(){
       Appointment.findById(req.params.id).then(function(appointment){
         //console.log('test' + user)
+        console.log('\n\nput appointment: ' + appointment)
         res.json(appointment)
       })
     })

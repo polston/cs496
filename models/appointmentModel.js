@@ -10,15 +10,49 @@ const AppointmentSchema = new Schema({
     trim: true
   },
   tutor: {
-    type: [mongoose.Schema.Types.ObjectId, 'Not object id'], 
-    ref: 'User', 
-    required: [true, 'Tutor required for appointment.'],
-    trim: true
-  },
+      name: {
+        firstName: {
+        type: String,
+        minlength: [1, 'First name must contain at least one character'],
+        maxlength: [25, 'First name is too long.'],
+        required: [true, 'First name required.'],
+        trim: true
+        },
+        lastName: {
+          type: String,
+          minlength: [1, 'Last name must contain at least one character'],
+          maxlength: [25, 'Last name is too long.'],
+          required: [true, 'Last name required.'],
+          trim: true
+        },
+      },
+      id: {
+        type: [mongoose.Schema.Types.ObjectId, 'Not object id'], 
+        ref: 'User', 
+        required: [true, 'Tutor required for appointment.'],
+        trim: true,
+      },
+    },
   student: {
-    type: [mongoose.Schema.Types.ObjectId, 'Not the right type, not a user'], 
-    ref: ['User', 'Not the right type, not a user'],
-    trim: true
+    name: {
+      firstName: {
+        type: String,
+        minlength: [1, 'First name must contain at least one character'],
+        maxlength: [25, 'First name is too long.'],
+        trim: true
+      },
+      lastName: {
+        type: String,
+        minlength: [1, 'Last name must contain at least one character'],
+        maxlength: [25, 'Last name is too long.'],
+        trim: true
+      },
+    },
+      id: {
+        type: [mongoose.Schema.Types.ObjectId, 'Not the right type, not a user'], 
+        ref: ['User', 'Not the right type, not a user'],
+        trim: true
+      },
   },
   course: {
     type: String, 

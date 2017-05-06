@@ -16,15 +16,15 @@ const UserSchema = new Schema({
   name: {
     firstName: {
       type: String,
-      minlength: [1, 'Last name must contain at least one character'],
-      maxlength: [25, 'Last name is too long.'],
+      minlength: [1, 'First name must contain at least one character'],
+      maxlength: [25, 'First name is too long.'],
       required: [true, 'First name required.'],
       trim: true
     },
     lastName: {
       type: String,
-      minlength: [1, 'First name must contain at least one character'],
-      maxlength: [25, 'First name is too long.'],
+      minlength: [1, 'Last name must contain at least one character'],
+      maxlength: [25, 'Last name is too long.'],
       required: [true, 'Last name required.'],
       trim: true
   }
@@ -57,7 +57,6 @@ UserSchema.methods.validPassword = function(password) {
 
 //for the testing suite...
 UserSchema.methods.dummyPasswordChecker = function(){
-  console.log('test?')
   return true
 }
 
